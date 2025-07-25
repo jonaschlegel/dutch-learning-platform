@@ -4,7 +4,7 @@ import { ArticleExercise } from '@/components/ArticleExercise';
 import { ChapterSelector } from '@/components/ChapterSelector';
 import { PluralExercise } from '@/components/PluralExercise';
 import { ProgressDashboard } from '@/components/ProgressDashboard';
-import { Avatar, AvatarFallback } from '@/components/Aavatar';
+import { Avatar, AvatarFallback } from '@/components/Avatar';
 import { Badge } from '@/components/Badge';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
@@ -41,6 +41,13 @@ export default function DutchLearningPlatform() {
     });
   }, [toast]);
 
+  // Clear selected category when switching to "All Chapters" mode
+  useEffect(() => {
+    if (progress.currentChapter === 0) {
+      setSelectedCategory(null);
+    }
+  }, [progress.currentChapter]);
+
   const currentChapterWords = useMemo(() => {
     if (progress.currentChapter === 0) {
       return vocabulary;
@@ -72,6 +79,20 @@ export default function DutchLearningPlatform() {
     selectedCategory,
     progress.currentChapter,
   ]);
+
+  // Dynamic categories based on current chapter
+  const availableCategories = useMemo(() => {
+    if (progress.currentChapter === 0) {
+      return []; // No categories for "All Chapters"
+    }
+
+    const categories = new Set(
+      currentChapterWords
+        .map((word) => word.category)
+        .filter((category): category is string => Boolean(category)),
+    );
+    return Array.from(categories).sort();
+  }, [currentChapterWords, progress.currentChapter]);
 
   const currentWord = availableWords[currentExerciseIndex];
 
@@ -211,53 +232,45 @@ export default function DutchLearningPlatform() {
               <TabsContent value="practice" className="space-y-6">
                 {!showResults ? (
                   <div className="space-y-6">
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
-                      <Button
-                        variant={
-                          selectedCategory === null ? 'default' : 'outline'
-                        }
-                        size="sm"
-                        onClick={() => setSelectedCategory(null)}
-                        className={
-                          selectedCategory === null
-                            ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                            : ''
-                        }
-                      >
-                        All Categories
-                      </Button>
-                      {[
-                        'family',
-                        'time',
-                        'number',
-                        'greeting',
-                        'description',
-                        'question',
-                        'pronoun',
-                        'article',
-                        'season',
-                        'ordinal',
-                        'plural',
-                      ].map((category) => (
-                        <Button
-                          key={category}
-                          variant={
-                            selectedCategory === category
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setSelectedCategory(category)}
-                          className={`capitalize ${
-                            selectedCategory === category
-                              ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                              : ''
-                          }`}
-                        >
-                          {category}
-                        </Button>
-                      ))}
-                    </div>
+                    {/* Only show category filters when not in "All Chapters" mode */}
+                    {progress.currentChapter !== 0 &&
+                      availableCategories.length > 0 && (
+                        <div className="flex flex-wrap justify-center gap-2 mb-4">
+                          <Button
+                            variant={
+                              selectedCategory === null ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setSelectedCategory(null)}
+                            className={
+                              selectedCategory === null
+                                ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                                : ''
+                            }
+                          >
+                            All Categories
+                          </Button>
+                          {availableCategories.map((category) => (
+                            <Button
+                              key={category}
+                              variant={
+                                selectedCategory === category
+                                  ? 'default'
+                                  : 'outline'
+                              }
+                              size="sm"
+                              onClick={() => setSelectedCategory(category)}
+                              className={`capitalize ${
+                                selectedCategory === category
+                                  ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                                  : ''
+                              }`}
+                            >
+                              {category}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
                     <div className="flex justify-center space-x-4">
                       <Button
                         variant={

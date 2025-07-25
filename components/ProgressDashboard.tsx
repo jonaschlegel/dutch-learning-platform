@@ -14,7 +14,7 @@ import {
   Target,
   TrendingUp,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 interface ProgressDashboardProps {
   progress: UserProgress;
@@ -46,6 +46,26 @@ export function ProgressDashboard({
       : 0;
 
   const [showCategoryProgress, setShowCategoryProgress] = useState(false);
+
+  // Dynamic categories based on current chapter
+  const availableCategories = useMemo(() => {
+    if (progress.currentChapter === 0) {
+      // For "All Chapters", get all unique categories across all vocabulary
+      const categories = new Set(
+        vocabulary.map((word) => word.category).filter(Boolean),
+      );
+      return Array.from(categories).sort();
+    } else {
+      // For specific chapter, get categories only from that chapter
+      const chapterWords = vocabulary.filter(
+        (w) => w.chapter === progress.currentChapter,
+      );
+      const categories = new Set(
+        chapterWords.map((word) => word.category).filter(Boolean),
+      );
+      return Array.from(categories).sort();
+    }
+  }, [progress.currentChapter]);
 
   const getCategoryProgress = (category: string) => {
     const categoryWords = vocabulary.filter(
@@ -146,6 +166,7 @@ export function ProgressDashboard({
           variant="ghost"
           onClick={() => setShowCategoryProgress((prev) => !prev)}
           className="text-sm text-muted-foreground hover:bg-muted"
+          disabled={availableCategories.length === 0}
         >
           {showCategoryProgress ? (
             <>
@@ -154,26 +175,19 @@ export function ProgressDashboard({
           ) : (
             <>
               Show Category Progress <ChevronDown className="ml-2 h-4 w-4" />
+              {availableCategories.length > 0 && (
+                <span className="ml-1 text-xs">
+                  ({availableCategories.length})
+                </span>
+              )}
             </>
           )}
         </Button>
       </div>
 
-      {showCategoryProgress && (
+      {showCategoryProgress && availableCategories.length > 0 && (
         <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-5 mt-4">
-          {[
-            'family',
-            'time',
-            'number',
-            'greeting',
-            'description',
-            'question',
-            'pronoun',
-            'article',
-            'season',
-            'ordinal',
-            'plural',
-          ].map((category) => {
+          {availableCategories.map((category) => {
             const { completed, total, percentage } =
               getCategoryProgress(category);
             if (total === 0) return null;
