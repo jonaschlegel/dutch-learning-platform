@@ -1,6 +1,6 @@
 export interface VocabularyItem {
   id: string;
-  dutch: string;
+  dutch: string | string[];
   english: string | string[];
   chapter: number;
   section: string;

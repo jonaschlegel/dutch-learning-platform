@@ -39,9 +39,9 @@ export function VocabularyCard({
     const userAnswerLower = userAnswer.toLowerCase().trim();
     let correct = false;
 
-    if (Array.isArray(word.english)) {
-      correct = word.english.some(
-        (translation) => userAnswerLower === translation.toLowerCase(),
+    if (Array.isArray(word.dutch)) {
+      correct = word.dutch.some(
+        (dutchForm) => userAnswerLower === dutchForm.toLowerCase(),
       );
     } else {
       correct = userAnswerLower === word.dutch.toLowerCase();
@@ -60,7 +60,8 @@ export function VocabularyCard({
   };
 
   const playAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.dutch);
+    const dutchText = Array.isArray(word.dutch) ? word.dutch[0] : word.dutch;
+    const utterance = new SpeechSynthesisUtterance(dutchText);
     utterance.lang = 'nl-NL';
     speechSynthesis.speak(utterance);
   };
@@ -172,7 +173,11 @@ export function VocabularyCard({
                     <div className="mt-2 text-sm">
                       <p className="font-semibold">
                         Correct answer:{' '}
-                        <span className="text-dutch-blue">{word.dutch}</span>
+                        <span className="text-dutch-blue">
+                          {Array.isArray(word.dutch)
+                            ? word.dutch.join(' / ')
+                            : word.dutch}
+                        </span>
                       </p>
                       {Array.isArray(word.english) &&
                         word.english.length > 1 && (
