@@ -5,7 +5,7 @@ export interface VocabularyItem {
   chapter: number;
   section: string;
   article?: 'de' | 'het';
-  plural?: string;
+  plural?: string | string[];
   hint?: string;
   category?:
     | 'time'
@@ -19,6 +19,40 @@ export interface VocabularyItem {
     | 'number'
     | 'article'
     | 'ordinal'
+    | 'verb'
+    | 'adjective'
+    | 'noun'
+    | 'adverb'
+    | 'preposition'
+    | 'conjunction'
+    | 'interjection'
+    | 'expression'
+    | 'location'
+    | 'emotion'
+    | 'food'
+    | 'drink'
+    | 'clothing'
+    | 'transportation'
+    | 'nature'
+    | 'body'
+    | 'health'
+    | 'school'
+    | 'work'
+    | 'technology'
+    | 'vegetable'
+    | 'color'
+    | 'description'
+    | 'family'
+    | 'frequency'
+    | 'fruit'
+    | 'greeting'
+    | 'month'
+    | 'number'
+    | 'ordinal'
+    | 'place'
+    | 'question'
+    | 'time'
+    | 'pronoun'
     | 'plural';
 }
 
