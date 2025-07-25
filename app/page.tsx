@@ -18,8 +18,13 @@ import { BookOpen, Brain, Play, RotateCcw, Target } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function DutchLearningPlatform() {
-  const { progress, markWordCompleted, setCurrentChapter, resetProgress } =
-    useProgress();
+  const {
+    progress,
+    markWordCompleted,
+    setCurrentChapter,
+    toggleMistakeMode,
+    resetProgress,
+  } = useProgress();
   const { initial, color } = useUserAvatar();
   const { toast } = useToast();
 
@@ -41,7 +46,6 @@ export default function DutchLearningPlatform() {
     });
   }, [toast]);
 
-  // Clear selected category when switching to "All Chapters" mode
   useEffect(() => {
     if (progress.currentChapter === 0) {
       setSelectedCategory(null);
@@ -57,6 +61,11 @@ export default function DutchLearningPlatform() {
 
   const availableWords = useMemo(() => {
     let words = currentChapterWords;
+
+    if (progress.mistakeMode) {
+      const incorrectWordIds = Object.keys(progress.incorrectWords);
+      words = words.filter((w) => incorrectWordIds.includes(w.id));
+    }
 
     if (exerciseMode === 'articles') {
       words = words.filter((w) => w.article);
@@ -77,6 +86,8 @@ export default function DutchLearningPlatform() {
     currentChapterWords,
     exerciseMode,
     selectedCategory,
+    progress.mistakeMode,
+    progress.incorrectWords,
     progress.currentChapter,
   ]);
 
@@ -107,6 +118,17 @@ export default function DutchLearningPlatform() {
       total: sessionScore.total + 1,
     };
     setSessionScore(newScore);
+
+    if (progress.mistakeMode && correct) {
+      const remainingIncorrectWords = Object.keys(
+        progress.incorrectWords,
+      ).filter((id) => id !== currentWord?.id);
+
+      if (remainingIncorrectWords.length === 0) {
+        setShowResults(true);
+        return;
+      }
+    }
 
     if (currentExerciseIndex < availableWords.length - 1) {
       setCurrentExerciseIndex((prev) => prev + 1);
@@ -203,6 +225,7 @@ export default function DutchLearningPlatform() {
             <ProgressDashboard
               progress={progress}
               onResetProgress={resetProgress}
+              onToggleMistakeMode={toggleMistakeMode}
             />
 
             <Tabs defaultValue="practice" className="space-y-6">
@@ -231,6 +254,26 @@ export default function DutchLearningPlatform() {
               </TabsList>
 
               <TabsContent value="practice" className="space-y-6">
+                {progress.mistakeMode && (
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <Target className="h-5 w-5 text-orange-600" />
+                        <span className="font-medium text-orange-800">
+                          Mistake Review Mode
+                        </span>
+                      </div>
+                      <span className="text-sm text-orange-600">
+                        {Object.keys(progress.incorrectWords).length} words to
+                        review
+                      </span>
+                    </div>
+                    <p className="text-sm text-orange-700 mt-2">
+                      Practicing words you've answered incorrectly before. Get
+                      them right to remove them from review!
+                    </p>
+                  </div>
+                )}
                 {!showResults ? (
                   <div className="space-y-6">
                     {progress.currentChapter !== 0 &&
@@ -355,18 +398,30 @@ export default function DutchLearningPlatform() {
                     ) : (
                       <Card className="text-center py-8 bg-card shadow-sm">
                         <CardContent>
-                          <p className="text-lg text-muted-foreground">
-                            No exercises available for this mode or category in
-                            the current chapter. Try selecting a different
-                            chapter or category.
-                          </p>
-                          <Button
-                            onClick={resetExercises}
-                            className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90"
-                          >
-                            <RotateCcw className="h-4 w-4 mr-2" />
-                            Practice Again
-                          </Button>
+                          {progress.mistakeMode ? (
+                            <div className="space-y-4">
+                              <div className="text-6xl">🎉</div>
+                              <p className="text-xl font-semibold text-foreground">
+                                Great job!
+                              </p>
+                              <p className="text-lg text-muted-foreground">
+                                No words to review - you've mastered all your
+                                previous mistakes!
+                              </p>
+                              <Button
+                                onClick={toggleMistakeMode}
+                                className="mt-4"
+                              >
+                                Return to Normal Practice
+                              </Button>
+                            </div>
+                          ) : (
+                            <p className="text-lg text-muted-foreground">
+                              No exercises available for this mode or category
+                              in the current chapter. Try selecting a different
+                              chapter or category.
+                            </p>
+                          )}
                         </CardContent>
                       </Card>
                     )}

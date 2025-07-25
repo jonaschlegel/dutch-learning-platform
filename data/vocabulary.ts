@@ -268,7 +268,7 @@ export const vocabulary: VocabularyItem[] = [
     section: 'Woordenlijst',
   },
   {
-    id: '28',
+    id: '913',
     dutch: ['jij', 'je'],
     english: 'you (singular)',
     chapter: 1,
@@ -3027,7 +3027,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'season',
   },
   {
-    id: '367',
+    id: '914',
     dutch: 'de herfst',
     english: 'autumn',
     chapter: 2,
@@ -3056,7 +3056,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Prepositions with Time
   {
-    id: '369',
+    id: '1115',
     dutch: 'op',
     english: 'on (with days and dates)',
     chapter: 2,
@@ -3082,7 +3082,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Chapter 3 - In het café
   {
-    id: '66',
+    id: '1116',
     dutch: 'de winter',
     english: 'winter',
     chapter: 2,
@@ -3093,21 +3093,21 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -s.',
   },
   {
-    id: '67',
+    id: '915',
     dutch: 'krijg',
     english: ['get', 'receive'],
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '68',
+    id: '916',
     dutch: 'nog',
     english: 'any',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '69',
+    id: '917',
     dutch: 'het bezoek',
     english: ['visit', 'visitors'],
     chapter: 2,
@@ -3115,7 +3115,7 @@ export const vocabulary: VocabularyItem[] = [
     article: 'het',
   },
   {
-    id: '70',
+    id: '918',
     dutch: 'de broer',
     english: 'brother',
     chapter: 2,
@@ -3126,7 +3126,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '71',
+    id: '919',
     dutch: 'jonger',
     english: 'younger',
     chapter: 2,
@@ -3134,21 +3134,21 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '72',
+    id: '920',
     dutch: 'maar',
     english: 'but',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '73',
+    id: '921',
     dutch: 'wel',
     english: 'certainly',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '74',
+    id: '922',
     dutch: 'langer',
     english: 'taller',
     chapter: 2,
@@ -3156,14 +3156,14 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '75',
+    id: '923',
     dutch: 'nog meer',
     english: 'any more',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '76',
+    id: '924',
     dutch: 'broers',
     english: 'brothers',
     chapter: 2,
@@ -3179,7 +3179,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'family',
   },
   {
-    id: '78',
+    id: '1117',
     dutch: 'de zus',
     english: 'sister',
     chapter: 2,
@@ -3190,21 +3190,21 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Nouns ending in -s often double the 's' before adding -en.",
   },
   {
-    id: '79',
+    id: '925',
     dutch: 'nog',
     english: 'as well',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '80',
+    id: '926',
     dutch: 'kijk',
     english: 'look',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '81',
+    id: '927',
     dutch: 'de foto',
     english: 'photo',
     chapter: 2,
@@ -3214,28 +3214,28 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Nouns ending in -o often form their plural by adding -'s.",
   },
   {
-    id: '82',
+    id: '928',
     dutch: 'goh',
     english: 'oh',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '83',
+    id: '929',
     dutch: 'heel',
     english: 'very',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '84',
+    id: '930',
     dutch: 'ander',
     english: ['different', 'other'],
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '85',
+    id: '1118',
     dutch: 'het type',
     english: 'type',
     chapter: 2,
@@ -3245,7 +3245,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -e often form their plural by adding -s.',
   },
   {
-    id: '86',
+    id: '931',
     dutch: 'kort',
     english: 'short',
     chapter: 2,
@@ -3253,7 +3253,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '87',
+    id: '932',
     dutch: 'blond',
     english: 'blonde',
     chapter: 2,
@@ -3261,7 +3261,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '88',
+    id: '933',
     dutch: 'het haar',
     english: 'hair',
     chapter: 2,
@@ -3270,7 +3270,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '89',
+    id: '934',
     dutch: 'donker',
     english: 'dark',
     chapter: 2,
@@ -3280,7 +3280,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Family Relations - Extended
   {
-    id: '90',
+    id: '1119',
     dutch: 'het gezin',
     english: 'family',
     chapter: 2,
@@ -3291,7 +3291,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in a short vowel + single consonant often double the consonant before adding -en.',
   },
   {
-    id: '91',
+    id: '1120',
     dutch: 'de ouders',
     english: 'parents',
     chapter: 2,
@@ -3300,7 +3300,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'family',
   },
   {
-    id: '92',
+    id: '935',
     dutch: 'de vader',
     english: 'father',
     chapter: 2,
@@ -3311,7 +3311,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '93',
+    id: '936',
     dutch: 'de moeder',
     english: 'mother',
     chapter: 2,
@@ -3322,7 +3322,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '94',
+    id: '937',
     dutch: 'de man',
     english: 'husband',
     chapter: 2,
@@ -3333,7 +3333,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in a short vowel + single consonant often double the consonant before adding -en.',
   },
   {
-    id: '95',
+    id: '938',
     dutch: 'de echtgenoot',
     english: 'husband',
     chapter: 2,
@@ -3344,7 +3344,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -en.',
   },
   {
-    id: '96',
+    id: '939',
     dutch: 'de vrouw',
     english: 'wife',
     chapter: 2,
@@ -3355,7 +3355,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -uw often form their plural by adding -en.',
   },
   {
-    id: '97',
+    id: '940',
     dutch: 'de echtgenote',
     english: 'wife',
     chapter: 2,
@@ -3366,7 +3366,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -e often form their plural by adding -s.',
   },
   {
-    id: '98',
+    id: '941',
     dutch: 'het kind',
     english: 'child',
     chapter: 2,
@@ -3377,7 +3377,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Some irregular nouns have unique plural forms.',
   },
   {
-    id: '99',
+    id: '942',
     dutch: 'de zoon',
     english: 'son',
     chapter: 2,
@@ -3388,7 +3388,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Some irregular nouns have unique plural forms.',
   },
   {
-    id: '100',
+    id: '1121',
     dutch: 'de dochter',
     english: 'daughter',
     chapter: 2,
@@ -3399,7 +3399,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '101',
+    id: '943',
     dutch: 'de familie',
     english: 'family',
     chapter: 2,
@@ -3410,7 +3410,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -ie often form their plural by adding -s.',
   },
   {
-    id: '102',
+    id: '944',
     dutch: 'de schoonzus',
     english: 'sister in law',
     chapter: 2,
@@ -3421,7 +3421,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in a short vowel + single consonant often double the consonant before adding -en.',
   },
   {
-    id: '103',
+    id: '945',
     dutch: 'de zwager',
     english: 'brother in law',
     chapter: 2,
@@ -3432,7 +3432,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '104',
+    id: '946',
     dutch: 'de opa',
     english: 'grandfather',
     chapter: 2,
@@ -3443,9 +3443,9 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Nouns ending in -a often form their plural by adding -'s.",
   },
   {
-    id: '105',
+    id: '947',
     dutch: 'de oma',
-    english: 'grandmother',
+    english: 'the grandmother',
     chapter: 2,
     section: 'Familierelaties',
     article: 'de',
@@ -3454,9 +3454,9 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Nouns ending in -a often form their plural by adding -'s.",
   },
   {
-    id: '106',
+    id: '948',
     dutch: 'het kleinkind',
-    english: 'grandchild',
+    english: 'the grandchild',
     chapter: 2,
     section: 'Familierelaties',
     article: 'het',
@@ -3465,9 +3465,9 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Some irregular nouns have unique plural forms.',
   },
   {
-    id: '107',
+    id: '949',
     dutch: 'de oom',
-    english: 'uncle',
+    english: 'the uncle',
     chapter: 2,
     section: 'Familierelaties',
     article: 'de',
@@ -3476,9 +3476,9 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -m often form their plural by adding -s.',
   },
   {
-    id: '108',
+    id: '950',
     dutch: 'de tante',
-    english: 'aunt',
+    english: 'the aunt',
     chapter: 2,
     section: 'Familierelaties',
     article: 'de',
@@ -3487,7 +3487,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -e often form their plural by adding -s.',
   },
   {
-    id: '109',
+    id: '951',
     dutch: 'de neef',
     english: ['nephew', 'cousin'],
     chapter: 2,
@@ -3498,7 +3498,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -f often change to -v before adding -en.',
   },
   {
-    id: '110',
+    id: '952',
     dutch: 'de nicht',
     english: ['niece', 'cousin'],
     chapter: 2,
@@ -3511,7 +3511,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Months
   {
-    id: '111',
+    id: '1122',
     dutch: 'januari',
     english: 'January',
     chapter: 2,
@@ -3519,7 +3519,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '112',
+    id: '953',
     dutch: 'februari',
     english: 'February',
     chapter: 2,
@@ -3527,7 +3527,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '113',
+    id: '954',
     dutch: 'maart',
     english: 'March',
     chapter: 2,
@@ -3535,7 +3535,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '114',
+    id: '955',
     dutch: 'april',
     english: 'April',
     chapter: 2,
@@ -3543,7 +3543,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '115',
+    id: '956',
     dutch: 'mei',
     english: 'May',
     chapter: 2,
@@ -3551,7 +3551,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '116',
+    id: '957',
     dutch: 'juni',
     english: 'June',
     chapter: 2,
@@ -3559,7 +3559,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '117',
+    id: '958',
     dutch: 'juli',
     english: 'July',
     chapter: 2,
@@ -3567,7 +3567,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '118',
+    id: '959',
     dutch: 'augustus',
     english: 'August',
     chapter: 2,
@@ -3575,7 +3575,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '119',
+    id: '960',
     dutch: 'september',
     english: 'September',
     chapter: 2,
@@ -3583,7 +3583,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '120',
+    id: '961',
     dutch: 'oktober',
     english: 'October',
     chapter: 2,
@@ -3591,7 +3591,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'month',
   },
   {
-    id: '121',
+    id: '962',
     dutch: 'november',
     english: 'November',
     chapter: 2,
@@ -3601,7 +3601,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Seasons
   {
-    id: '122',
+    id: '1123',
     dutch: 'de lente',
     english: 'spring',
     chapter: 2,
@@ -3612,7 +3612,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -e often form their plural by adding -s.',
   },
   {
-    id: '123',
+    id: '963',
     dutch: 'het voorjaar',
     english: 'spring',
     chapter: 2,
@@ -3621,7 +3621,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'season',
   },
   {
-    id: '124',
+    id: '964',
     dutch: 'de zomer',
     english: 'summer',
     chapter: 2,
@@ -3632,7 +3632,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -s.',
   },
   {
-    id: '125',
+    id: '965',
     dutch: 'de herfst',
     english: 'autumn',
     chapter: 2,
@@ -3643,7 +3643,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -en.',
   },
   {
-    id: '126',
+    id: '966',
     dutch: 'het najaar',
     english: 'autumn',
     chapter: 2,
@@ -3654,7 +3654,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Time expressions
   {
-    id: '127',
+    id: '1124',
     dutch: 'hoe laat is het',
     english: 'what time is it',
     chapter: 2,
@@ -3662,7 +3662,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '128',
+    id: '967',
     dutch: 'het is elf uur',
     english: "it is eleven o'clock",
     chapter: 2,
@@ -3670,7 +3670,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '129',
+    id: '968',
     dutch: 'vijf over elf',
     english: 'five past eleven',
     chapter: 2,
@@ -3678,7 +3678,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '130',
+    id: '969',
     dutch: 'tien over elf',
     english: 'ten past eleven',
     chapter: 2,
@@ -3686,7 +3686,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '131',
+    id: '970',
     dutch: 'kwart over elf',
     english: 'quarter past eleven',
     chapter: 2,
@@ -3694,7 +3694,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '132',
+    id: '971',
     dutch: 'half twaalf',
     english: 'half past eleven',
     chapter: 2,
@@ -3702,7 +3702,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '133',
+    id: '972',
     dutch: 'vijf voor half twaalf',
     english: 'twenty-five past eleven',
     chapter: 2,
@@ -3710,7 +3710,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '134',
+    id: '973',
     dutch: 'half twaalf',
     english: 'half past eleven',
     chapter: 2,
@@ -3718,7 +3718,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '135',
+    id: '974',
     dutch: 'vijf over half twaalf',
     english: 'twenty-five to twelve',
     chapter: 2,
@@ -3726,7 +3726,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '136',
+    id: '975',
     dutch: 'tien over half twaalf',
     english: 'twenty to twelve',
     chapter: 2,
@@ -3734,7 +3734,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '137',
+    id: '976',
     dutch: 'kwart voor twaalf',
     english: 'quarter to twelve',
     chapter: 2,
@@ -3742,7 +3742,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '138',
+    id: '977',
     dutch: 'tien voor twaalf',
     english: 'ten to twelve',
     chapter: 2,
@@ -3750,7 +3750,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '139',
+    id: '978',
     dutch: 'vijf voor twaalf',
     english: 'five to twelve',
     chapter: 2,
@@ -3758,7 +3758,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '140',
+    id: '979',
     dutch: 'een uur',
     english: 'an hour',
     chapter: 2,
@@ -3768,7 +3768,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Some irregular nouns have unique plural forms.',
   },
   {
-    id: '141',
+    id: '980',
     dutch: 'een halfuur',
     english: 'half an hour',
     chapter: 2,
@@ -3776,7 +3776,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '142',
+    id: '981',
     dutch: 'een kwartier',
     english: 'a quarter hour',
     chapter: 2,
@@ -3784,7 +3784,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '143',
+    id: '982',
     dutch: 'een minuut',
     english: 'a minute',
     chapter: 2,
@@ -3796,7 +3796,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Question words
   {
-    id: '144',
+    id: '1125',
     dutch: 'wie',
     english: 'who',
     chapter: 2,
@@ -3804,7 +3804,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '145',
+    id: '983',
     dutch: 'wat',
     english: 'what',
     chapter: 2,
@@ -3812,7 +3812,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '146',
+    id: '984',
     dutch: 'waar',
     english: 'where',
     chapter: 2,
@@ -3820,7 +3820,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '147',
+    id: '985',
     dutch: 'wanneer',
     english: 'when',
     chapter: 2,
@@ -3828,7 +3828,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '148',
+    id: '1126',
     dutch: 'waarom',
     english: 'why',
     chapter: 2,
@@ -3836,7 +3836,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '149',
+    id: '986',
     dutch: 'hoe',
     english: 'how',
     chapter: 2,
@@ -3844,7 +3844,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '150',
+    id: '987',
     dutch: 'hoeveel',
     english: 'how much/many',
     chapter: 2,
@@ -3852,7 +3852,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'question',
   },
   {
-    id: '151',
+    id: '988',
     dutch: 'welke',
     english: 'which',
     chapter: 2,
@@ -3862,56 +3862,56 @@ export const vocabulary: VocabularyItem[] = [
 
   // More vocabulary from Chapter 2
   {
-    id: '152',
+    id: '1127',
     dutch: 'komen op bezoek',
     english: 'pay a visit',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '153',
+    id: '989',
     dutch: 'op bezoek komen',
     english: 'pay a visit',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '154',
+    id: '990',
     dutch: 'op dit moment',
     english: 'at the moment',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '155',
+    id: '1128',
     dutch: 'Indonesië',
     english: 'Indonesia',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '156',
+    id: '991',
     dutch: 'doen',
     english: ['are doing', 'do'],
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '157',
+    id: '992',
     dutch: 'daar',
     english: 'there',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '158',
+    id: '993',
     dutch: 'op vakantie',
     english: 'on holiday',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '159',
+    id: '994',
     dutch: 'de vakantie',
     english: 'holiday',
     chapter: 2,
@@ -3921,14 +3921,14 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -ie often form their plural by adding -s.',
   },
   {
-    id: '160',
+    id: '995',
     dutch: 'voor',
     english: 'for',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '161',
+    id: '996',
     dutch: 'zijn',
     english: 'his',
     chapter: 2,
@@ -3936,7 +3936,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '162',
+    id: '997',
     dutch: 'het werk',
     english: 'work',
     chapter: 2,
@@ -3944,7 +3944,7 @@ export const vocabulary: VocabularyItem[] = [
     article: 'het',
   },
   {
-    id: '163',
+    id: '998',
     dutch: 'het seizoen',
     english: 'season',
     chapter: 2,
@@ -3954,28 +3954,28 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -oen often form their plural by adding -en.',
   },
   {
-    id: '164',
+    id: '999',
     dutch: 'weet',
     english: 'know',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '165',
+    id: '1000',
     dutch: 'niet',
     english: 'not',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '166',
+    id: '1001',
     dutch: 'vertel',
     english: 'tell',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '167',
+    id: '1002',
     dutch: 'eens',
     english: 'just / sometime / once (context-dependent, often untranslated)',
     chapter: 2,
@@ -3983,35 +3983,35 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Common in questions like: Kom je eens langs? → Will you come by sometime? or Kom eens hier! → Come here (just)!',
   },
   {
-    id: '168',
+    id: '1003',
     dutch: 'over',
     english: 'about',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '169',
+    id: '1004',
     dutch: 'dat',
     english: 'that',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '170',
+    id: '1005',
     dutch: 'wil',
     english: ['want', 'would like'],
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '171',
+    id: '1006',
     dutch: 'laat',
     english: 'late',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '172',
+    id: '1129',
     dutch: '11.00 uur',
     english: "11 o'clock",
     chapter: 2,
@@ -4019,21 +4019,21 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '173',
+    id: '1007',
     dutch: 'moeten',
     english: ['should', 'have to'],
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '174',
+    id: '1008',
     dutch: 'weer',
     english: 'again',
     chapter: 2,
     section: 'Woordenlijst',
   },
   {
-    id: '175',
+    id: '1009',
     dutch: 'naar',
     english: 'to',
     chapter: 2,
@@ -4042,7 +4042,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Possessive pronouns
   {
-    id: '176',
+    id: '1130',
     dutch: 'mijn',
     english: 'my',
     chapter: 2,
@@ -4050,7 +4050,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '177',
+    id: '1010',
     dutch: 'jouw',
     english: 'your (informal)',
     chapter: 2,
@@ -4058,7 +4058,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '178',
+    id: '1011',
     dutch: 'je',
     english: 'your (informal)',
     chapter: 2,
@@ -4066,7 +4066,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '179',
+    id: '1131',
     dutch: 'uw',
     english: 'your (formal)',
     chapter: 2,
@@ -4074,7 +4074,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '180',
+    id: '1012',
     dutch: 'haar',
     english: 'her',
     chapter: 2,
@@ -4082,7 +4082,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '181',
+    id: '1013',
     dutch: 'onze',
     english: 'our',
     chapter: 2,
@@ -4090,7 +4090,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '182',
+    id: '1014',
     dutch: 'ons',
     english: 'our',
     chapter: 2,
@@ -4098,7 +4098,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '183',
+    id: '1015',
     dutch: 'jullie',
     english: 'your (plural)',
     chapter: 2,
@@ -4106,7 +4106,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'pronoun',
   },
   {
-    id: '184',
+    id: '1016',
     dutch: 'hun',
     english: 'their',
     chapter: 2,
@@ -4262,7 +4262,7 @@ export const vocabulary: VocabularyItem[] = [
     plural: 'de bieren',
   },
   {
-    id: '391',
+    id: '1017',
     dutch: ['neem', 'nemen'],
     english: ['have (take)', 'take'],
     chapter: 3,
@@ -4294,7 +4294,7 @@ export const vocabulary: VocabularyItem[] = [
     plural: 'de wijnen',
   },
   {
-    id: '395',
+    id: '1018',
     dutch: ['roep', 'roepen'],
     english: 'call',
     chapter: 3,
@@ -5868,35 +5868,35 @@ export const vocabulary: VocabularyItem[] = [
 
   // Chapter 5 - New Het-words from PXL_20250722_201440469.jpg
   {
-    id: '304',
+    id: '1132',
     dutch: 'prettig',
     english: 'nice',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '193',
+    id: '1133',
     dutch: 'te maken',
     english: 'to meet',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '194',
+    id: '1019',
     dutch: 'kennen',
     english: 'know',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '195',
+    id: '1020',
     dutch: 'elkaar',
     english: 'each other',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '196',
+    id: '1021',
     dutch: 'eigenlijk',
     english: 'actually',
     chapter: 3,
@@ -5904,42 +5904,42 @@ export const vocabulary: VocabularyItem[] = [
   },
   { id: '197', dutch: 'van', english: 'from', chapter: 3, section: 'Dialoog' },
   {
-    id: '198',
+    id: '1022',
     dutch: 'willen',
     english: 'want',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '199',
+    id: '1023',
     dutch: 'drinken',
     english: 'drink',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '200',
+    id: '1024',
     dutch: 'trakteer',
     english: 'treat',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '201',
+    id: '1025',
     dutch: 'graag',
     english: 'gladly',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '202',
+    id: '1026',
     dutch: 'doe mij maar',
     english: 'give me',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '203',
+    id: '1027',
     dutch: 'een biertje',
     english: 'a beer',
     chapter: 3,
@@ -5947,7 +5947,7 @@ export const vocabulary: VocabularyItem[] = [
   },
   { id: '204', dutch: 'neem', english: 'take', chapter: 3, section: 'Dialoog' },
   {
-    id: '205',
+    id: '1028',
     dutch: 'rode wijn',
     english: 'red wine',
     chapter: 3,
@@ -5955,7 +5955,7 @@ export const vocabulary: VocabularyItem[] = [
   },
   { id: '206', dutch: 'roep', english: 'call', chapter: 3, section: 'Dialoog' },
   {
-    id: '207',
+    id: '1029',
     dutch: 'de ober',
     english: 'waiter',
     chapter: 3,
@@ -5963,91 +5963,91 @@ export const vocabulary: VocabularyItem[] = [
     article: 'de',
   },
   {
-    id: '208',
+    id: '1030',
     dutch: 'mag ik bestellen',
     english: 'may I order',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '209',
+    id: '1031',
     dutch: 'zegt u het maar',
     english: 'tell me',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '210',
+    id: '1032',
     dutch: 'een cola',
     english: 'a cola',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '211',
+    id: '1033',
     dutch: 'een biertje',
     english: 'a beer',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '212',
+    id: '1034',
     dutch: 'alstublieft',
     english: 'please',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '213',
+    id: '1035',
     dutch: 'Franse',
     english: 'French',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '214',
+    id: '1036',
     dutch: 'Spaanse',
     english: 'Spanish',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '215',
+    id: '1037',
     dutch: 'Zuid-Afrikaanse',
     english: 'South African',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '216',
+    id: '1038',
     dutch: 'weet het niet',
     english: "don't know",
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '217',
+    id: '1039',
     dutch: 'Spaanse maar',
     english: 'Spanish then',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '218',
+    id: '1040',
     dutch: 'proost',
     english: 'cheers',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '219',
+    id: '1041',
     dutch: 'op je verjaardag',
     english: 'on your birthday',
     chapter: 3,
     section: 'Dialoog',
   },
   {
-    id: '220',
+    id: '1042',
     dutch: 'bedankt',
     english: 'thanks',
     chapter: 3,
@@ -6056,14 +6056,14 @@ export const vocabulary: VocabularyItem[] = [
 
   // Chapter 3 – Additional vocabulary from textbook
   {
-    id: '221',
+    id: '1134',
     dutch: 'viert',
     english: 'celebrates',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '222',
+    id: '1043',
     dutch: 'de verjaardag',
     english: 'birthday',
     chapter: 3,
@@ -6073,7 +6073,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -en.',
   },
   {
-    id: '223',
+    id: '1044',
     dutch: 'het café',
     english: ['café', 'pub'],
     chapter: 3,
@@ -6083,14 +6083,14 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -é often form their plural by adding -s.',
   },
   {
-    id: '224',
+    id: '1135',
     dutch: 'samen',
     english: 'together',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '225',
+    id: '1045',
     dutch: 'gefeliciteerd',
     english: ['congratulations', 'happy birthday'],
     chapter: 3,
@@ -6098,7 +6098,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'greeting',
   },
   {
-    id: '226',
+    id: '1046',
     dutch: 'dank je wel',
     english: 'thank you',
     chapter: 3,
@@ -6106,63 +6106,63 @@ export const vocabulary: VocabularyItem[] = [
     category: 'greeting',
   },
   {
-    id: '227',
+    id: '1047',
     dutch: 'dit is',
     english: 'this is',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '228',
+    id: '1048',
     dutch: 'prettig',
     english: 'nice',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '229',
+    id: '1049',
     dutch: 'kennismaken',
     english: 'to meet',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '230',
+    id: '1050',
     dutch: 'kennen',
     english: 'know (people)',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '231',
+    id: '1051',
     dutch: 'elkaar',
     english: 'each other',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '232',
+    id: '1052',
     dutch: 'drinken',
     english: 'drink',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '233',
+    id: '1053',
     dutch: 'ik trakteer',
     english: "it's my treat",
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '234',
+    id: '1054',
     dutch: 'wil graag',
     english: 'would like',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '235',
+    id: '1055',
     dutch: 'de cola',
     english: 'cola',
     chapter: 3,
@@ -6172,7 +6172,7 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Nouns ending in -a often form their plural by adding -'s.",
   },
   {
-    id: '236',
+    id: '1056',
     dutch: 'het biertje',
     english: 'beer',
     chapter: 3,
@@ -6182,14 +6182,14 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Diminutive words (ending in -je, -tje, etc.) always take 'het' and form plurals with -s.",
   },
   {
-    id: '237',
+    id: '1057',
     dutch: 'neem',
     english: ['have', 'take'],
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '238',
+    id: '1058',
     dutch: 'rode',
     english: 'red',
     chapter: 3,
@@ -6197,7 +6197,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'description',
   },
   {
-    id: '239',
+    id: '1059',
     dutch: 'de wijn',
     english: 'wine',
     chapter: 3,
@@ -6207,14 +6207,14 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Most nouns form their plural by adding -en.',
   },
   {
-    id: '240',
+    id: '1060',
     dutch: 'roep',
     english: 'call',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '241',
+    id: '1061',
     dutch: 'de ober',
     english: 'waiter',
     chapter: 3,
@@ -6224,56 +6224,56 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -er often form their plural by adding -s.',
   },
   {
-    id: '242',
+    id: '1062',
     dutch: 'mag',
     english: 'may',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '243',
+    id: '1063',
     dutch: 'bestellen',
     english: 'order',
     chapter: 3,
     section: 'Bestellen',
   },
   {
-    id: '244',
+    id: '1064',
     dutch: 'alstublieft',
     english: 'please',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '245',
+    id: '1065',
     dutch: 'Franse',
     english: 'French',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '246',
+    id: '1066',
     dutch: 'Spaanse',
     english: 'Spanish',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '247',
+    id: '1067',
     dutch: 'Zuid-Afrikaanse',
     english: 'South African',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '248',
+    id: '1068',
     dutch: 'nou',
     english: 'well then',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '249',
+    id: '1069',
     dutch: 'proost',
     english: 'cheers',
     chapter: 3,
@@ -6289,7 +6289,7 @@ export const vocabulary: VocabularyItem[] = [
     article: 'het',
   },
   {
-    id: '251',
+    id: '1070',
     dutch: 'later',
     english: 'later',
     chapter: 3,
@@ -6297,28 +6297,28 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '252',
+    id: '1071',
     dutch: 'zullen',
     english: 'shall',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '253',
+    id: '1072',
     dutch: 'nog een keer',
     english: 'once more',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '254',
+    id: '1073',
     dutch: 'dat is goed',
     english: 'that is good',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '255',
+    id: '1074',
     dutch: 'het idee',
     english: 'idea',
     chapter: 3,
@@ -6328,21 +6328,21 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Nouns ending in -ee often form their plural by adding -ën.',
   },
   {
-    id: '256',
+    id: '1136',
     dutch: 'hetzelfde',
     english: 'the same',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '257',
+    id: '1075',
     dutch: 'ja, graag',
     english: 'yes, please',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '258',
+    id: '1076',
     dutch: 'het rondje',
     english: 'round (drink)',
     chapter: 3,
@@ -6352,28 +6352,28 @@ export const vocabulary: VocabularyItem[] = [
     hint: "Diminutive words (ending in -je, -tje, etc.) always take 'het' and form plurals with -s.",
   },
   {
-    id: '259',
+    id: '1077',
     dutch: 'betaal',
     english: 'pay',
     chapter: 3,
     section: 'Afrekenen',
   },
   {
-    id: '260',
+    id: '1078',
     dutch: 'geef',
     english: 'give',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '261',
+    id: '1079',
     dutch: 'nog maar',
     english: 'another',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '262',
+    id: '1080',
     dutch: 'het glas',
     english: 'glass',
     chapter: 3,
@@ -6383,21 +6383,21 @@ export const vocabulary: VocabularyItem[] = [
     hint: 'Some irregular nouns have unique plural forms.',
   },
   {
-    id: '263',
+    id: '1081',
     dutch: 'afrekenen',
     english: ['pay', 'settle the bill'],
     chapter: 3,
     section: 'Afrekenen',
   },
   {
-    id: '264',
+    id: '1082',
     dutch: 'alles',
     english: 'everything',
     chapter: 3,
     section: 'Woordenlijst',
   },
   {
-    id: '265',
+    id: '1083',
     dutch: 'daarom',
     english: "that's why",
     chapter: 3,
@@ -6406,7 +6406,7 @@ export const vocabulary: VocabularyItem[] = [
 
   // Ordinal numbers 1-21 & 100
   {
-    id: '266',
+    id: '1137',
     dutch: 'eerste',
     english: 'first',
     chapter: 3,
@@ -6414,7 +6414,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '267',
+    id: '1084',
     dutch: 'tweede',
     english: 'second',
     chapter: 3,
@@ -6422,7 +6422,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '268',
+    id: '1085',
     dutch: 'derde',
     english: 'third',
     chapter: 3,
@@ -6430,7 +6430,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '269',
+    id: '1086',
     dutch: 'vierde',
     english: 'fourth',
     chapter: 3,
@@ -6438,7 +6438,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '270',
+    id: '1138',
     dutch: 'vijfde',
     english: 'fifth',
     chapter: 3,
@@ -6446,7 +6446,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '271',
+    id: '1087',
     dutch: 'zesde',
     english: 'sixth',
     chapter: 3,
@@ -6454,7 +6454,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '272',
+    id: '1088',
     dutch: 'zevende',
     english: 'seventh',
     chapter: 3,
@@ -6462,7 +6462,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '273',
+    id: '1089',
     dutch: 'achtste',
     english: 'eighth',
     chapter: 3,
@@ -6470,7 +6470,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '274',
+    id: '1090',
     dutch: 'negende',
     english: 'ninth',
     chapter: 3,
@@ -6478,7 +6478,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '275',
+    id: '1091',
     dutch: 'tiende',
     english: 'tenth',
     chapter: 3,
@@ -6486,7 +6486,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '276',
+    id: '1092',
     dutch: 'elfde',
     english: 'eleventh',
     chapter: 3,
@@ -6494,7 +6494,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '277',
+    id: '1093',
     dutch: 'twaalfde',
     english: 'twelfth',
     chapter: 3,
@@ -6502,7 +6502,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '278',
+    id: '1094',
     dutch: 'dertiende',
     english: 'thirteenth',
     chapter: 3,
@@ -6510,7 +6510,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '279',
+    id: '1095',
     dutch: 'veertiende',
     english: 'fourteenth',
     chapter: 3,
@@ -6518,7 +6518,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '280',
+    id: '1139',
     dutch: 'vijftiende',
     english: 'fifteenth',
     chapter: 3,
@@ -6526,7 +6526,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '281',
+    id: '1096',
     dutch: 'zestiende',
     english: 'sixteenth',
     chapter: 3,
@@ -6534,7 +6534,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '282',
+    id: '1097',
     dutch: 'zeventiende',
     english: 'seventeenth',
     chapter: 3,
@@ -6542,7 +6542,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '283',
+    id: '1098',
     dutch: 'achttiende',
     english: 'eighteenth',
     chapter: 3,
@@ -6550,7 +6550,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '284',
+    id: '1099',
     dutch: 'negentiende',
     english: 'nineteenth',
     chapter: 3,
@@ -6558,7 +6558,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '285',
+    id: '1100',
     dutch: 'twintigste',
     english: 'twentieth',
     chapter: 3,
@@ -6566,7 +6566,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '286',
+    id: '1101',
     dutch: 'eenentwintigste',
     english: 'twenty-first',
     chapter: 3,
@@ -6574,7 +6574,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'ordinal',
   },
   {
-    id: '287',
+    id: '1102',
     dutch: 'honderdste',
     english: 'hundredth',
     chapter: 3,
@@ -6584,14 +6584,14 @@ export const vocabulary: VocabularyItem[] = [
 
   // Article-practice & misc nouns (ids 288–303)
   {
-    id: '288',
+    id: '1140',
     dutch: 'adres',
     english: 'address',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '289',
+    id: '1103',
     dutch: 'broer',
     english: 'brother',
     chapter: 3,
@@ -6599,21 +6599,21 @@ export const vocabulary: VocabularyItem[] = [
     category: 'family',
   },
   {
-    id: '290',
+    id: '1141',
     dutch: 'cursus',
     english: 'course',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '291',
+    id: '1104',
     dutch: 'foto',
     english: 'photo',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '292',
+    id: '1105',
     dutch: 'gezin',
     english: 'family',
     chapter: 3,
@@ -6622,7 +6622,7 @@ export const vocabulary: VocabularyItem[] = [
   },
   { id: '293', dutch: 'haar', english: 'hair', chapter: 3, section: 'Artikel' },
   {
-    id: '294',
+    id: '1106',
     dutch: 'zomer',
     english: 'summer',
     chapter: 3,
@@ -6630,28 +6630,28 @@ export const vocabulary: VocabularyItem[] = [
     category: 'season',
   },
   {
-    id: '295',
+    id: '1107',
     dutch: 'kantine',
     english: 'canteen',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '296',
+    id: '1108',
     dutch: 'koffie',
     english: 'coffee',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '297',
+    id: '1142',
     dutch: 'biertje',
     english: 'beer',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '298',
+    id: '1109',
     dutch: 'zus',
     english: 'sister',
     chapter: 3,
@@ -6659,7 +6659,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'family',
   },
   {
-    id: '299',
+    id: '1110',
     dutch: 'seizoen',
     english: 'season',
     chapter: 3,
@@ -6667,7 +6667,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'season',
   },
   {
-    id: '300',
+    id: '1111',
     dutch: 'maand',
     english: 'month',
     chapter: 3,
@@ -6675,14 +6675,14 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '301',
+    id: '1112',
     dutch: 'land',
     english: 'country',
     chapter: 3,
     section: 'Artikel',
   },
   {
-    id: '302',
+    id: '1113',
     dutch: 'pauze',
     english: 'break',
     chapter: 3,
@@ -6690,7 +6690,7 @@ export const vocabulary: VocabularyItem[] = [
     category: 'time',
   },
   {
-    id: '303',
+    id: '1114',
     dutch: 'tekst',
     english: 'text',
     chapter: 3,

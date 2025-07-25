@@ -66,6 +66,8 @@ export interface UserProgress {
   completedWords: Set<string>;
   scores: Record<string, number>;
   currentChapter: number;
+  incorrectWords: Record<string, { count: number; lastAttempt: number }>; // Track wrong words with count and timestamp
+  mistakeMode: boolean; // Whether currently in mistake review mode
 }
 
 export interface Exercise {
