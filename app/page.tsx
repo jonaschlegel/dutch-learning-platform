@@ -1,18 +1,18 @@
 'use client';
 
 import { ArticleExercise } from '@/components/ArticleExercise';
-import { ChapterSelector } from '@/components/ChapterSelector';
-import { PluralExercise } from '@/components/PluralExercise';
-import { ProgressDashboard } from '@/components/ProgressDashboard';
 import { Avatar, AvatarFallback } from '@/components/Avatar';
 import { Badge } from '@/components/Badge';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
+import { ChapterSelector } from '@/components/ChapterSelector';
+import { PluralExercise } from '@/components/PluralExercise';
+import { ProgressDashboard } from '@/components/ProgressDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { vocabulary } from '@/data/vocabulary';
-import { useToast } from '@/hooks/use-toast';
 import { useProgress } from '@/hooks/use-progress';
+import { useToast } from '@/hooks/use-toast';
 import { useUserAvatar } from '@/hooks/use-user-avatar';
 import { BookOpen, Brain, Play, RotateCcw, Target } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -80,16 +80,17 @@ export default function DutchLearningPlatform() {
     progress.currentChapter,
   ]);
 
-  // Dynamic categories based on current chapter
   const availableCategories = useMemo(() => {
     if (progress.currentChapter === 0) {
-      return []; // No categories for "All Chapters"
+      return [];
     }
 
     const categories = new Set(
       currentChapterWords
         .map((word) => word.category)
-        .filter((category): category is string => Boolean(category)),
+        .filter((category): category is NonNullable<typeof category> =>
+          Boolean(category),
+        ),
     );
     return Array.from(categories).sort();
   }, [currentChapterWords, progress.currentChapter]);
@@ -232,7 +233,6 @@ export default function DutchLearningPlatform() {
               <TabsContent value="practice" className="space-y-6">
                 {!showResults ? (
                   <div className="space-y-6">
-                    {/* Only show category filters when not in "All Chapters" mode */}
                     {progress.currentChapter !== 0 &&
                       availableCategories.length > 0 && (
                         <div className="flex flex-wrap justify-center gap-2 mb-4">

@@ -14,7 +14,7 @@ import {
   Target,
   TrendingUp,
 } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 interface ProgressDashboardProps {
   progress: UserProgress;
@@ -47,21 +47,26 @@ export function ProgressDashboard({
 
   const [showCategoryProgress, setShowCategoryProgress] = useState(false);
 
-  // Dynamic categories based on current chapter
   const availableCategories = useMemo(() => {
     if (progress.currentChapter === 0) {
-      // For "All Chapters", get all unique categories across all vocabulary
       const categories = new Set(
-        vocabulary.map((word) => word.category).filter(Boolean),
+        vocabulary
+          .map((word) => word.category)
+          .filter((category): category is NonNullable<typeof category> =>
+            Boolean(category),
+          ),
       );
       return Array.from(categories).sort();
     } else {
-      // For specific chapter, get categories only from that chapter
       const chapterWords = vocabulary.filter(
         (w) => w.chapter === progress.currentChapter,
       );
       const categories = new Set(
-        chapterWords.map((word) => word.category).filter(Boolean),
+        chapterWords
+          .map((word) => word.category)
+          .filter((category): category is NonNullable<typeof category> =>
+            Boolean(category),
+          ),
       );
       return Array.from(categories).sort();
     }
