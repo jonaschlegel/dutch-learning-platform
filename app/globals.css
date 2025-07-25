@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dutch Learning Platform Color System */
+    /* Based on Dutch flag colors with enhanced accessibility */
+
+    /* Core Brand Colors */
+    --dutch-blue: 214 100% 27%; /* #003d82 - Deep Dutch Blue */
+    --dutch-blue-light: 214 85% 45%; /* #1a5db8 - Lighter Dutch Blue */
+    --dutch-red: 0 85% 55%; /* #e53e3e - Dutch Red/Orange */
+    --dutch-red-light: 0 75% 65%; /* #f56565 - Lighter Dutch Red */
+    --dutch-white: 0 0% 100%; /* #ffffff - Pure White */
+    --dutch-cream: 39 100% 97%; /* #fefcf5 - Warm Cream */
+
+    /* Semantic Colors - Light Mode */
+    --background: 39 100% 97%; /* Warm cream background */
+    --foreground: 214 50% 15%; /* Dark blue text */
+
+    --card: 0 0% 100%; /* Pure white cards */
+    --card-foreground: 214 50% 15%; /* Dark blue text on cards */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 214 50% 15%;
+
+    --primary: 214 100% 27%; /* Dutch Blue primary */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+
+    --secondary: 0 85% 55%; /* Dutch Red secondary */
+    --secondary-foreground: 0 0% 100%; /* White text on secondary */
+
+    --tertiary: 39 85% 50%; /* Dutch Orange accent */
+    --tertiary-foreground: 214 50% 15%; /* Dark blue text on orange */
+
+    --muted: 214 15% 94%; /* Very light blue-grey */
+    --muted-foreground: 214 25% 45%; /* Medium blue-grey text */
+
+    --accent: 214 25% 92%; /* Light blue accent */
+    --accent-foreground: 214 50% 15%; /* Dark blue text */
+
+    --destructive: 0 85% 55%; /* Dutch Red for errors */
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%; /* Green for success */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 39 85% 50%; /* Orange for warnings */
+    --warning-foreground: 214 50% 15%;
+
+    --border: 214 20% 88%; /* Light blue-grey borders */
+    --input: 214 20% 88%; /* Input borders */
+    --ring: 214 100% 27%; /* Focus ring - Dutch Blue */
+
+    /* Typography Scale */
+    --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--font-nunito), var(--font-inter), ui-sans-serif,
+      system-ui, sans-serif;
+
+    /* Spacing & Sizing */
+    --radius: 0.75rem; /* Slightly rounded for friendliness */
+
+    /* Animation */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 250ms ease-in-out;
+    --transition-slow: 350ms ease-in-out;
+  }
+
+  .dark {
+    /* Dark Mode - Maintaining Dutch theme with accessibility */
+    --background: 214 50% 8%; /* Very dark blue */
+    --foreground: 39 100% 97%; /* Warm cream text */
+
+    --card: 214 45% 12%; /* Dark blue cards */
+    --card-foreground: 39 100% 97%; /* Cream text on cards */
+
+    --popover: 214 45% 12%;
+    --popover-foreground: 39 100% 97%;
+
+    --primary: 214 85% 65%; /* Lighter Dutch Blue for dark mode */
+    --primary-foreground: 214 50% 8%; /* Dark blue text on primary */
+
+    --secondary: 0 75% 65%; /* Lighter Dutch Red for dark mode */
+    --secondary-foreground: 214 50% 8%;
+
+    --tertiary: 39 75% 60%; /* Lighter orange for dark mode */
+    --tertiary-foreground: 214 50% 8%;
+
+    --muted: 214 30% 20%; /* Dark blue-grey */
+    --muted-foreground: 214 15% 70%; /* Light blue-grey text */
+
+    --accent: 214 35% 25%; /* Medium dark blue */
+    --accent-foreground: 39 100% 97%;
+
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 214 50% 8%;
+
+    --success: 142 60% 50%;
+    --success-foreground: 214 50% 8%;
+
+    --warning: 39 75% 60%;
+    --warning-foreground: 214 50% 8%;
+
+    --border: 214 30% 25%;
+    --input: 214 30% 25%;
+    --ring: 214 85% 65%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Typography System */
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: 'ss01', 'ss02', 'cv01', 'cv02';
+  }
+
+  /* Focus Management for Accessibility */
+  *:focus {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Skip to main content for screen readers */
+  .skip-link {
+    @apply absolute -top-40 left-6 z-[100] bg-primary px-4 py-2 text-primary-foreground;
+    @apply focus:top-6 transition-all duration-300;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: 214 50% 50%;
+      --ring: 214 100% 40%;
+    }
+
+    .dark {
+      --border: 214 30% 60%;
+      --ring: 214 85% 70%;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* Dutch Learning Platform specific components */
+  .dutch-flag-gradient {
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--dutch-red)) 0% 33.33%,
+      hsl(var(--dutch-white)) 33.33% 66.66%,
+      hsl(var(--dutch-blue)) 66.66% 100%
+    );
+  }
+
+  .text-dutch-blue {
+    color: hsl(var(--dutch-blue));
+  }
+
+  .text-dutch-red {
+    color: hsl(var(--dutch-red));
+  }
+
+  .bg-dutch-blue {
+    background-color: hsl(var(--dutch-blue));
+  }
+
+  .bg-dutch-red {
+    background-color: hsl(var(--dutch-red));
+  }
+
+  .border-dutch-blue {
+    border-color: hsl(var(--dutch-blue));
+  }
+
+  /* Learning card styles */
+  .learning-card {
+    @apply bg-card border rounded-lg p-6 shadow-sm;
+    @apply hover:shadow-md transition-shadow duration-normal;
+  }
+
+  /* Button variants */
+  .btn-dutch {
+    @apply bg-dutch-blue text-white hover:bg-dutch-blue-light;
+    @apply transition-colors duration-fast;
+  }
+
+  .btn-dutch-secondary {
+    @apply bg-dutch-red text-white hover:bg-dutch-red-light;
+    @apply transition-colors duration-fast;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Accessibility utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+}

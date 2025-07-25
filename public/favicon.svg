@@ -1,0 +1,20 @@
+<!-- Simplified favicon version -->
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#fefcf5"/>
+
+  <!-- Book icon simplified -->
+  <rect x="6" y="18" width="20" height="8" rx="1" fill="#ff8c00" stroke="#2c2c2c" stroke-width="1"/>
+  <line x1="16" y1="18" x2="16" y2="26" stroke="#2c2c2c" stroke-width="1"/>
+
+  <!-- EN bubble -->
+  <rect x="4" y="6" width="10" height="8" rx="2" fill="#003d82"/>
+  <text x="9" y="12" fill="white" font-family="Arial" font-size="6" font-weight="bold" text-anchor="middle">EN</text>
+
+  <!-- NL bubble with flag -->
+  <rect x="18" y="6" width="10" height="8" rx="2" fill="white" stroke="#2c2c2c" stroke-width="0.5"/>
+  <rect x="19" y="7" width="8" height="2" fill="#e53e3e"/>
+  <rect x="19" y="9" width="8" height="2" fill="white"/>
+  <rect x="19" y="11" width="8" height="2" fill="#003d82"/>
+  <text x="23" y="12" fill="#2c2c2c" font-family="Arial" font-size="4" font-weight="bold" text-anchor="middle">NL</text>
+</svg>
