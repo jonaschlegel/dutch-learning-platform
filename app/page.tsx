@@ -443,7 +443,10 @@ export default function DutchLearningPlatform() {
                                       variant="secondary"
                                       className="bg-secondary text-secondary-foreground"
                                     >
-                                      Plural: {word.plural}
+                                      Plural:{' '}
+                                      {Array.isArray(word.plural)
+                                        ? word.plural.join(' / ')
+                                        : word.plural}
                                     </Badge>
                                   )}
                                 </div>

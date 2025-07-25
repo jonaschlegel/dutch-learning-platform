@@ -1,17 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { Button } from '@/components/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { Input } from '@/components/Input';
-import type { VocabularyItem } from '@/types/vocabulary';
-import { CheckCircle, XCircle, Lightbulb, Volume2 } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/Tooltip';
+import type { VocabularyItem } from '@/types/vocabulary';
+import { CheckCircle, Lightbulb, Volume2, XCircle } from 'lucide-react';
+import { useState } from 'react';
 
 interface PluralExerciseProps {
   word: VocabularyItem;
@@ -24,8 +24,17 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
   const [isCorrect, setIsCorrect] = useState(false);
 
   const checkAnswer = () => {
-    const correct =
-      userAnswer.toLowerCase().trim() === word.plural?.toLowerCase().trim();
+    const userAnswerLower = userAnswer.toLowerCase().trim();
+    let correct = false;
+
+    if (Array.isArray(word.plural)) {
+      correct = word.plural.some(
+        (pluralForm) => userAnswerLower === pluralForm.toLowerCase(),
+      );
+    } else if (word.plural) {
+      correct = userAnswerLower === word.plural.toLowerCase().trim();
+    }
+
     setIsCorrect(correct);
     setShowFeedback(true);
     setTimeout(() => {
@@ -36,7 +45,8 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
   };
 
   const playAudio = () => {
-    const utterance = new SpeechSynthesisUtterance(word.dutch);
+    const dutchWord = Array.isArray(word.dutch) ? word.dutch[0] : word.dutch;
+    const utterance = new SpeechSynthesisUtterance(dutchWord);
     utterance.lang = 'nl-NL';
     speechSynthesis.speak(utterance);
   };
@@ -128,7 +138,11 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
             <span className="font-medium">
               {isCorrect
                 ? 'Correct!'
-                : `Incorrect. The plural is: ${word.plural}`}
+                : `Incorrect. The plural is: ${
+                    Array.isArray(word.plural)
+                      ? word.plural.join(' / ')
+                      : word.plural
+                  }`}
             </span>
           </div>
         )}
