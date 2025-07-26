@@ -9,12 +9,23 @@ import { ChapterSelector } from '@/components/ChapterSelector';
 import { PluralExercise } from '@/components/PluralExercise';
 import { ProgressDashboard } from '@/components/ProgressDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
+import {
+  createTestExercises,
+  TestExerciseCard,
+} from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { vocabulary } from '@/data/vocabulary';
 import { useProgress } from '@/hooks/use-progress';
 import { useToast } from '@/hooks/use-toast';
 import { useUserAvatar } from '@/hooks/use-user-avatar';
-import { BookOpen, Brain, Play, RotateCcw, Target } from 'lucide-react';
+import {
+  BookOpen,
+  Brain,
+  GraduationCap,
+  Play,
+  RotateCcw,
+  Target,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function DutchLearningPlatform() {
@@ -30,12 +41,13 @@ export default function DutchLearningPlatform() {
 
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [exerciseMode, setExerciseMode] = useState<
-    'vocabulary' | 'articles' | 'plural'
+    'vocabulary' | 'articles' | 'plural' | 'test'
   >('vocabulary');
   const [showResults, setShowResults] = useState(false);
   const [sessionScore, setSessionScore] = useState({ correct: 0, total: 0 });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hasStartedLearning, setHasStartedLearning] = useState(false);
+  const [testExercises, setTestExercises] = useState(createTestExercises());
 
   useEffect(() => {
     toast({
@@ -60,6 +72,10 @@ export default function DutchLearningPlatform() {
   }, [progress.currentChapter]);
 
   const availableWords = useMemo(() => {
+    if (exerciseMode === 'test') {
+      return [];
+    }
+
     let words = currentChapterWords;
 
     if (progress.mistakeMode) {
@@ -107,6 +123,8 @@ export default function DutchLearningPlatform() {
   }, [currentChapterWords, progress.currentChapter]);
 
   const currentWord = availableWords[currentExerciseIndex];
+  const currentTestExercise =
+    exerciseMode === 'test' ? testExercises[currentExerciseIndex] : null;
 
   const handleExerciseComplete = (correct: boolean) => {
     if (currentWord) {
@@ -119,7 +137,10 @@ export default function DutchLearningPlatform() {
     };
     setSessionScore(newScore);
 
-    if (progress.mistakeMode && correct) {
+    const totalExercises =
+      exerciseMode === 'test' ? testExercises.length : availableWords.length;
+
+    if (progress.mistakeMode && correct && currentWord) {
       const remainingIncorrectWords = Object.keys(
         progress.incorrectWords,
       ).filter((id) => id !== currentWord?.id);
@@ -130,7 +151,7 @@ export default function DutchLearningPlatform() {
       }
     }
 
-    if (currentExerciseIndex < availableWords.length - 1) {
+    if (currentExerciseIndex < totalExercises - 1) {
       setCurrentExerciseIndex((prev) => prev + 1);
     } else {
       setShowResults(true);
@@ -141,9 +162,14 @@ export default function DutchLearningPlatform() {
     setCurrentExerciseIndex(0);
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
+    if (exerciseMode === 'test') {
+      setTestExercises(createTestExercises());
+    }
   };
 
-  const startNewSession = (mode: 'vocabulary' | 'articles' | 'plural') => {
+  const startNewSession = (
+    mode: 'vocabulary' | 'articles' | 'plural' | 'test',
+  ) => {
     setExerciseMode(mode);
     resetExercises();
     setHasStartedLearning(true);
@@ -186,9 +212,10 @@ export default function DutchLearningPlatform() {
                 exercises.
               </p>
               <p className="text-md text-muted-foreground">
-                Start with "Vocabulary" to learn new words, or challenge
-                yourself with "Articles" to get the de/het right! You can also
-                browse vocabulary by chapter.
+                Start with "Vocabulary" to learn new words, challenge yourself
+                with "Articles" to get the de/het right, or prepare for your
+                test with "Test Prep"! You can also browse vocabulary by
+                chapter.
               </p>
               <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <Button
@@ -206,7 +233,7 @@ export default function DutchLearningPlatform() {
                   className="border-primary text-primary hover:bg-primary/10"
                 >
                   <Play className="h-5 w-5 mr-2" />
-                  Articles (de/het)
+                  Articles
                 </Button>
                 <Button
                   size="default"
@@ -216,6 +243,15 @@ export default function DutchLearningPlatform() {
                 >
                   <Play className="h-5 w-5 mr-2" />
                   Plural
+                </Button>
+                <Button
+                  size="default"
+                  variant="outline"
+                  onClick={() => startNewSession('test')}
+                  className="border-primary text-primary hover:bg-primary/10"
+                >
+                  <GraduationCap className="h-5 w-5 mr-2" />
+                  Test Prep
                 </Button>
               </div>
             </CardContent>
@@ -314,7 +350,7 @@ export default function DutchLearningPlatform() {
                           ))}
                         </div>
                       )}
-                    <div className="flex justify-center space-x-4">
+                    <div className="flex justify-center space-x-4 flex-wrap gap-y-2">
                       <Button
                         variant={
                           exerciseMode === 'vocabulary' ? 'default' : 'outline'
@@ -354,14 +390,34 @@ export default function DutchLearningPlatform() {
                       >
                         Plural Practice
                       </Button>
+                      <Button
+                        variant={
+                          exerciseMode === 'test' ? 'default' : 'outline'
+                        }
+                        onClick={() => startNewSession('test')}
+                        className={
+                          exerciseMode === 'test'
+                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                            : ''
+                        }
+                      >
+                        Test Prep Practice
+                      </Button>
                     </div>
 
-                    {availableWords.length > 0 && currentWord ? (
+                    {(exerciseMode !== 'test' &&
+                      availableWords.length > 0 &&
+                      currentWord) ||
+                    (exerciseMode === 'test' &&
+                      testExercises.length > 0 &&
+                      currentTestExercise) ? (
                       <div className="space-y-4">
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
                             Question {currentExerciseIndex + 1} of{' '}
-                            {availableWords.length}
+                            {exerciseMode === 'test'
+                              ? testExercises.length
+                              : availableWords.length}
                           </p>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div
@@ -369,7 +425,9 @@ export default function DutchLearningPlatform() {
                               style={{
                                 width: `${
                                   ((currentExerciseIndex + 1) /
-                                    availableWords.length) *
+                                    (exerciseMode === 'test'
+                                      ? testExercises.length
+                                      : availableWords.length)) *
                                   100
                                 }%`,
                               }}
@@ -377,7 +435,12 @@ export default function DutchLearningPlatform() {
                           </div>
                         </div>
 
-                        {exerciseMode === 'vocabulary' ? (
+                        {exerciseMode === 'test' && currentTestExercise ? (
+                          <TestExerciseCard
+                            exercise={currentTestExercise}
+                            onComplete={handleExerciseComplete}
+                          />
+                        ) : exerciseMode === 'vocabulary' ? (
                           <VocabularyCard
                             word={currentWord}
                             mode="production"

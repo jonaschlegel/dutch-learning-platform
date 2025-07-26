@@ -1,16 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { Button } from '@/components/Button';
-import type { VocabularyItem } from '@/types/vocabulary';
-import { CheckCircle, XCircle, Lightbulb } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/Tooltip';
+import type { VocabularyItem } from '@/types/vocabulary';
+import { CheckCircle, Lightbulb, XCircle } from 'lucide-react';
+import { useState } from 'react';
 
 interface ArticleExerciseProps {
   word: VocabularyItem;
@@ -67,7 +67,12 @@ export function ArticleExercise({ word, onComplete }: ArticleExerciseProps) {
       <CardContent className="space-y-4">
         <div className="text-center">
           <p className="text-2xl font-bold text-primary mb-2">
-            ___ {word.dutch.replace(/^(de|het)\s+/, '')}
+            ___{' '}
+            {typeof word.dutch === 'string'
+              ? word.dutch.replace(/^(de|het)\s+/, '')
+              : Array.isArray(word.dutch)
+              ? word.dutch.join(' ').replace(/^(de|het)\s+/, '')
+              : ''}
           </p>
           <p className="text-lg text-muted-foreground">({word.english})</p>
         </div>
