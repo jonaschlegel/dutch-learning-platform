@@ -65,6 +65,8 @@ export interface DialogueExercise {
     speaker: 'A' | 'B';
     text: string;
     isUserInput?: boolean;
+    answerOptions?: string[];
+    correctAnswer?: string;
   }>;
 }
 
@@ -125,6 +127,20 @@ export const testExercises = {
       ],
     },
     {
+      id: 'dictation-4',
+      title: 'Listening/Dictation Exercise 4',
+      instructions:
+        'Target words to practise spelling: gelukkig; bezoek; lekker; wandelen; soms',
+      targetWords: ['gelukkig', 'bezoek', 'lekker', 'wandelen', 'soms'],
+      sentences: [
+        'Gelukkig is het weekend begonnen.',
+        'Krijg je vaak bezoek van vrienden?',
+        'De soep smaakt lekker.',
+        'In het park wandelen veel mensen.',
+        'Soms regent het de hele dag.',
+      ],
+    },
+    {
       id: 'dictation-original',
       title: 'Original Dictation Exercise',
       instructions:
@@ -171,6 +187,30 @@ export const testExercises = {
         { question: 'Wat doe je in het weekend?' },
         { question: 'Wanneer ga je op vakantie?' },
         { question: 'Zullen we samen koffie drinken?' },
+      ],
+    },
+    {
+      id: 'qa-3',
+      title: 'Exercise A3: Question and Answer Practice',
+      instructions: 'Give an appropriate reaction to the question',
+      questions: [
+        { question: 'Wat eet je graag?', sampleAnswer: 'Ik eet graag pasta.' },
+        {
+          question: 'Met wie woon je?',
+          sampleAnswer: 'Ik woon met mijn partner.',
+        },
+        {
+          question: 'Hoe kom je naar school?',
+          sampleAnswer: 'Ik kom met de fiets.',
+        },
+        {
+          question: 'Wanneer is je verjaardag?',
+          sampleAnswer: 'Mijn verjaardag is in maart.',
+        },
+        {
+          question: 'Ga je vaak naar de markt?',
+          sampleAnswer: 'Ja, elke zaterdag.',
+        },
       ],
     },
   ] as QuestionAnswerExercise[],
@@ -278,6 +318,54 @@ export const testExercises = {
         },
       ],
     },
+    {
+      id: 'fillin-3',
+      title: 'Exercise B3: Fill in the Correct Word Form',
+      instructions:
+        'Choose from: maken, helpen, openen, bellen, rijden, gebruiken, stoppen, wachten, halen, zoeken',
+      wordBank: [
+        'maken',
+        'helpen',
+        'openen',
+        'bellen',
+        'rijden',
+        'gebruiken',
+        'stoppen',
+        'wachten',
+        'halen',
+        'zoeken',
+      ],
+      sentences: [
+        {
+          sentence: 'Kunt u mij ... ... met deze oefening?',
+          correctAnswer: 'helpen',
+        },
+        {
+          sentence: 'We ... ... vaak met de auto naar het werk.',
+          correctAnswer: 'rijden',
+        },
+        { sentence: 'Ik ... ... de deur voor je.', correctAnswer: 'open' },
+        { sentence: 'Wil je mij even ... ... later?', correctAnswer: 'bellen' },
+        {
+          sentence: 'Ze ... ... de bus bij de halte.',
+          correctAnswer: 'wachten op',
+        },
+        {
+          sentence: 'We ... ... een oplossing voor dit probleem.',
+          correctAnswer: 'zoeken',
+        },
+        {
+          sentence: 'Hij ... ... zijn jas bij de kapstok.',
+          correctAnswer: 'haalt',
+        },
+        { sentence: 'Gebruik je je laptop veel?', correctAnswer: 'gebruik' },
+        {
+          sentence: 'Zij ... ... elke dag een gezonde lunch.',
+          correctAnswer: 'maken',
+        },
+        { sentence: 'De trein ... ... in Utrecht.', correctAnswer: 'stopt' },
+      ],
+    },
   ] as FillInExercise[],
 
   pronouns: [
@@ -364,6 +452,44 @@ export const testExercises = {
         },
       ],
     },
+    {
+      id: 'pronouns-3',
+      title: 'Exercise C3: Fill in the Correct Possessive Pronoun',
+      instructions: 'Fill in the correct possessive pronoun',
+      sentences: [
+        {
+          sentence: 'Dit is het boek van Pieter. Het is ... ... boek.',
+          correctAnswer: 'zijn',
+        },
+        {
+          sentence: 'Ik geef een cadeau aan ... ... moeder.',
+          correctAnswer: 'mijn',
+        },
+        { sentence: 'Heb jij ... ... sleutels gevonden?', correctAnswer: 'je' },
+        {
+          sentence: 'Wij vieren ... ... verjaardag op zaterdag.',
+          correctAnswer: 'onze',
+        },
+        {
+          sentence: 'U hebt ... ... afspraak om tien uur.',
+          correctAnswer: 'uw',
+        },
+        {
+          sentence: 'Zij stuurt een kaart naar ... ... oma.',
+          correctAnswer: 'haar',
+        },
+        {
+          sentence: 'Het kind speelt met ... ... speelgoed.',
+          correctAnswer: 'zijn',
+        },
+        {
+          sentence: 'Hebben jullie ... ... huis verkocht?',
+          correctAnswer: 'jullie',
+        },
+        { sentence: 'De buren vieren ... ... huwelijk.', correctAnswer: 'hun' },
+        { sentence: 'Ik wacht op ... ... vriend.', correctAnswer: 'mijn' },
+      ],
+    },
   ] as PronounExercise[],
 
   createQuestions: [
@@ -415,6 +541,27 @@ export const testExercises = {
         },
       ],
     },
+    {
+      id: 'create-3',
+      title: 'Exercise D3: Create Your Own Questions',
+      instructions: 'Create a fitting question for each answer',
+      answerPairs: [
+        { answer: 'Om half negen.', sampleQuestion: 'Hoe laat begint de les?' },
+        {
+          answer: 'In het park naast mijn huis.',
+          sampleQuestion: 'Waar ga je wandelen?',
+        },
+        {
+          answer: 'Ja, ik heb een hond.',
+          sampleQuestion: 'Heb je huisdieren?',
+        },
+        { answer: 'Twee keer per week.', sampleQuestion: 'Hoe vaak sport je?' },
+        {
+          answer: 'Met mijn collega’s.',
+          sampleQuestion: 'Met wie lunch je meestal?',
+        },
+      ],
+    },
   ] as CreateQuestionsExercise[],
 
   sentenceWriting: [
@@ -445,24 +592,86 @@ export const testExercises = {
         },
       ],
     },
+    {
+      id: 'sentence-writing-2',
+      title: 'Exercise E3: Sentence Writing Practice',
+      instructions: 'Write complete sentences using the given words',
+      prompts: [
+        {
+          words: '(jij / maken / huiswerk / vanavond)',
+          sampleAnswer: 'Jij maakt vanavond huiswerk.',
+        },
+        {
+          words: '(wij / koken / soep / keuken)',
+          sampleAnswer: 'Wij koken soep in de keuken.',
+        },
+        {
+          words: '(mijn ouders / lezen / krant / ochtend)',
+          sampleAnswer: 'Mijn ouders lezen de krant in de ochtend.',
+        },
+        {
+          words: '(kinderen / gaan / school / bus)',
+          sampleAnswer: 'De kinderen gaan met de bus naar school.',
+        },
+        {
+          words: '(zij / werken / ziekenhuis / verpleegkundige)',
+          sampleAnswer: 'Zij werkt als verpleegkundige in het ziekenhuis.',
+        },
+      ],
+    },
   ] as SentenceWritingExercise[],
 
   dialogue: [
     {
       id: 'dialogue-completion',
       title: 'Exercise F: Dialogue Completion',
-      instructions: 'Complete the dialogue with appropriate responses',
+      instructions:
+        'Complete the dialogue by choosing or typing the best answer.',
       dialogue: [
         { speaker: 'A', text: 'Goedemorgen! Hoe gaat het met je?' },
-        { speaker: 'B', text: '', isUserInput: true },
+        {
+          speaker: 'B',
+          text: '',
+          isUserInput: true,
+          answerOptions: [
+            'Goed, dank je!',
+            'Ik ga naar school.',
+            'Tot morgen!',
+          ],
+          correctAnswer: 'Goed, dank je!',
+        },
         { speaker: 'A', text: 'Wat ga je vandaag doen?' },
-        { speaker: 'B', text: '', isUserInput: true },
+        {
+          speaker: 'B',
+          text: '',
+          isUserInput: true,
+          answerOptions: ['Ik ga werken.', 'Heel goed.', 'Graag gedaan.'],
+          correctAnswer: 'Ik ga werken.',
+        },
         { speaker: 'A', text: 'Zullen we samen lunchen?' },
-        { speaker: 'B', text: '', isUserInput: true },
+        {
+          speaker: 'B',
+          text: '',
+          isUserInput: true,
+          answerOptions: ['Ja, graag!', 'Nee, tot morgen!', 'Ik ben goed.'],
+          correctAnswer: 'Ja, graag!',
+        },
         { speaker: 'A', text: 'Om hoe laat spreken we af?' },
-        { speaker: 'B', text: '', isUserInput: true },
+        {
+          speaker: 'B',
+          text: '',
+          isUserInput: true,
+          answerOptions: ['Om twaalf uur.', 'Tot morgen.', 'Heel goed.'],
+          correctAnswer: 'Om twaalf uur.',
+        },
         { speaker: 'A', text: 'Tot straks dan!' },
-        { speaker: 'B', text: '', isUserInput: true },
+        {
+          speaker: 'B',
+          text: '',
+          isUserInput: true,
+          answerOptions: ['Tot straks!', 'Ik ga werken.', 'Goed, dank je.'],
+          correctAnswer: 'Tot straks!',
+        },
       ],
     },
   ] as DialogueExercise[],
