@@ -148,16 +148,16 @@ export const testExercises = {
         { question: 'Hoe heet je?', sampleAnswer: 'Ik ben Sander' },
         { question: 'Wat is het?', sampleAnswer: 'Het is...' },
         {
-          question: 'Bij de bakker koop je het waar?',
-          sampleAnswer: 'gistere avond een broodje',
+          question: 'Wat koop je bij de bakker?',
+          sampleAnswer: 'Gisterenavond heb ik een broodje gekocht.',
         },
         {
           question: 'Wanneer kom je langs op bezoek?',
-          sampleAnswer: 'Zijk kom morgenvroeg, wilde slapen',
+          sampleAnswer: 'Ik kom morgenvroeg langs, als ik uitgeslapen ben.',
         },
         {
           question: 'Zullen we morgenavond iets afspreken?',
-          sampleAnswer: 'Ja, in het goed idee',
+          sampleAnswer: 'Ja, dat is een goed idee.',
         },
       ],
     },
