@@ -41,19 +41,21 @@ export interface VocabularyItem {
     | 'technology'
     | 'vegetable'
     | 'color'
-    | 'description'
-    | 'family'
     | 'frequency'
     | 'fruit'
-    | 'greeting'
-    | 'month'
-    | 'number'
-    | 'ordinal'
     | 'place'
-    | 'question'
-    | 'time'
-    | 'pronoun'
-    | 'plural';
+    | 'plural'
+    | 'person'
+    | 'furniture'
+    | 'building'
+    | 'restaurant'
+    | 'quantity'
+    | 'cutlery'
+    | 'determiner'
+    | 'feeling'
+    | 'opinion'
+    | 'request'
+    | 'statement';
 }
 
 export interface Chapter {
