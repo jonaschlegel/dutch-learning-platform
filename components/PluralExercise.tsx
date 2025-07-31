@@ -37,11 +37,12 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
 
     setIsCorrect(correct);
     setShowFeedback(true);
-    setTimeout(() => {
-      onComplete(correct);
-      setShowFeedback(false);
-      setUserAnswer('');
-    }, 1500);
+  };
+
+  const handleNext = () => {
+    onComplete(isCorrect);
+    setShowFeedback(false);
+    setUserAnswer('');
   };
 
   const playAudio = () => {
@@ -123,28 +124,36 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
         </div>
 
         {showFeedback && (
-          <div
-            className={`flex items-center justify-center space-x-2 p-4 rounded-lg ${
-              isCorrect
-                ? 'bg-green-100 text-green-800'
-                : 'bg-red-100 text-red-800'
-            }`}
-          >
-            {isCorrect ? (
-              <CheckCircle className="h-5 w-5" />
-            ) : (
-              <XCircle className="h-5 w-5" />
-            )}
-            <span className="font-medium">
-              {isCorrect
-                ? 'Correct!'
-                : `Incorrect. The plural is: ${
-                    Array.isArray(word.plural)
-                      ? word.plural.join(' / ')
-                      : word.plural
-                  }`}
-            </span>
-          </div>
+          <>
+            <div
+              className={`flex items-center justify-center space-x-2 p-4 rounded-lg ${
+                isCorrect
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-red-100 text-red-800'
+              }`}
+            >
+              {isCorrect ? (
+                <CheckCircle className="h-5 w-5" />
+              ) : (
+                <XCircle className="h-5 w-5" />
+              )}
+              <span className="font-medium">
+                {isCorrect
+                  ? 'Correct!'
+                  : `Incorrect. The plural is: ${
+                      Array.isArray(word.plural)
+                        ? word.plural.join(' / ')
+                        : word.plural
+                    }`}
+              </span>
+            </div>
+            <Button
+              onClick={handleNext}
+              className="w-full bg-blue-600 text-white hover:bg-blue-700"
+            >
+              Next Exercise
+            </Button>
+          </>
         )}
       </CardContent>
     </Card>

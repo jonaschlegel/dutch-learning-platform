@@ -70,11 +70,11 @@ export function TestExerciseCard({
 
     setFeedback(isCorrect ? 'correct' : 'incorrect');
     setShowAnswer(true);
+  };
 
-    setTimeout(() => {
-      onComplete(isCorrect);
-      resetCard();
-    }, 2000);
+  const handleNext = () => {
+    onComplete(feedback === 'correct');
+    resetCard();
   };
 
   const resetCard = () => {
@@ -191,7 +191,7 @@ export function TestExerciseCard({
             />
 
             {showAnswer && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {feedback === 'correct' ? (
                   <div className="flex items-center text-green-600">
                     <Check className="h-4 w-4 mr-2" />
@@ -216,6 +216,12 @@ export function TestExerciseCard({
                     )}
                   </div>
                 )}
+                <Button
+                  onClick={handleNext}
+                  className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                >
+                  Next Exercise
+                </Button>
               </div>
             )}
           </div>
