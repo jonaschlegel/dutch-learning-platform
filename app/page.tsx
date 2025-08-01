@@ -15,7 +15,9 @@ import {
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { vocabulary } from '@/data/vocabulary';
+import { useExerciseQueue } from '@/hooks/use-exercise-queue';
 import { useProgress } from '@/hooks/use-progress';
+import { useTestExerciseQueue } from '@/hooks/use-test-exercise-queue';
 import { useToast } from '@/hooks/use-toast';
 import { useUserAvatar } from '@/hooks/use-user-avatar';
 import {
@@ -39,7 +41,16 @@ export default function DutchLearningPlatform() {
   const { initial, color } = useUserAvatar();
   const { toast } = useToast();
 
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const exerciseQueue = useExerciseQueue({
+    maxRecentItems: 8,
+    prioritizeIncorrect: true,
+  });
+
+  const testExerciseQueue = useTestExerciseQueue({
+    maxRecentExercises: 6,
+    ensureTypeDistribution: true,
+  });
+
   const [exerciseMode, setExerciseMode] = useState<
     'vocabulary' | 'articles' | 'plural' | 'test'
   >('vocabulary');
@@ -47,7 +58,6 @@ export default function DutchLearningPlatform() {
   const [sessionScore, setSessionScore] = useState({ correct: 0, total: 0 });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hasStartedLearning, setHasStartedLearning] = useState(false);
-  const [testExercises, setTestExercises] = useState(createTestExercises());
 
   useEffect(() => {
     toast({
@@ -122,13 +132,24 @@ export default function DutchLearningPlatform() {
     return Array.from(categories).sort();
   }, [currentChapterWords, progress.currentChapter]);
 
-  const currentWord = availableWords[currentExerciseIndex];
-  const currentTestExercise =
-    exerciseMode === 'test' ? testExercises[currentExerciseIndex] : null;
+  useEffect(() => {
+    if (exerciseMode === 'test') {
+      const testExercises = createTestExercises();
+      testExerciseQueue.initializeTestQueue(testExercises);
+    } else {
+      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
+    }
+  }, [availableWords, exerciseMode, progress.incorrectWords]);
+
+  const currentWord = exerciseQueue.getCurrentItem();
+  const currentTestExercise = testExerciseQueue.getCurrentTestExercise();
 
   const handleExerciseComplete = (correct: boolean) => {
-    if (currentWord) {
+    if (exerciseMode === 'test' && currentTestExercise) {
+      testExerciseQueue.moveToNextTest(currentTestExercise.id, correct);
+    } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
+      exerciseQueue.moveToNext(currentWord.id, correct);
     }
 
     const newScore = {
@@ -137,8 +158,10 @@ export default function DutchLearningPlatform() {
     };
     setSessionScore(newScore);
 
-    const totalExercises =
-      exerciseMode === 'test' ? testExercises.length : availableWords.length;
+    const hasMoreExercises =
+      exerciseMode === 'test'
+        ? testExerciseQueue.hasMoreTestExercises()
+        : exerciseQueue.hasMoreItems();
 
     if (progress.mistakeMode && correct && currentWord) {
       const remainingIncorrectWords = Object.keys(
@@ -151,19 +174,19 @@ export default function DutchLearningPlatform() {
       }
     }
 
-    if (currentExerciseIndex < totalExercises - 1) {
-      setCurrentExerciseIndex((prev) => prev + 1);
-    } else {
+    if (!hasMoreExercises) {
       setShowResults(true);
     }
   };
 
   const resetExercises = () => {
-    setCurrentExerciseIndex(0);
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
     if (exerciseMode === 'test') {
-      setTestExercises(createTestExercises());
+      const testExercises = createTestExercises();
+      testExerciseQueue.initializeTestQueue(testExercises);
+    } else {
+      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
     }
   };
 
@@ -408,27 +431,28 @@ export default function DutchLearningPlatform() {
                     {(exerciseMode !== 'test' &&
                       availableWords.length > 0 &&
                       currentWord) ||
-                    (exerciseMode === 'test' &&
-                      testExercises.length > 0 &&
-                      currentTestExercise) ? (
+                    (exerciseMode === 'test' && currentTestExercise) ? (
                       <div className="space-y-4">
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
-                            Question {currentExerciseIndex + 1} of{' '}
+                            Question{' '}
                             {exerciseMode === 'test'
-                              ? testExercises.length
-                              : availableWords.length}
+                              ? testExerciseQueue.getTestProgress().current + 1
+                              : exerciseQueue.getProgress().current + 1}{' '}
+                            of{' '}
+                            {exerciseMode === 'test'
+                              ? testExerciseQueue.getTestProgress().total
+                              : exerciseQueue.getProgress().total}
                           </p>
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div
                               className="bg-primary h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${
-                                  ((currentExerciseIndex + 1) /
-                                    (exerciseMode === 'test'
-                                      ? testExercises.length
-                                      : availableWords.length)) *
-                                  100
+                                  exerciseMode === 'test'
+                                    ? testExerciseQueue.getTestProgress()
+                                        .percentage
+                                    : exerciseQueue.getProgress().percentage
                                 }%`,
                               }}
                             />
@@ -440,23 +464,23 @@ export default function DutchLearningPlatform() {
                             exercise={currentTestExercise}
                             onComplete={handleExerciseComplete}
                           />
-                        ) : exerciseMode === 'vocabulary' ? (
+                        ) : exerciseMode === 'vocabulary' && currentWord ? (
                           <VocabularyCard
                             word={currentWord}
                             mode="production"
                             onComplete={handleExerciseComplete}
                           />
-                        ) : exerciseMode === 'articles' ? (
+                        ) : exerciseMode === 'articles' && currentWord ? (
                           <ArticleExercise
                             word={currentWord}
                             onComplete={handleExerciseComplete}
                           />
-                        ) : (
+                        ) : currentWord ? (
                           <PluralExercise
                             word={currentWord}
                             onComplete={handleExerciseComplete}
                           />
-                        )}
+                        ) : null}
                       </div>
                     ) : (
                       <Card className="text-center py-8 bg-card shadow-sm">
