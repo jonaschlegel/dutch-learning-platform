@@ -77,6 +77,13 @@ export function TestExerciseCard({
     resetCard();
   };
 
+  // Handle Enter key for next exercise
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && showAnswer) {
+      handleNext();
+    }
+  };
+
   const resetCard = () => {
     setUserAnswer('');
     setShowAnswer(false);
@@ -112,7 +119,11 @@ export function TestExerciseCard({
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card
+      className="w-full max-w-2xl mx-auto"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{getTypeLabel()}</CardTitle>

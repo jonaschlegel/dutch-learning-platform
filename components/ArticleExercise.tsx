@@ -36,12 +36,23 @@ export function ArticleExercise({ word, onComplete }: ArticleExerciseProps) {
     setSelectedArticle(null);
   };
 
+  // Handle Enter key for next exercise
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && showFeedback) {
+      handleNext();
+    }
+  };
+
   if (!word.article) {
     return null;
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-card shadow-lg">
+    <Card
+      className="w-full max-w-md mx-auto bg-card shadow-lg"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <CardHeader>
         <CardTitle className="flex items-center justify-between font-nunito">
           <span>Choose the correct article</span>

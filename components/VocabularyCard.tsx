@@ -59,6 +59,13 @@ export function VocabularyCard({
     setHasAnswered(false);
   };
 
+  // Handle Enter key for next exercise
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && hasAnswered) {
+      handleNext();
+    }
+  };
+
   const playAudio = () => {
     const dutchText = Array.isArray(word.dutch) ? word.dutch[0] : word.dutch;
     const utterance = new SpeechSynthesisUtterance(dutchText);
@@ -71,7 +78,11 @@ export function VocabularyCard({
     : word.english;
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-card shadow-lg min-h-[400px] flex flex-col">
+    <Card
+      className="w-full max-w-md mx-auto bg-card shadow-lg min-h-[400px] flex flex-col"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <CardHeader>
         <CardTitle className="flex items-center justify-between font-nunito">
           <span>Translate to Dutch</span>

@@ -45,6 +45,13 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
     setUserAnswer('');
   };
 
+  // Handle Enter key for next exercise
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && showFeedback) {
+      handleNext();
+    }
+  };
+
   const playAudio = () => {
     const dutchWord = Array.isArray(word.dutch) ? word.dutch[0] : word.dutch;
     const utterance = new SpeechSynthesisUtterance(dutchWord);
@@ -57,7 +64,11 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto bg-card shadow-lg">
+    <Card
+      className="w-full max-w-md mx-auto bg-card shadow-lg"
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+    >
       <CardHeader>
         <CardTitle className="flex items-center justify-between font-nunito">
           <span>Form the plural</span>
