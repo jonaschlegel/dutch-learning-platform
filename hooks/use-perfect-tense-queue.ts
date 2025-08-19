@@ -53,15 +53,60 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
         }
       }
 
-      // Shuffle the available words
-      const shuffled = [...availableWords].sort(() => Math.random() - 0.5);
+      // Create a smarter queue that ensures all words are seen before repeating
+      const createSmartQueue = (words: typeof availableWords) => {
+        const queue = [...words];
+        const recentlyUsed = new Set<string>();
+        const result: typeof words = [];
 
-      setCurrentQueue(shuffled);
+        // Fisher-Yates shuffle for initial randomization
+        for (let i = queue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [queue[i], queue[j]] = [queue[j], queue[i]];
+        }
+
+        // Ensure no word appears twice until all have been seen once
+        while (queue.length > 0) {
+          let selectedIndex = -1;
+
+          // Try to find a word that hasn't been used recently
+          for (let i = 0; i < queue.length; i++) {
+            if (!recentlyUsed.has(queue[i].id)) {
+              selectedIndex = i;
+              break;
+            }
+          }
+
+          // If all remaining words were used recently, clear the recent list and pick the first
+          if (selectedIndex === -1) {
+            recentlyUsed.clear();
+            selectedIndex = 0;
+          }
+
+          const selectedWord = queue[selectedIndex];
+          result.push(selectedWord);
+          queue.splice(selectedIndex, 1);
+
+          recentlyUsed.add(selectedWord.id);
+          if (
+            recentlyUsed.size >
+            Math.max(3, Math.floor(availableWords.length / 4))
+          ) {
+            const oldestId = Array.from(recentlyUsed)[0];
+            recentlyUsed.delete(oldestId);
+          }
+        }
+
+        return result;
+      };
+
+      const smartQueue = createSmartQueue(availableWords);
+      setCurrentQueue(smartQueue);
       setCurrentIndex(0);
       setRecentItems([]);
       setIncorrectItems(new Set(Object.keys(incorrectWords)));
     },
-    [focusCategory, prioritizeIncorrect, maxRecentItems],
+    [focusCategory, prioritizeIncorrect],
   );
 
   const getCurrentItem = useCallback(() => {

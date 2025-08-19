@@ -16,6 +16,8 @@ import {
   TestExerciseCard,
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
+import { imperfectumVocabulary } from '@/data/imperfectum';
+import { perfectTenseVocabulary } from '@/data/perfect-tense';
 import { vocabulary } from '@/data/vocabulary';
 import { useExerciseQueue } from '@/hooks/use-exercise-queue';
 import { useImperfectumQueue } from '@/hooks/use-imperfectum-queue';
@@ -58,12 +60,12 @@ export default function DutchLearningPlatform() {
 
   const perfectTenseQueue = usePerfectTenseQueue({
     maxRecentItems: 6,
-    prioritizeIncorrect: true,
+    prioritizeIncorrect: progress.mistakeMode || true,
   });
 
   const imperfectumQueue = useImperfectumQueue({
     maxRecentItems: 6,
-    prioritizeIncorrect: true,
+    prioritizeIncorrect: progress.mistakeMode || true,
   });
 
   const [exerciseMode, setExerciseMode] = useState<
@@ -167,18 +169,51 @@ export default function DutchLearningPlatform() {
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
-      perfectTenseQueue.initializeQueue(incorrectWordIds);
+
+      // In mistake mode, only use incorrect words from perfect tense vocabulary
+      if (progress.mistakeMode) {
+        const perfectTenseIds = new Set(
+          perfectTenseVocabulary.map((w) => w.id),
+        );
+        const filteredIncorrectWords: Record<string, number> = {};
+        Object.entries(incorrectWordIds).forEach(([id, count]) => {
+          if (perfectTenseIds.has(id)) {
+            filteredIncorrectWords[id] = count;
+          }
+        });
+        perfectTenseQueue.initializeQueue(filteredIncorrectWords);
+      } else {
+        perfectTenseQueue.initializeQueue(incorrectWordIds);
+      }
     } else if (exerciseMode === 'imperfectum') {
       // Convert progress.incorrectWords to simple Record<string, number>
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
-      imperfectumQueue.initializeQueue(incorrectWordIds);
+
+      // In mistake mode, only use incorrect words from imperfectum vocabulary
+      if (progress.mistakeMode) {
+        const imperfectumIds = new Set(imperfectumVocabulary.map((w) => w.id));
+        const filteredIncorrectWords: Record<string, number> = {};
+        Object.entries(incorrectWordIds).forEach(([id, count]) => {
+          if (imperfectumIds.has(id)) {
+            filteredIncorrectWords[id] = count;
+          }
+        });
+        imperfectumQueue.initializeQueue(filteredIncorrectWords);
+      } else {
+        imperfectumQueue.initializeQueue(incorrectWordIds);
+      }
     } else {
       exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
     }
-  }, [availableWords, exerciseMode, progress.incorrectWords]);
+  }, [
+    availableWords,
+    exerciseMode,
+    progress.incorrectWords,
+    progress.mistakeMode,
+  ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
   const currentTestExercise = testExerciseQueue.getCurrentTestExercise();
@@ -189,8 +224,12 @@ export default function DutchLearningPlatform() {
     if (exerciseMode === 'test' && currentTestExercise) {
       testExerciseQueue.moveToNextTest(currentTestExercise.id, correct);
     } else if (exerciseMode === 'perfect' && currentPerfectTenseWord) {
+      // Track perfect tense words in global progress system
+      markWordCompleted(currentPerfectTenseWord.id, correct ? 1 : 0);
       perfectTenseQueue.moveToNext(currentPerfectTenseWord.id, correct);
     } else if (exerciseMode === 'imperfectum' && currentImperfectumWord) {
+      // Track imperfectum words in global progress system
+      markWordCompleted(currentImperfectumWord.id, correct ? 1 : 0);
       imperfectumQueue.moveToNext(currentImperfectumWord.id, correct);
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
@@ -212,14 +251,20 @@ export default function DutchLearningPlatform() {
         ? imperfectumQueue.hasMoreItems()
         : exerciseQueue.hasMoreItems();
 
-    if (progress.mistakeMode && correct && currentWord) {
-      const remainingIncorrectWords = Object.keys(
-        progress.incorrectWords,
-      ).filter((id) => id !== currentWord?.id);
+    if (progress.mistakeMode && correct) {
+      const currentId =
+        currentWord?.id ||
+        currentPerfectTenseWord?.id ||
+        currentImperfectumWord?.id;
+      if (currentId) {
+        const remainingIncorrectWords = Object.keys(
+          progress.incorrectWords,
+        ).filter((id) => id !== currentId);
 
-      if (remainingIncorrectWords.length === 0) {
-        setShowResults(true);
-        return;
+        if (remainingIncorrectWords.length === 0) {
+          setShowResults(true);
+          return;
+        }
       }
     }
 
@@ -239,13 +284,41 @@ export default function DutchLearningPlatform() {
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
-      perfectTenseQueue.initializeQueue(incorrectWordIds);
+
+      // In mistake mode, only use incorrect words from perfect tense vocabulary
+      if (progress.mistakeMode) {
+        const perfectTenseIds = new Set(
+          perfectTenseVocabulary.map((w) => w.id),
+        );
+        const filteredIncorrectWords: Record<string, number> = {};
+        Object.entries(incorrectWordIds).forEach(([id, count]) => {
+          if (perfectTenseIds.has(id)) {
+            filteredIncorrectWords[id] = count;
+          }
+        });
+        perfectTenseQueue.initializeQueue(filteredIncorrectWords);
+      } else {
+        perfectTenseQueue.initializeQueue(incorrectWordIds);
+      }
     } else if (exerciseMode === 'imperfectum') {
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
-      imperfectumQueue.initializeQueue(incorrectWordIds);
+
+      // In mistake mode, only use incorrect words from imperfectum vocabulary
+      if (progress.mistakeMode) {
+        const imperfectumIds = new Set(imperfectumVocabulary.map((w) => w.id));
+        const filteredIncorrectWords: Record<string, number> = {};
+        Object.entries(incorrectWordIds).forEach(([id, count]) => {
+          if (imperfectumIds.has(id)) {
+            filteredIncorrectWords[id] = count;
+          }
+        });
+        imperfectumQueue.initializeQueue(filteredIncorrectWords);
+      } else {
+        imperfectumQueue.initializeQueue(incorrectWordIds);
+      }
     } else {
       exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
     }
@@ -416,8 +489,32 @@ export default function DutchLearningPlatform() {
                         </span>
                       </div>
                       <span className="text-sm text-orange-600">
-                        {Object.keys(progress.incorrectWords).length} words to
-                        review
+                        {(() => {
+                          const incorrectWordIds = Object.keys(
+                            progress.incorrectWords,
+                          );
+                          if (exerciseMode === 'perfect') {
+                            const perfectTenseIds = new Set(
+                              perfectTenseVocabulary.map((w) => w.id),
+                            );
+                            const perfectIncorrectCount =
+                              incorrectWordIds.filter((id) =>
+                                perfectTenseIds.has(id),
+                              ).length;
+                            return `${perfectIncorrectCount} perfect tense words to review`;
+                          } else if (exerciseMode === 'imperfectum') {
+                            const imperfectumIds = new Set(
+                              imperfectumVocabulary.map((w) => w.id),
+                            );
+                            const imperfectumIncorrectCount =
+                              incorrectWordIds.filter((id) =>
+                                imperfectumIds.has(id),
+                              ).length;
+                            return `${imperfectumIncorrectCount} imperfectum words to review`;
+                          } else {
+                            return `${incorrectWordIds.length} words to review`;
+                          }
+                        })()}
                       </span>
                     </div>
                     <p className="text-sm text-orange-700 mt-2">
