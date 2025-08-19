@@ -160,10 +160,11 @@ export const vocabulary = [
   {
     id: '1',
     dutch: 'welkom',
-    english: 'welcome (to)',
+    english: 'welcome',
     chapter: 1,
     section: 'Woordenlijst',
     category: 'greeting',
+    hint: 'Used to greet someone arriving: "Welkom in Nederland!" (Welcome to the Netherlands!)',
   },
   {
     id: '2',
@@ -172,6 +173,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'greeting',
+    hint: 'Used until about 12:00. Can be shortened to "morgen" in informal situations.',
   },
   {
     id: '3',
@@ -180,6 +182,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: 'Used when addressing a group: "Goedemorgen allemaal!" (Good morning everyone!)',
   },
   {
     id: '4',
@@ -198,6 +201,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'article',
+    hint: 'Dutch has two forms of "the": de (common gender) and het (neuter). About 75% of nouns use "de".',
   },
   {
     id: '6',
@@ -205,7 +209,8 @@ export const vocabulary = [
     english: 'Dutch',
     chapter: 1,
     section: 'Woordenlijst',
-    category: 'noun',
+    category: 'language',
+    hint: 'The language spoken in the Netherlands and Belgium. Always capitalized.',
   },
   {
     id: '7',
@@ -214,14 +219,16 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: 'Always written lowercase unless at the beginning of a sentence.',
   },
   {
     id: '8',
     dutch: 'ben',
-    english: ['am (I)', '(I) am'],
+    english: 'am',
     chapter: 1,
     section: 'Woordenlijst',
     category: 'verb',
+    hint: 'Form of "zijn" (to be) used with "ik": Ik ben student.',
   },
   {
     id: '9',
@@ -230,6 +237,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'conjunction',
+    hint: 'Used to connect words or sentences: "Jan en Marie".',
   },
   {
     id: '10',
@@ -238,6 +246,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: 'Used when talking to more than one person. Both subject and possessive pronoun.',
   },
   {
     id: '11',
@@ -265,6 +274,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'number',
+    hint: 'Cardinal number. Pronunciation: /twe:/',
   },
   {
     id: '16',
@@ -273,11 +283,12 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'description',
+    hint: 'Changes form based on gender and number: ander/andere/anderen.',
   },
   {
     id: '17',
     dutch: ['zijn', 'ben', 'bent', 'is'],
-    english: ['be', 'am (I)', 'are (you)', 'is (he/she/it)'],
+    english: ['to be', 'am (I)', 'are (you)', 'is (he/she/it)'],
     chapter: 1,
     section: 'Woordenlijst',
     category: 'verb',
@@ -290,6 +301,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: 'Subject pronoun for masculine persons or things.',
   },
   {
     id: '19',
@@ -297,6 +309,8 @@ export const vocabulary = [
     english: 'teach',
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'verb',
+    hint: 'Multiple ways to say "teach": leren (learn/teach), doceren (formal teaching), lesgeven (give lessons).',
   },
   {
     id: '20',
@@ -315,6 +329,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'number',
+    hint: 'Cardinal number. Pronunciation: /dri:/',
   },
   {
     id: '22',
@@ -323,16 +338,12 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: '"We" is more common in speech, "wij" is used for emphasis or in formal writing.',
   },
   {
     id: '23',
     dutch: ['beginnen', 'begin', 'begint'],
-    english: [
-      'begin',
-      'start',
-      'begin (I/we/you plural/they)',
-      'begin (you/he/she/it)',
-    ],
+    english: ['begin', 'start'],
     chapter: 1,
     section: 'Woordenlijst',
     category: 'verb',
@@ -344,13 +355,17 @@ export const vocabulary = [
     english: 'with',
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'preposition',
+    hint: 'Preposition indicating accompaniment or means: "met de bus" (by bus).',
   },
   {
     id: '25',
-    dutch: 'met iem. kennismaken',
-    english: 'meet sb.',
+    dutch: 'kennismaken',
+    english: ['meet', 'get to know'],
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'verb',
+    hint: 'Used when meeting someone for the first time: "Ik wil je graag leren kennen."',
   },
   {
     id: '26',
@@ -359,21 +374,25 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'question',
+    hint: 'Question word for asking about people: "Wie ben jij?" (Who are you?)',
   },
   {
     id: '28',
     dutch: 'bent',
-    english: '(you) are',
+    english: 'are',
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'verb',
+    hint: 'Form of "zijn" (to be) used with "jij/je": Jij bent Nederlands.',
   },
   {
     id: '913',
-    dutch: ['jij', 'je', 'jouw'],
-    english: ['you (singular)', 'your (singular)'],
+    dutch: ['jij', 'je'],
+    english: 'you (singular)',
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: '"Jij" is stressed form, "je" is unstressed. Both mean "you" for one person informally.',
   },
   {
     id: '29',
@@ -382,6 +401,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'question',
+    hint: 'Question word for asking about things: "Wat is dit?" (What is this?)',
   },
   {
     id: '31',
@@ -400,14 +420,16 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'pronoun',
+    hint: 'Possessive pronoun, same form for all genders: mijn naam, mijn huis.',
   },
   {
     id: '33',
-    dutch: ['dag', 'hallo', 'hoi', 'goededag'],
+    dutch: ['hallo', 'hoi', 'dag'],
     english: 'hello',
     chapter: 1,
     section: 'Woordenlijst',
     category: 'greeting',
+    hint: 'Multiple greetings: "hallo" (universal), "hoi" (informal), "dag" (casual).',
   },
   {
     id: '35',
@@ -435,6 +457,8 @@ export const vocabulary = [
     english: 'from',
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'preposition',
+    hint: 'Preposition indicating origin: "Ik kom uit Nederland" (I come from the Netherlands).',
   },
   {
     id: '38',
@@ -443,6 +467,7 @@ export const vocabulary = [
     chapter: 1,
     section: 'Woordenlijst',
     category: 'question',
+    hint: 'Question word: "welk" with het-words, "welke" with de-words and plurals.',
   },
   {
     id: '39',
@@ -460,6 +485,8 @@ export const vocabulary = [
     english: 'England',
     chapter: 1,
     section: 'Woordenlijst',
+    category: 'country',
+    hint: 'Country name. Always capitalized. No article needed with country names.',
   },
 
   // Origin and Location vocabulary
@@ -1386,14 +1413,6 @@ export const vocabulary = [
     section: 'Begroeten',
     category: 'verb',
     hint: 'Regular verb conjugation: ik begroet, jij/je begroet, hij/zij/het begroet, wij/jullie/zij begroeten',
-  },
-  {
-    id: '156',
-    dutch: 'goedemorgen',
-    english: 'good morning',
-    chapter: 1,
-    section: 'Begroeten',
-    category: 'greeting',
   },
   {
     id: '157',
@@ -11010,15 +11029,6 @@ export const vocabulary = [
     hint: 'Used before nouns: "geen idee"',
   },
   {
-    id: '1273',
-    dutch: 'niet',
-    english: 'not',
-    chapter: 8,
-    section: 'Negation Structures',
-    category: 'adverb',
-    hint: 'Used with verbs/adjectives: "niet ver"',
-  },
-  {
     id: '1274',
     dutch: 'hoeven geen',
     english: "don't need to have",
@@ -11927,22 +11937,6 @@ export const vocabulary = [
 
   // Question Words
   {
-    id: '1368',
-    dutch: 'wat',
-    english: 'what',
-    chapter: 9,
-    section: 'Question Words',
-    category: 'question',
-  },
-  {
-    id: '1369',
-    dutch: 'waar',
-    english: 'where',
-    chapter: 9,
-    section: 'Question Words',
-    category: 'question',
-  },
-  {
     id: '1370',
     dutch: 'wanneer',
     english: 'when',
@@ -11954,14 +11948,6 @@ export const vocabulary = [
     id: '1371',
     dutch: 'waarom',
     english: 'why',
-    chapter: 9,
-    section: 'Question Words',
-    category: 'question',
-  },
-  {
-    id: '1372',
-    dutch: 'hoe',
-    english: 'how',
     chapter: 9,
     section: 'Question Words',
     category: 'question',
@@ -12614,30 +12600,6 @@ export const vocabulary = [
   },
 
   // Time Expressions
-  {
-    id: '1442',
-    dutch: 'gisteren',
-    english: 'yesterday',
-    chapter: 10,
-    section: 'Time Expressions',
-    category: 'time',
-  },
-  {
-    id: '1443',
-    dutch: 'vandaag',
-    english: 'today',
-    chapter: 10,
-    section: 'Time Expressions',
-    category: 'time',
-  },
-  {
-    id: '1444',
-    dutch: 'morgen',
-    english: 'tomorrow',
-    chapter: 10,
-    section: 'Time Expressions',
-    category: 'time',
-  },
   {
     id: '1445',
     dutch: 'overmorgen',
