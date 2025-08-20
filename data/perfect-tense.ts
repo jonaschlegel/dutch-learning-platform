@@ -12,7 +12,6 @@ export interface PerfectTenseWord {
 }
 
 export const perfectTenseVocabulary: PerfectTenseWord[] = [
-  // Movement/Change verbs with "zijn" - Group 1
   {
     id: 'pt001',
     infinitive: 'groeien',
@@ -438,8 +437,6 @@ export const perfectTenseVocabulary: PerfectTenseWord[] = [
     exampleSentence: 'Ik heb mijn sleutels gezocht',
     exampleTranslation: 'I looked for my keys',
   },
-
-  // Special movement cases that can use both
   {
     id: 'pt036',
     infinitive: 'vliegen',
@@ -598,8 +595,6 @@ export const perfectTenseVocabulary: PerfectTenseWord[] = [
     exampleSentence: 'De boom is groot gegroeid',
     exampleTranslation: 'The tree has grown big',
   },
-
-  // More Regular verbs with "hebben" - SoFT KeTCHuP examples
   {
     id: 'pt049',
     infinitive: 'praten',
@@ -954,8 +949,6 @@ export const perfectTenseVocabulary: PerfectTenseWord[] = [
     exampleSentence: 'We zijn in de auto ingestapt',
     exampleTranslation: 'We got in the car',
   },
-
-  // More daily life verbs
   {
     id: 'pt078',
     infinitive: 'douchen',

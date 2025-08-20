@@ -8,7 +8,14 @@ type TestExerciseType =
   | 'pronouns'
   | 'questionAnswer'
   | 'createQuestions'
-  | 'sentenceWriting';
+  | 'sentenceWriting'
+  | 'vocabulary'
+  | 'perfectTense'
+  | 'imperfectum'
+  | 'readingComprehension'
+  | 'listeningComprehension'
+  | 'grammar'
+  | 'dialogue';
 
 interface TestExercise {
   id: string;
@@ -21,6 +28,19 @@ interface TestExercise {
   targetWords?: string[];
   wordBank?: string[];
   instructions: string;
+  options?: string[];
+  level?: string;
+  title?: string;
+  text?: string;
+  audioScript?: string;
+  scenario?: string;
+  dialogue?: Array<{
+    speaker: string;
+    text: string;
+    isUserInput?: boolean;
+    answerOptions?: string[];
+    correctAnswer?: string;
+  }>;
 }
 
 interface TestExerciseQueue {

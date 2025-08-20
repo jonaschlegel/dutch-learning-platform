@@ -65,7 +65,6 @@ export function PerfectTenseExercise({
         correct = participleCorrect && auxiliaryCorrect;
         break;
       case 'translate':
-        // For translation, we'll accept if they get the basic structure right
         const hasAuxiliary = userTranslation
           .toLowerCase()
           .includes(word.auxiliary);

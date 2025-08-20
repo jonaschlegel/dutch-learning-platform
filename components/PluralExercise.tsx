@@ -45,7 +45,6 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
     setUserAnswer('');
   };
 
-  // Handle Enter key for next exercise
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && showFeedback) {
       handleNext();

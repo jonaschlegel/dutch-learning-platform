@@ -59,7 +59,6 @@ export function VocabularyCard({
     setHasAnswered(false);
   };
 
-  // Handle Enter key for next exercise
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && hasAnswered) {
       e.preventDefault();

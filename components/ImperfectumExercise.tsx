@@ -51,7 +51,6 @@ export function ImperfectumExercise({
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasAnswered, setHasAnswered] = useState(false);
 
-  // Generate a random pronoun for the exercise
   const pronouns = ['ik', 'jij', 'hij', 'wij', 'jullie', 'zij'];
   const currentPronoun = selectedPronoun as keyof typeof word.imperfectum;
 
@@ -65,14 +64,12 @@ export function ImperfectumExercise({
           word.imperfectum[currentPronoun].toLowerCase();
         break;
       case 'complete':
-        // Check if the user's sentence contains the correct conjugation
         const expectedConjugation = word.imperfectum[currentPronoun];
         correct = userSentence
           .toLowerCase()
           .includes(expectedConjugation.toLowerCase());
         break;
       case 'translate':
-        // For translation, we'll accept if they get the basic verb form right
         const hasCorrectForm = Object.values(word.imperfectum).some((form) =>
           userTranslation.toLowerCase().includes(form.toLowerCase()),
         );
@@ -92,7 +89,6 @@ export function ImperfectumExercise({
     setUserSentence('');
     setUserTranslation('');
     setHasAnswered(false);
-    // Pick a new random pronoun for the next exercise
     const randomPronoun = pronouns[Math.floor(Math.random() * pronouns.length)];
     setSelectedPronoun(randomPronoun);
   };
@@ -130,7 +126,6 @@ export function ImperfectumExercise({
     }
   };
 
-  // Generate level badge color
   const getLevelBadgeColor = () => {
     return word.level === 'A1'
       ? 'bg-green-100 text-green-800'

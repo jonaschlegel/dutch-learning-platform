@@ -19,7 +19,6 @@ export interface ImperfectumWord {
 }
 
 export const imperfectumVocabulary: ImperfectumWord[] = [
-  // A1 Level - Regular verbs
   {
     id: 'imp001',
     infinitive: 'werken',
@@ -305,8 +304,6 @@ export const imperfectumVocabulary: ImperfectumWord[] = [
     exampleSentence: 'Hij wilde een ijsje',
     exampleTranslation: 'He wanted an ice cream',
   },
-
-  // A2 Level - More complex verbs
   {
     id: 'imp016',
     infinitive: 'zeggen',

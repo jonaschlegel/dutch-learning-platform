@@ -13,11 +13,13 @@ import { ProgressDashboard } from '@/components/ProgressDashboard';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import {
   createTestExercises,
+  createTestExercises2,
   TestExerciseCard,
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { imperfectumVocabulary } from '@/data/imperfectum';
 import { perfectTenseVocabulary } from '@/data/perfect-tense';
+import { testExercises2 } from '@/data/test-exercises';
 import { vocabulary } from '@/data/vocabulary';
 import { useExerciseQueue } from '@/hooks/use-exercise-queue';
 import { useImperfectumQueue } from '@/hooks/use-imperfectum-queue';
@@ -69,7 +71,13 @@ export default function DutchLearningPlatform() {
   });
 
   const [exerciseMode, setExerciseMode] = useState<
-    'vocabulary' | 'articles' | 'plural' | 'perfect' | 'imperfectum' | 'test'
+    | 'vocabulary'
+    | 'articles'
+    | 'plural'
+    | 'perfect'
+    | 'imperfectum'
+    | 'test1'
+    | 'test2'
   >('vocabulary');
   const [perfectTenseMode, setPerfectTenseMode] = useState<
     'participle' | 'auxiliary' | 'complete' | 'translate'
@@ -106,7 +114,8 @@ export default function DutchLearningPlatform() {
 
   const availableWords = useMemo(() => {
     if (
-      exerciseMode === 'test' ||
+      exerciseMode === 'test1' ||
+      exerciseMode === 'test2' ||
       exerciseMode === 'perfect' ||
       exerciseMode === 'imperfectum'
     ) {
@@ -160,17 +169,18 @@ export default function DutchLearningPlatform() {
   }, [currentChapterWords, progress.currentChapter]);
 
   useEffect(() => {
-    if (exerciseMode === 'test') {
+    if (exerciseMode === 'test1') {
       const testExercises = createTestExercises();
       testExerciseQueue.initializeTestQueue(testExercises);
+    } else if (exerciseMode === 'test2') {
+      const testExercises = createTestExercises2();
+      testExerciseQueue.initializeTestQueue(testExercises);
     } else if (exerciseMode === 'perfect') {
-      // Convert progress.incorrectWords to simple Record<string, number>
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
-      // In mistake mode, only use incorrect words from perfect tense vocabulary
       if (progress.mistakeMode) {
         const perfectTenseIds = new Set(
           perfectTenseVocabulary.map((w) => w.id),
@@ -186,13 +196,11 @@ export default function DutchLearningPlatform() {
         perfectTenseQueue.initializeQueue(incorrectWordIds);
       }
     } else if (exerciseMode === 'imperfectum') {
-      // Convert progress.incorrectWords to simple Record<string, number>
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
-      // In mistake mode, only use incorrect words from imperfectum vocabulary
       if (progress.mistakeMode) {
         const imperfectumIds = new Set(imperfectumVocabulary.map((w) => w.id));
         const filteredIncorrectWords: Record<string, number> = {};
@@ -221,14 +229,15 @@ export default function DutchLearningPlatform() {
   const currentImperfectumWord = imperfectumQueue.getCurrentItem();
 
   const handleExerciseComplete = (correct: boolean) => {
-    if (exerciseMode === 'test' && currentTestExercise) {
+    if (
+      (exerciseMode === 'test1' || exerciseMode === 'test2') &&
+      currentTestExercise
+    ) {
       testExerciseQueue.moveToNextTest(currentTestExercise.id, correct);
     } else if (exerciseMode === 'perfect' && currentPerfectTenseWord) {
-      // Track perfect tense words in global progress system
       markWordCompleted(currentPerfectTenseWord.id, correct ? 1 : 0);
       perfectTenseQueue.moveToNext(currentPerfectTenseWord.id, correct);
     } else if (exerciseMode === 'imperfectum' && currentImperfectumWord) {
-      // Track imperfectum words in global progress system
       markWordCompleted(currentImperfectumWord.id, correct ? 1 : 0);
       imperfectumQueue.moveToNext(currentImperfectumWord.id, correct);
     } else if (currentWord) {
@@ -243,7 +252,7 @@ export default function DutchLearningPlatform() {
     setSessionScore(newScore);
 
     const hasMoreExercises =
-      exerciseMode === 'test'
+      exerciseMode === 'test1' || exerciseMode === 'test2'
         ? testExerciseQueue.hasMoreTestExercises()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.hasMoreItems()
@@ -276,16 +285,19 @@ export default function DutchLearningPlatform() {
   const resetExercises = () => {
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
-    if (exerciseMode === 'test') {
-      const testExercises = createTestExercises();
-      testExerciseQueue.initializeTestQueue(testExercises);
+    if (exerciseMode === 'test1' || exerciseMode === 'test2') {
+      // Create test exercises based on the selected test level
+      const exercises =
+        exerciseMode === 'test1'
+          ? createTestExercises()
+          : createTestExercises2();
+      testExerciseQueue.initializeTestQueue(exercises);
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
-      // In mistake mode, only use incorrect words from perfect tense vocabulary
       if (progress.mistakeMode) {
         const perfectTenseIds = new Set(
           perfectTenseVocabulary.map((w) => w.id),
@@ -306,7 +318,6 @@ export default function DutchLearningPlatform() {
         incorrectWordIds[id] = data.count;
       });
 
-      // In mistake mode, only use incorrect words from imperfectum vocabulary
       if (progress.mistakeMode) {
         const imperfectumIds = new Set(imperfectumVocabulary.map((w) => w.id));
         const filteredIncorrectWords: Record<string, number> = {};
@@ -331,7 +342,8 @@ export default function DutchLearningPlatform() {
       | 'plural'
       | 'perfect'
       | 'imperfectum'
-      | 'test',
+      | 'test1'
+      | 'test2',
   ) => {
     setExerciseMode(mode);
     resetExercises();
@@ -435,11 +447,20 @@ export default function DutchLearningPlatform() {
                   <Button
                     size="default"
                     variant="outline"
-                    onClick={() => startNewSession('test')}
+                    onClick={() => startNewSession('test1')}
                     className="border-primary text-primary hover:bg-primary/10"
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
-                    Test Prep
+                    Test 1 (Basic)
+                  </Button>
+                  <Button
+                    size="default"
+                    variant="outline"
+                    onClick={() => startNewSession('test2')}
+                    className="border-secondary text-secondary hover:bg-secondary/10"
+                  >
+                    <GraduationCap className="h-5 w-5 mr-2" />
+                    Test 2 (Advanced)
                   </Button>
                 </div>
               </div>
@@ -631,16 +652,29 @@ export default function DutchLearningPlatform() {
                       </Button>
                       <Button
                         variant={
-                          exerciseMode === 'test' ? 'default' : 'outline'
+                          exerciseMode === 'test1' ? 'default' : 'outline'
                         }
-                        onClick={() => startNewSession('test')}
+                        onClick={() => startNewSession('test1')}
                         className={
-                          exerciseMode === 'test'
+                          exerciseMode === 'test1'
                             ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                             : ''
                         }
                       >
-                        Test Prep Practice
+                        Test 1 (Basic)
+                      </Button>
+                      <Button
+                        variant={
+                          exerciseMode === 'test2' ? 'default' : 'outline'
+                        }
+                        onClick={() => startNewSession('test2')}
+                        className={
+                          exerciseMode === 'test2'
+                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                            : ''
+                        }
+                      >
+                        Test 2 (Advanced)
                       </Button>
                     </div>
 
@@ -737,12 +771,14 @@ export default function DutchLearningPlatform() {
                       </div>
                     )}
 
-                    {(exerciseMode !== 'test' &&
+                    {(exerciseMode !== 'test1' &&
+                      exerciseMode !== 'test2' &&
                       exerciseMode !== 'perfect' &&
                       exerciseMode !== 'imperfectum' &&
                       availableWords.length > 0 &&
                       currentWord) ||
-                    (exerciseMode === 'test' && currentTestExercise) ||
+                    ((exerciseMode === 'test1' || exerciseMode === 'test2') &&
+                      currentTestExercise) ||
                     (exerciseMode === 'perfect' && currentPerfectTenseWord) ||
                     (exerciseMode === 'imperfectum' &&
                       currentImperfectumWord) ? (
@@ -750,7 +786,8 @@ export default function DutchLearningPlatform() {
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
                             Question{' '}
-                            {exerciseMode === 'test'
+                            {exerciseMode === 'test1' ||
+                            exerciseMode === 'test2'
                               ? testExerciseQueue.getTestProgress().current + 1
                               : exerciseMode === 'perfect'
                               ? perfectTenseQueue.getProgress().current
@@ -758,7 +795,8 @@ export default function DutchLearningPlatform() {
                               ? imperfectumQueue.getProgress().current
                               : exerciseQueue.getProgress().current + 1}{' '}
                             of{' '}
-                            {exerciseMode === 'test'
+                            {exerciseMode === 'test1' ||
+                            exerciseMode === 'test2'
                               ? testExerciseQueue.getTestProgress().total
                               : exerciseMode === 'perfect'
                               ? perfectTenseQueue.getProgress().total
@@ -771,7 +809,8 @@ export default function DutchLearningPlatform() {
                               className="bg-primary h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${
-                                  exerciseMode === 'test'
+                                  exerciseMode === 'test1' ||
+                                  exerciseMode === 'test2'
                                     ? testExerciseQueue.getTestProgress()
                                         .percentage
                                     : exerciseMode === 'perfect'
@@ -789,7 +828,9 @@ export default function DutchLearningPlatform() {
                           </div>
                         </div>
 
-                        {exerciseMode === 'test' && currentTestExercise ? (
+                        {(exerciseMode === 'test1' ||
+                          exerciseMode === 'test2') &&
+                        currentTestExercise ? (
                           <TestExerciseCard
                             exercise={currentTestExercise}
                             onComplete={handleExerciseComplete}

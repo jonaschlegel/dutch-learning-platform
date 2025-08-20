@@ -1,3 +1,69 @@
+export interface VocabularyExercise {
+  id: string;
+  level: string;
+  type: 'translate' | 'multiple-choice' | 'fill-in-blank';
+  question: string;
+  answer: string;
+  options?: string[];
+  hint?: string;
+}
+
+export interface GrammarExercise {
+  id: string;
+  level: string;
+  type: 'fill' | 'multiple-choice' | 'reorder';
+  question: string;
+  answer: string;
+  options?: string[];
+  hint?: string;
+}
+
+export interface ReadingComprehensionExercise {
+  id: string;
+  level: string;
+  title: string;
+  text: string;
+  questions: Array<{
+    question: string;
+    options: string[];
+    answer: string;
+  }>;
+}
+
+export interface ImperfectumTestExercise {
+  id: string;
+  level: string;
+  infinitive: string;
+  imperfectForm: string;
+  pronoun: string;
+  question: string;
+  answer: string;
+  hint?: string;
+}
+
+export interface PerfectTenseTestExercise {
+  id: string;
+  level: string;
+  infinitive: string;
+  pastParticiple: string;
+  auxiliary: string;
+  question: string;
+  answer: string;
+  hint?: string;
+}
+
+export interface ListeningComprehensionExercise {
+  id: string;
+  level: string;
+  title: string;
+  audioScript: string;
+  questions: Array<{
+    question: string;
+    options: string[];
+    answer: string;
+  }>;
+}
+
 export interface DictationExercise {
   id: string;
   title: string;
@@ -59,10 +125,12 @@ export interface SentenceWritingExercise {
 
 export interface DialogueExercise {
   id: string;
+  level?: string;
   title: string;
-  instructions: string;
+  scenario?: string;
+  instructions?: string;
   dialogue: Array<{
-    speaker: 'A' | 'B';
+    speaker: 'A' | 'B' | 'Receptionist' | 'You';
     text: string;
     isUserInput?: boolean;
     answerOptions?: string[];
@@ -671,6 +739,357 @@ export const testExercises = {
           isUserInput: true,
           answerOptions: ['Tot straks!', 'Ik ga werken.', 'Goed, dank je.'],
           correctAnswer: 'Tot straks!',
+        },
+      ],
+    },
+  ] as DialogueExercise[],
+};
+
+// Test 2 - Advanced (Chapters 5-10 + Perfect Tense + Imperfectum + Reading/Listening)
+export const testExercises2 = {
+  vocabulary: [
+    // Advanced vocabulary from chapters 5-10
+    {
+      id: 'v2-1',
+      level: 'A2',
+      type: 'translate',
+      question:
+        'How do you say "I have been living here for two years" in Dutch?',
+      answer: 'Ik woon hier al twee jaar',
+      options: [
+        'Ik woon hier al twee jaar',
+        'Ik woonde hier twee jaar',
+        'Ik ga hier twee jaar wonen',
+        'Ik heb hier twee jaar gewoond',
+      ],
+      hint: 'Use "al" to indicate duration that continues to the present',
+    },
+    {
+      id: 'v2-2',
+      level: 'A2',
+      type: 'translate',
+      question: 'What does "Hoeveel kost dat?" mean?',
+      answer: 'How much does that cost?',
+      options: [
+        'How much does that cost?',
+        'When does that start?',
+        'Where is that located?',
+        'Why is that expensive?',
+      ],
+      hint: 'This is a common shopping question',
+    },
+    {
+      id: 'v2-3',
+      level: 'A2',
+      type: 'translate',
+      question: 'How do you say "The weather is getting worse" in Dutch?',
+      answer: 'Het weer wordt slechter',
+      options: [
+        'Het weer wordt slechter',
+        'Het weer was slecht',
+        'Het weer is slecht',
+        'Het weer zal slecht zijn',
+      ],
+      hint: 'Use "wordt" for becoming/getting',
+    },
+  ] as VocabularyExercise[],
+
+  perfectTense: [
+    {
+      id: 'pt2-1',
+      level: 'A2',
+      infinitive: 'spreken',
+      pastParticiple: 'gesproken',
+      auxiliary: 'hebben',
+      question: 'Complete: Ik ___ Nederlands ___.',
+      answer: 'heb gesproken',
+      hint: 'Use the auxiliary verb "hebben" with "gesproken"',
+    },
+    {
+      id: 'pt2-2',
+      level: 'A2',
+      infinitive: 'vertrekken',
+      pastParticiple: 'vertrokken',
+      auxiliary: 'zijn',
+      question: 'Complete: De trein ___ al ___.',
+      answer: 'is vertrokken',
+      hint: 'Movement verbs typically use "zijn"',
+    },
+    {
+      id: 'pt2-3',
+      level: 'A2',
+      infinitive: 'beginnen',
+      pastParticiple: 'begonnen',
+      auxiliary: 'zijn',
+      question: 'Complete: De les ___ nog niet ___.',
+      answer: 'is begonnen',
+      hint: 'State changes often use "zijn"',
+    },
+  ] as PerfectTenseTestExercise[],
+
+  imperfectum: [
+    {
+      id: 'imp2-1',
+      level: 'A2',
+      infinitive: 'willen',
+      imperfectForm: 'wilde',
+      pronoun: 'hij',
+      question: 'Complete: ___ ___ graag een auto kopen.',
+      answer: 'Hij wilde',
+      hint: 'Irregular verb: willen -> wilde',
+    },
+    {
+      id: 'imp2-2',
+      level: 'A2',
+      infinitive: 'kunnen',
+      imperfectForm: 'kon',
+      pronoun: 'ik',
+      question: 'Complete: ___ ___ gisteren niet komen.',
+      answer: 'Ik kon',
+      hint: 'Modal verb: kunnen -> kon',
+    },
+    {
+      id: 'imp2-3',
+      level: 'A2',
+      infinitive: 'moeten',
+      imperfectForm: 'moest',
+      pronoun: 'zij',
+      question: 'Complete: ___ ___ vroeg opstaan.',
+      answer: 'Zij moest',
+      hint: 'Modal verb: moeten -> moest',
+    },
+  ] as ImperfectumTestExercise[],
+
+  readingComprehension: [
+    {
+      id: 'rc2-1',
+      level: 'A2',
+      title: 'Een dag in Amsterdam',
+      text: `Sarah woont sinds vorig jaar in Amsterdam. Ze heeft een kleine flat in het centrum. Elke ochtend fietst ze naar haar werk bij een reisbureau. Amsterdam heeft veel toeristen, dus haar werk is altijd interessant.
+
+In de weekenden gaat Sarah vaak naar musea of parken. Het Vondelpark is haar favoriet omdat het dicht bij haar huis is. Soms ontmoet ze vrienden in een café voor koffie en taart.
+
+Sarah vindt Amsterdam een perfecte stad om te wonen. Het is niet te groot en niet te klein. Er zijn altijd activiteiten, maar het is ook rustig genoeg om te ontspannen.`,
+      questions: [
+        {
+          question: 'Waar woont Sarah?',
+          options: [
+            'In het centrum van Amsterdam',
+            'Bij het Vondelpark',
+            'Bij haar werk',
+            'In een groot huis',
+          ],
+          answer: 'In het centrum van Amsterdam',
+        },
+        {
+          question: 'Hoe gaat Sarah naar haar werk?',
+          options: ['Met de bus', 'Met de auto', 'Op de fiets', 'Te voet'],
+          answer: 'Op de fiets',
+        },
+        {
+          question: 'Waarom vindt Sarah haar werk interessant?',
+          options: [
+            'Het is makkelijk',
+            'Er zijn veel toeristen',
+            'Het is dicht bij huis',
+            'Ze verdient veel geld',
+          ],
+          answer: 'Er zijn veel toeristen',
+        },
+        {
+          question: 'Wat is Sarahs favoriete park?',
+          options: [
+            'Het centrum park',
+            'Het Vondelpark',
+            'Het museum park',
+            'Het café park',
+          ],
+          answer: 'Het Vondelpark',
+        },
+      ],
+    },
+    {
+      id: 'rc2-2',
+      level: 'A2',
+      title: 'Nederlandse tradities',
+      text: `In Nederland zijn er veel interessante tradities. Koningsdag op 27 april is een van de belangrijkste feestdagen. Mensen dragen oranje kleding en er zijn markten en feesten in elke stad.
+
+Sinterklaas is ook heel belangrijk voor Nederlandse kinderen. Op 5 december krijgen kinderen cadeaus van Sinterklaas. Dit is anders dan Kerstmis in andere landen.
+
+Veel Nederlanders eten stamppot in de winter. Dit is een traditioneel gerecht met aardappels en groenten. Het is warm en lekker op koude dagen.`,
+      questions: [
+        {
+          question: 'Wanneer is Koningsdag?',
+          options: ['5 december', '27 april', '25 december', '31 oktober'],
+          answer: '27 april',
+        },
+        {
+          question: 'Welke kleur dragen mensen op Koningsdag?',
+          options: ['Rood', 'Blauw', 'Oranje', 'Groen'],
+          answer: 'Oranje',
+        },
+        {
+          question: 'Wanneer krijgen kinderen cadeaus van Sinterklaas?',
+          options: ['27 april', '25 december', '31 december', '5 december'],
+          answer: '5 december',
+        },
+        {
+          question: 'Wat is stamppot?',
+          options: [
+            'Een drank',
+            'Een traditioneel gerecht',
+            'Een feestdag',
+            'Een kleding',
+          ],
+          answer: 'Een traditioneel gerecht',
+        },
+      ],
+    },
+  ] as ReadingComprehensionExercise[],
+
+  listeningComprehension: [
+    {
+      id: 'lc2-1',
+      level: 'A2',
+      title: 'Op het station',
+      audioScript:
+        'Goedemorgen. De trein naar Utrecht vertrekt over vijf minuten van spoor drie. Let op: de trein naar Amsterdam is vijftien minuten vertraagd. Dank je wel.',
+      questions: [
+        {
+          question: 'Wanneer vertrekt de trein naar Utrecht?',
+          options: [
+            'Over drie minuten',
+            'Over vijf minuten',
+            'Over vijftien minuten',
+            'Nu',
+          ],
+          answer: 'Over vijf minuten',
+        },
+        {
+          question: 'Van welk spoor vertrekt de trein naar Utrecht?',
+          options: ['Spoor 1', 'Spoor 2', 'Spoor 3', 'Spoor 5'],
+          answer: 'Spoor 3',
+        },
+        {
+          question: 'Wat is er met de trein naar Amsterdam?',
+          options: [
+            'Hij is geannuleerd',
+            'Hij vertrekt vroeger',
+            'Hij is vertraagd',
+            'Hij is op tijd',
+          ],
+          answer: 'Hij is vertraagd',
+        },
+      ],
+    },
+    {
+      id: 'lc2-2',
+      level: 'A2',
+      title: 'In de supermarkt',
+      audioScript:
+        'We hebben vandaag een speciale aanbieding op appels. Twee kilo voor drie euro. Ook hebben we verse broccoli voor één euro vijftig per kilo. De bakkerij sluit om zes uur.',
+      questions: [
+        {
+          question: 'Hoeveel kosten twee kilo appels?',
+          options: ['Twee euro', 'Drie euro', 'Vier euro', 'Vijf euro'],
+          answer: 'Drie euro',
+        },
+        {
+          question: 'Hoeveel kost broccoli per kilo?',
+          options: ['Een euro', 'Een euro vijftig', 'Twee euro', 'Drie euro'],
+          answer: 'Een euro vijftig',
+        },
+        {
+          question: 'Wanneer sluit de bakkerij?',
+          options: ['Om vijf uur', 'Om zes uur', 'Om zeven uur', 'Om acht uur'],
+          answer: 'Om zes uur',
+        },
+      ],
+    },
+  ] as ListeningComprehensionExercise[],
+
+  grammar: [
+    // Advanced grammar for A2 level
+    {
+      id: 'g2-1',
+      level: 'A2',
+      type: 'fill',
+      question:
+        'Complete the sentence: Als het morgen regent, ___ ik thuis (blijven).',
+      answer: 'blijf',
+      options: ['blijf', 'bleef', 'gebleven', 'zal blijven'],
+      hint: 'In conditional sentences with "als", use present tense in both clauses',
+    },
+    {
+      id: 'g2-2',
+      level: 'A2',
+      type: 'fill',
+      question: 'Complete: De man ___ ik gisteren sprak, is mijn buur.',
+      answer: 'die',
+      options: ['die', 'dat', 'wie', 'wat'],
+      hint: 'Use "die" for masculine and feminine nouns, "dat" for neuter',
+    },
+    {
+      id: 'g2-3',
+      level: 'A2',
+      type: 'fill',
+      question: 'Complete: Ik zou graag naar Frankrijk ___ gaan.',
+      answer: 'willen',
+      options: ['willen', 'wilde', 'gewild', 'zal willen'],
+      hint: 'Use infinitive after "zou graag"',
+    },
+  ] as GrammarExercise[],
+
+  dialogue: [
+    // Advanced dialogues
+    {
+      id: 'd2-1',
+      level: 'A2',
+      title: 'Making an appointment at the doctor',
+      scenario:
+        'You need to make an appointment with your doctor for next week.',
+      dialogue: [
+        {
+          speaker: 'Receptionist',
+          text: 'Goedemorgen, praktijk Dr. de Vries.',
+        },
+        {
+          speaker: 'You',
+          text: '',
+          isUserInput: true,
+          answerOptions: [
+            'Goedemorgen, ik zou graag een afspraak maken.',
+            'Hallo, is de dokter er?',
+            'Dag, ik ben ziek.',
+          ],
+          correctAnswer: 'Goedemorgen, ik zou graag een afspraak maken.',
+        },
+        {
+          speaker: 'Receptionist',
+          text: 'Natuurlijk. Voor wanneer zou u willen komen?',
+        },
+        {
+          speaker: 'You',
+          text: '',
+          isUserInput: true,
+          answerOptions: [
+            'Volgende week dinsdag, als dat mogelijk is.',
+            'Nu meteen graag.',
+            'Ik weet het niet.',
+          ],
+          correctAnswer: 'Volgende week dinsdag, als dat mogelijk is.',
+        },
+        { speaker: 'Receptionist', text: 'Dinsdag om 10:30 kan. Is dat goed?' },
+        {
+          speaker: 'You',
+          text: '',
+          isUserInput: true,
+          answerOptions: [
+            'Ja, dat is perfect. Dank je wel.',
+            'Nee, dat is te vroeg.',
+            'Misschien later.',
+          ],
+          correctAnswer: 'Ja, dat is perfect. Dank je wel.',
         },
       ],
     },
