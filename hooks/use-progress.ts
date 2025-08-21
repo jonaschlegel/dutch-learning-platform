@@ -24,6 +24,27 @@ export function useProgress() {
     },
   });
 
+  // State for current exercise session
+  const [exerciseSession, setExerciseSession] = useState<{
+    exerciseMode: string | null;
+    currentIndex: number;
+    sessionScore: { correct: number; total: number };
+    perfectTenseMode: string;
+    imperfectumMode: string;
+    selectedCategory: string | null;
+    testReviewMode: { test1: boolean; test2: boolean };
+    hasStartedLearning: boolean;
+  }>({
+    exerciseMode: null,
+    currentIndex: 0,
+    sessionScore: { correct: 0, total: 0 },
+    perfectTenseMode: 'complete',
+    imperfectumMode: 'conjugation',
+    selectedCategory: null,
+    testReviewMode: { test1: false, test2: false },
+    hasStartedLearning: false,
+  });
+
   useEffect(() => {
     const savedProgress = localStorage.getItem('dutch-learning-progress');
     if (savedProgress) {
@@ -68,6 +89,25 @@ export function useProgress() {
             },
       });
     }
+
+    // Load exercise session state
+    const savedSession = localStorage.getItem('dutch-learning-session');
+    if (savedSession) {
+      const parsedSession = JSON.parse(savedSession);
+      setExerciseSession({
+        exerciseMode: parsedSession.exerciseMode || null,
+        currentIndex: parsedSession.currentIndex || 0,
+        sessionScore: parsedSession.sessionScore || { correct: 0, total: 0 },
+        perfectTenseMode: parsedSession.perfectTenseMode || 'complete',
+        imperfectumMode: parsedSession.imperfectumMode || 'conjugation',
+        selectedCategory: parsedSession.selectedCategory || null,
+        testReviewMode: parsedSession.testReviewMode || {
+          test1: false,
+          test2: false,
+        },
+        hasStartedLearning: parsedSession.hasStartedLearning || false,
+      });
+    }
   }, []);
 
   const saveProgress = (newProgress: UserProgress) => {
@@ -93,6 +133,25 @@ export function useProgress() {
     };
     localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
     setProgress(newProgress);
+  };
+
+  const saveExerciseSession = (newSession: typeof exerciseSession) => {
+    localStorage.setItem('dutch-learning-session', JSON.stringify(newSession));
+    setExerciseSession(newSession);
+  };
+
+  const clearExerciseSession = () => {
+    localStorage.removeItem('dutch-learning-session');
+    setExerciseSession({
+      exerciseMode: null,
+      currentIndex: 0,
+      sessionScore: { correct: 0, total: 0 },
+      perfectTenseMode: 'complete',
+      imperfectumMode: 'conjugation',
+      selectedCategory: null,
+      testReviewMode: { test1: false, test2: false },
+      hasStartedLearning: false,
+    });
   };
 
   const markWordCompleted = (wordId: string, score: number) => {
@@ -159,6 +218,7 @@ export function useProgress() {
 
   const resetProgress = () => {
     localStorage.removeItem('dutch-learning-progress');
+    localStorage.removeItem('dutch-learning-session');
     setProgress({
       completedWords: new Set(),
       scores: {},
@@ -177,6 +237,16 @@ export function useProgress() {
           scores: {},
         },
       },
+    });
+    setExerciseSession({
+      exerciseMode: null,
+      currentIndex: 0,
+      sessionScore: { correct: 0, total: 0 },
+      perfectTenseMode: 'complete',
+      imperfectumMode: 'conjugation',
+      selectedCategory: null,
+      testReviewMode: { test1: false, test2: false },
+      hasStartedLearning: false,
     });
   };
 
@@ -244,6 +314,7 @@ export function useProgress() {
 
   return {
     progress,
+    exerciseSession,
     markWordCompleted,
     markWordIncorrect,
     setCurrentChapter,
@@ -251,5 +322,7 @@ export function useProgress() {
     resetProgress,
     markTestExerciseCompleted,
     getTestExerciseProgress,
+    saveExerciseSession,
+    clearExerciseSession,
   };
 }

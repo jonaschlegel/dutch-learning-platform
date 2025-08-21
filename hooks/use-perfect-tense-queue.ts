@@ -31,7 +31,7 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
   const [incorrectItems, setIncorrectItems] = useState<Set<string>>(new Set());
 
   const initializeQueue = useCallback(
-    (incorrectWords: Record<string, number> = {}) => {
+    (incorrectWords: Record<string, number> = {}, startIndex?: number) => {
       let availableWords = [...perfectTenseVocabulary];
 
       // Filter by category if specified
@@ -102,7 +102,7 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
 
       const smartQueue = createSmartQueue(availableWords);
       setCurrentQueue(smartQueue);
-      setCurrentIndex(0);
+      setCurrentIndex(startIndex || 0);
       setRecentItems([]);
       setIncorrectItems(new Set(Object.keys(incorrectWords)));
     },
@@ -146,10 +146,10 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
 
         if (Object.keys(incorrectWords).length > 0) {
           // Reinitialize with only incorrect words
-          initializeQueue(incorrectWords);
+          initializeQueue(incorrectWords, 0);
         } else {
           // All correct, start fresh
-          initializeQueue();
+          initializeQueue({}, 0);
         }
       } else {
         setCurrentIndex(nextIndex);
@@ -202,5 +202,6 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
     resetQueue,
     getStatistics,
     incorrectItems,
+    setCurrentIndex: (index: number) => setCurrentIndex(index),
   };
 }

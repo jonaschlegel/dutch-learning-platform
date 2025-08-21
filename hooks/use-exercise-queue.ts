@@ -112,11 +112,12 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
     (
       items: VocabularyItem[],
       incorrectWords?: Record<string, { count: number; lastAttempt: number }>,
+      startIndex?: number,
     ) => {
       const smartQueue = createSmartQueue(items, incorrectWords);
       setQueue({
         items: smartQueue,
-        currentIndex: 0,
+        currentIndex: startIndex || 0,
         completedItems: new Set(),
         recentlySeenItems: new Set(),
         maxRecentItems,
@@ -212,5 +213,8 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
     reshuffleRemaining,
     reset,
     queueLength: queue.items.length,
+    setCurrentIndex: (index: number) => {
+      setQueue((prev) => ({ ...prev, currentIndex: index }));
+    },
   };
 }

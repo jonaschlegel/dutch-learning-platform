@@ -37,17 +37,20 @@ import {
   RotateCcw,
   Target,
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 
 export default function DutchLearningPlatform() {
   const {
     progress,
+    exerciseSession,
     markWordCompleted,
     setCurrentChapter,
     toggleMistakeMode,
     resetProgress,
     markTestExerciseCompleted,
     getTestExerciseProgress,
+    saveExerciseSession,
+    clearExerciseSession,
   } = useProgress();
   const { initial, color } = useUserAvatar();
   const { toast } = useToast();
@@ -77,6 +80,7 @@ export default function DutchLearningPlatform() {
     prioritizeIncorrect: progress.mistakeMode || true,
   });
 
+  // Use state from exerciseSession instead of local state
   const [exerciseMode, setExerciseMode] = useState<
     | 'vocabulary'
     | 'articles'
@@ -85,24 +89,65 @@ export default function DutchLearningPlatform() {
     | 'imperfectum'
     | 'test1'
     | 'test2'
-  >('vocabulary');
+  >((exerciseSession.exerciseMode as any) || 'vocabulary');
   const [perfectTenseMode, setPerfectTenseMode] = useState<
     'participle' | 'auxiliary' | 'complete' | 'translate'
-  >('complete');
+  >((exerciseSession.perfectTenseMode as any) || 'complete');
   const [imperfectumMode, setImperfectumMode] = useState<
     'conjugation' | 'complete' | 'translate'
-  >('conjugation');
+  >((exerciseSession.imperfectumMode as any) || 'conjugation');
   const [showResults, setShowResults] = useState(false);
-  const [sessionScore, setSessionScore] = useState({ correct: 0, total: 0 });
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [hasStartedLearning, setHasStartedLearning] = useState(false);
-  const [testReviewMode, setTestReviewMode] = useState<{
-    test1: boolean;
-    test2: boolean;
-  }>({
-    test1: false,
-    test2: false,
-  });
+  const [sessionScore, setSessionScore] = useState(
+    exerciseSession.sessionScore,
+  );
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(
+    exerciseSession.selectedCategory,
+  );
+  const [hasStartedLearning, setHasStartedLearning] = useState(
+    exerciseSession.hasStartedLearning,
+  );
+  const [testReviewMode, setTestReviewMode] = useState(
+    exerciseSession.testReviewMode,
+  );
+
+  // Function to save current exercise session state
+  const saveCurrentSession = useCallback(() => {
+    const currentProgress =
+      exerciseMode === 'test1'
+        ? test1ExerciseQueue.getTestProgress()
+        : exerciseMode === 'test2'
+        ? test2ExerciseQueue.getTestProgress()
+        : exerciseMode === 'perfect'
+        ? perfectTenseQueue.getProgress()
+        : exerciseMode === 'imperfectum'
+        ? imperfectumQueue.getProgress()
+        : exerciseQueue.getProgress();
+
+    saveExerciseSession({
+      exerciseMode,
+      currentIndex: currentProgress.current,
+      sessionScore,
+      perfectTenseMode,
+      imperfectumMode,
+      selectedCategory,
+      testReviewMode,
+      hasStartedLearning,
+    });
+  }, [
+    exerciseMode,
+    sessionScore,
+    perfectTenseMode,
+    imperfectumMode,
+    selectedCategory,
+    testReviewMode,
+    hasStartedLearning,
+    saveExerciseSession,
+    test1ExerciseQueue,
+    test2ExerciseQueue,
+    perfectTenseQueue,
+    imperfectumQueue,
+    exerciseQueue,
+  ]);
 
   useEffect(() => {
     toast({
@@ -118,6 +163,19 @@ export default function DutchLearningPlatform() {
       setSelectedCategory(null);
     }
   }, [progress.currentChapter]);
+
+  // Save session state when relevant values change
+  useEffect(() => {
+    if (hasStartedLearning) {
+      saveCurrentSession();
+    }
+  }, [
+    perfectTenseMode,
+    imperfectumMode,
+    selectedCategory,
+    hasStartedLearning,
+    saveCurrentSession,
+  ]);
 
   const currentChapterWords = useMemo(() => {
     if (progress.currentChapter === 0) {
@@ -200,9 +258,15 @@ export default function DutchLearningPlatform() {
         const incorrectExercises = testExercises.filter((ex) =>
           incorrectIds.includes(ex.id),
         );
-        test1ExerciseQueue.initializeTestQueue(incorrectExercises);
+        test1ExerciseQueue.initializeTestQueue(
+          incorrectExercises,
+          exerciseSession.currentIndex,
+        );
       } else {
-        test1ExerciseQueue.initializeTestQueue(testExercises);
+        test1ExerciseQueue.initializeTestQueue(
+          testExercises,
+          exerciseSession.currentIndex,
+        );
       }
     } else if (exerciseMode === 'test2') {
       const testExercises = createTestExercises2();
@@ -213,9 +277,15 @@ export default function DutchLearningPlatform() {
         const incorrectExercises = testExercises.filter((ex) =>
           incorrectIds.includes(ex.id),
         );
-        test2ExerciseQueue.initializeTestQueue(incorrectExercises);
+        test2ExerciseQueue.initializeTestQueue(
+          incorrectExercises,
+          exerciseSession.currentIndex,
+        );
       } else {
-        test2ExerciseQueue.initializeTestQueue(testExercises);
+        test2ExerciseQueue.initializeTestQueue(
+          testExercises,
+          exerciseSession.currentIndex,
+        );
       }
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
@@ -233,9 +303,15 @@ export default function DutchLearningPlatform() {
             filteredIncorrectWords[id] = count;
           }
         });
-        perfectTenseQueue.initializeQueue(filteredIncorrectWords);
+        perfectTenseQueue.initializeQueue(
+          filteredIncorrectWords,
+          exerciseSession.currentIndex,
+        );
       } else {
-        perfectTenseQueue.initializeQueue(incorrectWordIds);
+        perfectTenseQueue.initializeQueue(
+          incorrectWordIds,
+          exerciseSession.currentIndex,
+        );
       }
     } else if (exerciseMode === 'imperfectum') {
       const incorrectWordIds: Record<string, number> = {};
@@ -251,12 +327,22 @@ export default function DutchLearningPlatform() {
             filteredIncorrectWords[id] = count;
           }
         });
-        imperfectumQueue.initializeQueue(filteredIncorrectWords);
+        imperfectumQueue.initializeQueue(
+          filteredIncorrectWords,
+          exerciseSession.currentIndex,
+        );
       } else {
-        imperfectumQueue.initializeQueue(incorrectWordIds);
+        imperfectumQueue.initializeQueue(
+          incorrectWordIds,
+          exerciseSession.currentIndex,
+        );
       }
     } else {
-      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
+      exerciseQueue.initializeQueue(
+        availableWords,
+        progress.incorrectWords,
+        exerciseSession.currentIndex,
+      );
     }
   }, [
     availableWords,
@@ -264,6 +350,7 @@ export default function DutchLearningPlatform() {
     progress.incorrectWords,
     progress.mistakeMode,
     testReviewModeValues,
+    exerciseSession.currentIndex,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
@@ -327,6 +414,7 @@ export default function DutchLearningPlatform() {
 
         if (remainingIncorrectWords.length === 0) {
           setShowResults(true);
+          clearExerciseSession(); // Clear session when exercise is complete
           return;
         }
       }
@@ -334,18 +422,23 @@ export default function DutchLearningPlatform() {
 
     if (!hasMoreExercises) {
       setShowResults(true);
+      clearExerciseSession(); // Clear session when exercise is complete
+    } else {
+      // Save session state after each question
+      saveCurrentSession();
     }
   };
 
   const resetExercises = () => {
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
+    clearExerciseSession(); // Clear session when resetting
     if (exerciseMode === 'test1') {
       const exercises = createTestExercises();
-      test1ExerciseQueue.initializeTestQueue(exercises);
+      test1ExerciseQueue.initializeTestQueue(exercises, 0);
     } else if (exerciseMode === 'test2') {
       const exercises = createTestExercises2();
-      test2ExerciseQueue.initializeTestQueue(exercises);
+      test2ExerciseQueue.initializeTestQueue(exercises, 0);
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
@@ -362,9 +455,9 @@ export default function DutchLearningPlatform() {
             filteredIncorrectWords[id] = count;
           }
         });
-        perfectTenseQueue.initializeQueue(filteredIncorrectWords);
+        perfectTenseQueue.initializeQueue(filteredIncorrectWords, 0);
       } else {
-        perfectTenseQueue.initializeQueue(incorrectWordIds);
+        perfectTenseQueue.initializeQueue(incorrectWordIds, 0);
       }
     } else if (exerciseMode === 'imperfectum') {
       const incorrectWordIds: Record<string, number> = {};
@@ -380,12 +473,12 @@ export default function DutchLearningPlatform() {
             filteredIncorrectWords[id] = count;
           }
         });
-        imperfectumQueue.initializeQueue(filteredIncorrectWords);
+        imperfectumQueue.initializeQueue(filteredIncorrectWords, 0);
       } else {
-        imperfectumQueue.initializeQueue(incorrectWordIds);
+        imperfectumQueue.initializeQueue(incorrectWordIds, 0);
       }
     } else {
-      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords);
+      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords, 0);
     }
   };
 
@@ -399,20 +492,63 @@ export default function DutchLearningPlatform() {
       | 'test1'
       | 'test2',
   ) => {
+    // Check if we're continuing an existing session for this mode
+    const isContinuingSession =
+      exerciseSession.exerciseMode === mode &&
+      exerciseSession.currentIndex > 0 &&
+      !showResults;
+
     setExerciseMode(mode);
-    resetExercises();
+
+    if (!isContinuingSession) {
+      // Starting a fresh session
+      resetExercises();
+      setSessionScore({ correct: 0, total: 0 });
+    } else {
+      // Continuing existing session - restore session score
+      setSessionScore(exerciseSession.sessionScore);
+    }
+
     setHasStartedLearning(true);
+
+    // Save the session state
+    const newSession = {
+      exerciseMode: mode,
+      currentIndex: isContinuingSession ? exerciseSession.currentIndex : 0,
+      sessionScore: isContinuingSession
+        ? exerciseSession.sessionScore
+        : { correct: 0, total: 0 },
+      perfectTenseMode,
+      imperfectumMode,
+      selectedCategory,
+      testReviewMode,
+      hasStartedLearning: true,
+    };
+    saveExerciseSession(newSession);
   };
 
   const toggleTestReviewMode = (testType: 'test1' | 'test2') => {
-    setTestReviewMode((prev) => ({
-      ...prev,
-      [testType]: !prev[testType],
-    }));
+    const newTestReviewMode = {
+      ...testReviewMode,
+      [testType]: !testReviewMode[testType],
+    };
+    setTestReviewMode(newTestReviewMode);
 
     // Reset the session when toggling review mode
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
+
+    // Save the updated session
+    saveExerciseSession({
+      exerciseMode,
+      currentIndex: 0,
+      sessionScore: { correct: 0, total: 0 },
+      perfectTenseMode,
+      imperfectumMode,
+      selectedCategory,
+      testReviewMode: newTestReviewMode,
+      hasStartedLearning,
+    });
   };
 
   const getTestCompletionStatus = (testType: 'test1' | 'test2') => {
@@ -471,6 +607,25 @@ export default function DutchLearningPlatform() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              {exerciseSession.exerciseMode &&
+                exerciseSession.currentIndex > 0 && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-center space-x-2">
+                      <RotateCcw className="h-5 w-5 text-blue-600" />
+                      <span className="font-medium text-blue-800">
+                        Session Found!
+                      </span>
+                    </div>
+                    <p className="text-sm text-blue-700 mt-2">
+                      We found your previous {exerciseSession.exerciseMode}{' '}
+                      session with {exerciseSession.currentIndex} questions
+                      completed. Click on "
+                      {exerciseSession.exerciseMode.charAt(0).toUpperCase() +
+                        exerciseSession.exerciseMode.slice(1)}
+                      " below to continue where you left off.
+                    </p>
+                  </div>
+                )}
               <p className="text-lg text-foreground">
                 Ready to dive into Dutch? This platform helps you learn
                 vocabulary and master articles (de/het) through interactive

@@ -188,7 +188,7 @@ export function useTestExerciseQueue(
   );
 
   const initializeTestQueue = useCallback(
-    (exercises: TestExercise[]) => {
+    (exercises: TestExercise[], startIndex?: number) => {
       // If in review mode, filter to only incorrect exercises
       const exercisesToUse = reviewMode
         ? exercises.filter((ex) => incorrectExerciseIds.includes(ex.id))
@@ -197,7 +197,7 @@ export function useTestExerciseQueue(
       const smartQueue = createSmartTestQueue(exercisesToUse);
       setQueue({
         exercises: smartQueue,
-        currentIndex: 0,
+        currentIndex: startIndex || 0,
         completedExercises: new Set(),
         incorrectExercises: new Set(),
         recentlySeenExercises: new Set(),
@@ -299,5 +299,8 @@ export function useTestExerciseQueue(
     resetTestQueue,
     getIncorrectExerciseIds,
     testQueueLength: queue.exercises.length,
+    setCurrentIndex: (index: number) => {
+      setQueue((prev) => ({ ...prev, currentIndex: index }));
+    },
   };
 }
