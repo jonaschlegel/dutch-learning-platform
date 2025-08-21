@@ -47,26 +47,37 @@ interface TestExerciseQueue {
   exercises: TestExercise[];
   currentIndex: number;
   completedExercises: Set<string>;
+  incorrectExercises: Set<string>;
   recentlySeenExercises: Set<string>;
   maxRecentExercises: number;
+  allExercisesCompleted: boolean;
 }
 
 interface UseTestExerciseQueueOptions {
   maxRecentExercises?: number;
   ensureTypeDistribution?: boolean;
+  reviewMode?: boolean;
+  incorrectExerciseIds?: string[];
 }
 
 export function useTestExerciseQueue(
   options: UseTestExerciseQueueOptions = {},
 ) {
-  const { maxRecentExercises = 8, ensureTypeDistribution = true } = options;
+  const {
+    maxRecentExercises = 8,
+    ensureTypeDistribution = true,
+    reviewMode = false,
+    incorrectExerciseIds = [],
+  } = options;
 
   const [queue, setQueue] = useState<TestExerciseQueue>({
     exercises: [],
     currentIndex: 0,
     completedExercises: new Set(),
+    incorrectExercises: new Set(),
     recentlySeenExercises: new Set(),
     maxRecentExercises,
+    allExercisesCompleted: false,
   });
 
   const createSmartTestQueue = useCallback(
@@ -178,16 +189,28 @@ export function useTestExerciseQueue(
 
   const initializeTestQueue = useCallback(
     (exercises: TestExercise[]) => {
-      const smartQueue = createSmartTestQueue(exercises);
+      // If in review mode, filter to only incorrect exercises
+      const exercisesToUse = reviewMode
+        ? exercises.filter((ex) => incorrectExerciseIds.includes(ex.id))
+        : exercises;
+
+      const smartQueue = createSmartTestQueue(exercisesToUse);
       setQueue({
         exercises: smartQueue,
         currentIndex: 0,
         completedExercises: new Set(),
+        incorrectExercises: new Set(),
         recentlySeenExercises: new Set(),
         maxRecentExercises,
+        allExercisesCompleted: false,
       });
     },
-    [createSmartTestQueue, maxRecentExercises],
+    [
+      createSmartTestQueue,
+      maxRecentExercises,
+      reviewMode,
+      incorrectExerciseIds,
+    ],
   );
 
   const getCurrentTestExercise = useCallback((): TestExercise | null => {
@@ -208,15 +231,26 @@ export function useTestExerciseQueue(
         }
 
         const newCompletedExercises = new Set(prev.completedExercises);
+        const newIncorrectExercises = new Set(prev.incorrectExercises);
+
         if (wasCorrect) {
           newCompletedExercises.add(exerciseId);
+          // Remove from incorrect set if it was there
+          newIncorrectExercises.delete(exerciseId);
+        } else {
+          newIncorrectExercises.add(exerciseId);
         }
+
+        const newCurrentIndex = prev.currentIndex + 1;
+        const allExercisesCompleted = newCurrentIndex >= prev.exercises.length;
 
         return {
           ...prev,
-          currentIndex: prev.currentIndex + 1,
+          currentIndex: newCurrentIndex,
           completedExercises: newCompletedExercises,
+          incorrectExercises: newIncorrectExercises,
           recentlySeenExercises: newRecentlySeenExercises,
+          allExercisesCompleted,
         };
       });
     },
@@ -232,6 +266,8 @@ export function useTestExerciseQueue(
       current: queue.currentIndex,
       total: queue.exercises.length,
       completed: queue.completedExercises.size,
+      incorrect: queue.incorrectExercises.size,
+      allCompleted: queue.allExercisesCompleted,
       percentage:
         queue.exercises.length > 0
           ? (queue.currentIndex / queue.exercises.length) * 100
@@ -244,9 +280,15 @@ export function useTestExerciseQueue(
       ...prev,
       currentIndex: 0,
       completedExercises: new Set(),
+      incorrectExercises: new Set(),
       recentlySeenExercises: new Set(),
+      allExercisesCompleted: false,
     }));
   }, []);
+
+  const getIncorrectExerciseIds = useCallback(() => {
+    return Array.from(queue.incorrectExercises);
+  }, [queue.incorrectExercises]);
 
   return {
     initializeTestQueue,
@@ -255,6 +297,7 @@ export function useTestExerciseQueue(
     hasMoreTestExercises,
     getTestProgress,
     resetTestQueue,
+    getIncorrectExerciseIds,
     testQueueLength: queue.exercises.length,
   };
 }

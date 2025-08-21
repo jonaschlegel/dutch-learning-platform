@@ -46,6 +46,8 @@ export default function DutchLearningPlatform() {
     setCurrentChapter,
     toggleMistakeMode,
     resetProgress,
+    markTestExerciseCompleted,
+    getTestExerciseProgress,
   } = useProgress();
   const { initial, color } = useUserAvatar();
   const { toast } = useToast();
@@ -55,7 +57,12 @@ export default function DutchLearningPlatform() {
     prioritizeIncorrect: true,
   });
 
-  const testExerciseQueue = useTestExerciseQueue({
+  const test1ExerciseQueue = useTestExerciseQueue({
+    maxRecentExercises: 6,
+    ensureTypeDistribution: true,
+  });
+
+  const test2ExerciseQueue = useTestExerciseQueue({
     maxRecentExercises: 6,
     ensureTypeDistribution: true,
   });
@@ -89,6 +96,13 @@ export default function DutchLearningPlatform() {
   const [sessionScore, setSessionScore] = useState({ correct: 0, total: 0 });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hasStartedLearning, setHasStartedLearning] = useState(false);
+  const [testReviewMode, setTestReviewMode] = useState<{
+    test1: boolean;
+    test2: boolean;
+  }>({
+    test1: false,
+    test2: false,
+  });
 
   useEffect(() => {
     toast({
@@ -171,10 +185,30 @@ export default function DutchLearningPlatform() {
   useEffect(() => {
     if (exerciseMode === 'test1') {
       const testExercises = createTestExercises();
-      testExerciseQueue.initializeTestQueue(testExercises);
+      const test1Progress = getTestExerciseProgress('test1');
+      const incorrectIds = Object.keys(test1Progress.incorrectExercises);
+
+      if (testReviewMode.test1 && incorrectIds.length > 0) {
+        const incorrectExercises = testExercises.filter((ex) =>
+          incorrectIds.includes(ex.id),
+        );
+        test1ExerciseQueue.initializeTestQueue(incorrectExercises);
+      } else {
+        test1ExerciseQueue.initializeTestQueue(testExercises);
+      }
     } else if (exerciseMode === 'test2') {
       const testExercises = createTestExercises2();
-      testExerciseQueue.initializeTestQueue(testExercises);
+      const test2Progress = getTestExerciseProgress('test2');
+      const incorrectIds = Object.keys(test2Progress.incorrectExercises);
+
+      if (testReviewMode.test2 && incorrectIds.length > 0) {
+        const incorrectExercises = testExercises.filter((ex) =>
+          incorrectIds.includes(ex.id),
+        );
+        test2ExerciseQueue.initializeTestQueue(incorrectExercises);
+      } else {
+        test2ExerciseQueue.initializeTestQueue(testExercises);
+      }
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
@@ -221,19 +255,31 @@ export default function DutchLearningPlatform() {
     exerciseMode,
     progress.incorrectWords,
     progress.mistakeMode,
+    getTestExerciseProgress,
+    testReviewMode,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
-  const currentTestExercise = testExerciseQueue.getCurrentTestExercise();
+  const currentTest1Exercise = test1ExerciseQueue.getCurrentTestExercise();
+  const currentTest2Exercise = test2ExerciseQueue.getCurrentTestExercise();
   const currentPerfectTenseWord = perfectTenseQueue.getCurrentItem();
   const currentImperfectumWord = imperfectumQueue.getCurrentItem();
 
   const handleExerciseComplete = (correct: boolean) => {
-    if (
-      (exerciseMode === 'test1' || exerciseMode === 'test2') &&
-      currentTestExercise
-    ) {
-      testExerciseQueue.moveToNextTest(currentTestExercise.id, correct);
+    if (exerciseMode === 'test1' && currentTest1Exercise) {
+      markTestExerciseCompleted(
+        'test1',
+        currentTest1Exercise.id,
+        correct ? 1 : 0,
+      );
+      test1ExerciseQueue.moveToNextTest(currentTest1Exercise.id, correct);
+    } else if (exerciseMode === 'test2' && currentTest2Exercise) {
+      markTestExerciseCompleted(
+        'test2',
+        currentTest2Exercise.id,
+        correct ? 1 : 0,
+      );
+      test2ExerciseQueue.moveToNextTest(currentTest2Exercise.id, correct);
     } else if (exerciseMode === 'perfect' && currentPerfectTenseWord) {
       markWordCompleted(currentPerfectTenseWord.id, correct ? 1 : 0);
       perfectTenseQueue.moveToNext(currentPerfectTenseWord.id, correct);
@@ -252,8 +298,10 @@ export default function DutchLearningPlatform() {
     setSessionScore(newScore);
 
     const hasMoreExercises =
-      exerciseMode === 'test1' || exerciseMode === 'test2'
-        ? testExerciseQueue.hasMoreTestExercises()
+      exerciseMode === 'test1'
+        ? test1ExerciseQueue.hasMoreTestExercises()
+        : exerciseMode === 'test2'
+        ? test2ExerciseQueue.hasMoreTestExercises()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.hasMoreItems()
         : exerciseMode === 'imperfectum'
@@ -285,13 +333,12 @@ export default function DutchLearningPlatform() {
   const resetExercises = () => {
     setShowResults(false);
     setSessionScore({ correct: 0, total: 0 });
-    if (exerciseMode === 'test1' || exerciseMode === 'test2') {
-      // Create test exercises based on the selected test level
-      const exercises =
-        exerciseMode === 'test1'
-          ? createTestExercises()
-          : createTestExercises2();
-      testExerciseQueue.initializeTestQueue(exercises);
+    if (exerciseMode === 'test1') {
+      const exercises = createTestExercises();
+      test1ExerciseQueue.initializeTestQueue(exercises);
+    } else if (exerciseMode === 'test2') {
+      const exercises = createTestExercises2();
+      test2ExerciseQueue.initializeTestQueue(exercises);
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
@@ -348,6 +395,42 @@ export default function DutchLearningPlatform() {
     setExerciseMode(mode);
     resetExercises();
     setHasStartedLearning(true);
+  };
+
+  const toggleTestReviewMode = (testType: 'test1' | 'test2') => {
+    setTestReviewMode((prev) => ({
+      ...prev,
+      [testType]: !prev[testType],
+    }));
+
+    // Reset the session when toggling review mode
+    setShowResults(false);
+    setSessionScore({ correct: 0, total: 0 });
+  };
+
+  const getTestCompletionStatus = (testType: 'test1' | 'test2') => {
+    const testProgress = getTestExerciseProgress(testType);
+    const totalExercises =
+      testType === 'test1'
+        ? createTestExercises().length
+        : createTestExercises2().length;
+    const attemptedExercises = testProgress.completedExercises.size;
+    const correctExercises = Object.values(testProgress.scores).filter(
+      (score) => score === 1,
+    ).length;
+
+    return {
+      total: totalExercises,
+      attempted: attemptedExercises,
+      correct: correctExercises,
+      incorrect: Object.keys(testProgress.incorrectExercises).length,
+      completionPercentage:
+        totalExercises > 0 ? (attemptedExercises / totalExercises) * 100 : 0,
+      accuracyPercentage:
+        attemptedExercises > 0
+          ? (correctExercises / attemptedExercises) * 100
+          : 0,
+    };
   };
 
   return (
@@ -682,6 +765,70 @@ export default function DutchLearningPlatform() {
                       </Button>
                     </div>
 
+                    {/* Test Review Mode Controls */}
+                    {(exerciseMode === 'test1' || exerciseMode === 'test2') && (
+                      <div className="flex justify-center space-x-4 mb-4">
+                        {exerciseMode === 'test1' && (
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="outline">
+                              Test 1 Incorrect:{' '}
+                              {
+                                Object.keys(
+                                  getTestExerciseProgress('test1')
+                                    .incorrectExercises,
+                                ).length
+                              }
+                            </Badge>
+                            {Object.keys(
+                              getTestExerciseProgress('test1')
+                                .incorrectExercises,
+                            ).length > 0 && (
+                              <Button
+                                size="sm"
+                                variant={
+                                  testReviewMode.test1 ? 'default' : 'outline'
+                                }
+                                onClick={() => toggleTestReviewMode('test1')}
+                              >
+                                {testReviewMode.test1
+                                  ? 'Exit Review'
+                                  : 'Review Mode'}
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                        {exerciseMode === 'test2' && (
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="outline">
+                              Test 2 Incorrect:{' '}
+                              {
+                                Object.keys(
+                                  getTestExerciseProgress('test2')
+                                    .incorrectExercises,
+                                ).length
+                              }
+                            </Badge>
+                            {Object.keys(
+                              getTestExerciseProgress('test2')
+                                .incorrectExercises,
+                            ).length > 0 && (
+                              <Button
+                                size="sm"
+                                variant={
+                                  testReviewMode.test2 ? 'default' : 'outline'
+                                }
+                                onClick={() => toggleTestReviewMode('test2')}
+                              >
+                                {testReviewMode.test2
+                                  ? 'Exit Review'
+                                  : 'Review Mode'}
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {exerciseMode === 'perfect' && (
                       <div className="flex justify-center space-x-2 mb-4">
                         <span className="text-sm text-muted-foreground self-center mr-2">
@@ -781,8 +928,8 @@ export default function DutchLearningPlatform() {
                       exerciseMode !== 'imperfectum' &&
                       availableWords.length > 0 &&
                       currentWord) ||
-                    ((exerciseMode === 'test1' || exerciseMode === 'test2') &&
-                      currentTestExercise) ||
+                    (exerciseMode === 'test1' && currentTest1Exercise) ||
+                    (exerciseMode === 'test2' && currentTest2Exercise) ||
                     (exerciseMode === 'perfect' && currentPerfectTenseWord) ||
                     (exerciseMode === 'imperfectum' &&
                       currentImperfectumWord) ? (
@@ -790,32 +937,45 @@ export default function DutchLearningPlatform() {
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
                             Question{' '}
-                            {exerciseMode === 'test1' ||
-                            exerciseMode === 'test2'
-                              ? testExerciseQueue.getTestProgress().current + 1
+                            {exerciseMode === 'test1'
+                              ? test1ExerciseQueue.getTestProgress().current + 1
+                              : exerciseMode === 'test2'
+                              ? test2ExerciseQueue.getTestProgress().current + 1
                               : exerciseMode === 'perfect'
-                              ? perfectTenseQueue.getProgress().current
+                              ? perfectTenseQueue.getProgress().current + 1
                               : exerciseMode === 'imperfectum'
-                              ? imperfectumQueue.getProgress().current
+                              ? imperfectumQueue.getProgress().current + 1
                               : exerciseQueue.getProgress().current + 1}{' '}
                             of{' '}
-                            {exerciseMode === 'test1' ||
-                            exerciseMode === 'test2'
-                              ? testExerciseQueue.getTestProgress().total
+                            {exerciseMode === 'test1'
+                              ? test1ExerciseQueue.getTestProgress().total
+                              : exerciseMode === 'test2'
+                              ? test2ExerciseQueue.getTestProgress().total
                               : exerciseMode === 'perfect'
                               ? perfectTenseQueue.getProgress().total
                               : exerciseMode === 'imperfectum'
                               ? imperfectumQueue.getProgress().total
                               : exerciseQueue.getProgress().total}
                           </p>
+                          {/* Review Mode Indicator */}
+                          {((exerciseMode === 'test1' &&
+                            testReviewMode.test1) ||
+                            (exerciseMode === 'test2' &&
+                              testReviewMode.test2)) && (
+                            <Badge variant="secondary" className="mt-2">
+                              Review Mode: Practicing Incorrect Answers
+                            </Badge>
+                          )}
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div
                               className="bg-primary h-2 rounded-full transition-all duration-300"
                               style={{
                                 width: `${
-                                  exerciseMode === 'test1' ||
-                                  exerciseMode === 'test2'
-                                    ? testExerciseQueue.getTestProgress()
+                                  exerciseMode === 'test1'
+                                    ? test1ExerciseQueue.getTestProgress()
+                                        .percentage
+                                    : exerciseMode === 'test2'
+                                    ? test2ExerciseQueue.getTestProgress()
                                         .percentage
                                     : exerciseMode === 'perfect'
                                     ? (perfectTenseQueue.getProgress().current /
@@ -832,11 +992,14 @@ export default function DutchLearningPlatform() {
                           </div>
                         </div>
 
-                        {(exerciseMode === 'test1' ||
-                          exerciseMode === 'test2') &&
-                        currentTestExercise ? (
+                        {exerciseMode === 'test1' && currentTest1Exercise ? (
                           <TestExerciseCard
-                            exercise={currentTestExercise}
+                            exercise={currentTest1Exercise}
+                            onComplete={handleExerciseComplete}
+                          />
+                        ) : exerciseMode === 'test2' && currentTest2Exercise ? (
+                          <TestExerciseCard
+                            exercise={currentTest2Exercise}
                             onComplete={handleExerciseComplete}
                           />
                         ) : exerciseMode === 'perfect' &&
@@ -922,6 +1085,85 @@ export default function DutchLearningPlatform() {
                         You got {sessionScore.correct} out of{' '}
                         {sessionScore.total} questions correct!
                       </p>
+
+                      {/* Enhanced Test Statistics */}
+                      {(exerciseMode === 'test1' ||
+                        exerciseMode === 'test2') && (
+                        <div className="mt-6 space-y-4">
+                          <div className="grid gap-4 md:grid-cols-3">
+                            <div className="bg-gray-50 p-4 rounded-lg">
+                              <h4 className="font-semibold text-sm text-gray-600">
+                                Overall Progress
+                              </h4>
+                              <p className="text-2xl font-bold text-gray-800">
+                                {getTestCompletionStatus(
+                                  exerciseMode,
+                                ).completionPercentage.toFixed(1)}
+                                %
+                              </p>
+                              <p className="text-xs text-gray-500">
+                                {
+                                  getTestCompletionStatus(exerciseMode)
+                                    .attempted
+                                }{' '}
+                                of {getTestCompletionStatus(exerciseMode).total}{' '}
+                                exercises
+                              </p>
+                            </div>
+                            <div className="bg-green-50 p-4 rounded-lg">
+                              <h4 className="font-semibold text-sm text-green-600">
+                                Accuracy Rate
+                              </h4>
+                              <p className="text-2xl font-bold text-green-800">
+                                {getTestCompletionStatus(
+                                  exerciseMode,
+                                ).accuracyPercentage.toFixed(1)}
+                                %
+                              </p>
+                              <p className="text-xs text-green-500">
+                                {getTestCompletionStatus(exerciseMode).correct}{' '}
+                                correct answers
+                              </p>
+                            </div>
+                            <div className="bg-orange-50 p-4 rounded-lg">
+                              <h4 className="font-semibold text-sm text-orange-600">
+                                Need Review
+                              </h4>
+                              <p className="text-2xl font-bold text-orange-800">
+                                {
+                                  getTestCompletionStatus(exerciseMode)
+                                    .incorrect
+                                }
+                              </p>
+                              <p className="text-xs text-orange-500">
+                                exercises to practice
+                              </p>
+                            </div>
+                          </div>
+
+                          {getTestCompletionStatus(exerciseMode).incorrect >
+                            0 && (
+                            <div className="bg-blue-50 p-4 rounded-lg">
+                              <p className="text-sm text-blue-800 mb-2">
+                                💡 <strong>Tip:</strong> Practice your incorrect
+                                answers in Review Mode to improve your
+                                understanding!
+                              </p>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() =>
+                                  toggleTestReviewMode(exerciseMode)
+                                }
+                                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                              >
+                                Start Review Mode
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
                       <Button
                         onClick={resetExercises}
                         className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90"

@@ -83,11 +83,34 @@ export function TestExerciseCard({
     let isCorrect = false;
 
     if (exercise.correctAnswer) {
-      isCorrect =
-        answerToCheck.toLowerCase().trim() ===
-        exercise.correctAnswer.toLowerCase().trim();
+      // Normalize both answers for comparison
+      const normalizedUserAnswer = answerToCheck
+        .toLowerCase()
+        .trim()
+        .replace(/[.,!?;]/g, '') // Remove punctuation
+        .replace(/\s+/g, ' '); // Normalize whitespace
+
+      const normalizedCorrectAnswer = exercise.correctAnswer
+        .toLowerCase()
+        .trim()
+        .replace(/[.,!?;]/g, '')
+        .replace(/\s+/g, ' ');
+
+      // For multiple choice, exact match is required
+      if (exercise.options && exercise.options.length > 0) {
+        isCorrect = answerToCheck === exercise.correctAnswer;
+      } else {
+        // For open-ended questions, allow some flexibility
+        isCorrect =
+          normalizedUserAnswer === normalizedCorrectAnswer ||
+          // Also check if the user answer contains the correct answer
+          (normalizedUserAnswer.includes(normalizedCorrectAnswer) &&
+            normalizedCorrectAnswer.length > 3); // Avoid matching very short words
+      }
     } else {
-      isCorrect = answerToCheck.trim().length > 0;
+      // For exercises without a specific correct answer (like creative writing)
+      // Consider it correct if the answer has sufficient length
+      isCorrect = answerToCheck.trim().length >= 3;
     }
 
     if (answer) {

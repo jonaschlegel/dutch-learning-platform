@@ -10,6 +10,18 @@ export function useProgress() {
     currentChapter: 0,
     incorrectWords: {},
     mistakeMode: false,
+    testExerciseProgress: {
+      test1: {
+        completedExercises: new Set(),
+        incorrectExercises: {},
+        scores: {},
+      },
+      test2: {
+        completedExercises: new Set(),
+        incorrectExercises: {},
+        scores: {},
+      },
+    },
   });
 
   useEffect(() => {
@@ -21,6 +33,39 @@ export function useProgress() {
         completedWords: new Set(parsed.completedWords),
         incorrectWords: parsed.incorrectWords || {},
         mistakeMode: parsed.mistakeMode || false,
+        testExerciseProgress: parsed.testExerciseProgress
+          ? {
+              test1: {
+                ...parsed.testExerciseProgress.test1,
+                completedExercises: new Set(
+                  parsed.testExerciseProgress.test1.completedExercises || [],
+                ),
+                incorrectExercises:
+                  parsed.testExerciseProgress.test1.incorrectExercises || {},
+                scores: parsed.testExerciseProgress.test1.scores || {},
+              },
+              test2: {
+                ...parsed.testExerciseProgress.test2,
+                completedExercises: new Set(
+                  parsed.testExerciseProgress.test2.completedExercises || [],
+                ),
+                incorrectExercises:
+                  parsed.testExerciseProgress.test2.incorrectExercises || {},
+                scores: parsed.testExerciseProgress.test2.scores || {},
+              },
+            }
+          : {
+              test1: {
+                completedExercises: new Set(),
+                incorrectExercises: {},
+                scores: {},
+              },
+              test2: {
+                completedExercises: new Set(),
+                incorrectExercises: {},
+                scores: {},
+              },
+            },
       });
     }
   }, []);
@@ -29,6 +74,22 @@ export function useProgress() {
     const toSave = {
       ...newProgress,
       completedWords: Array.from(newProgress.completedWords),
+      testExerciseProgress: newProgress.testExerciseProgress
+        ? {
+            test1: {
+              ...newProgress.testExerciseProgress.test1,
+              completedExercises: Array.from(
+                newProgress.testExerciseProgress.test1.completedExercises,
+              ),
+            },
+            test2: {
+              ...newProgress.testExerciseProgress.test2,
+              completedExercises: Array.from(
+                newProgress.testExerciseProgress.test2.completedExercises,
+              ),
+            },
+          }
+        : undefined,
     };
     localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
     setProgress(newProgress);
@@ -104,7 +165,81 @@ export function useProgress() {
       currentChapter: 0,
       incorrectWords: {},
       mistakeMode: false,
+      testExerciseProgress: {
+        test1: {
+          completedExercises: new Set(),
+          incorrectExercises: {},
+          scores: {},
+        },
+        test2: {
+          completedExercises: new Set(),
+          incorrectExercises: {},
+          scores: {},
+        },
+      },
     });
+  };
+
+  const markTestExerciseCompleted = (
+    testType: 'test1' | 'test2',
+    exerciseId: string,
+    score: number,
+  ) => {
+    const newProgress = { ...progress };
+
+    // Initialize test exercise progress if it doesn't exist
+    if (!newProgress.testExerciseProgress) {
+      newProgress.testExerciseProgress = {
+        test1: {
+          completedExercises: new Set(),
+          incorrectExercises: {},
+          scores: {},
+        },
+        test2: {
+          completedExercises: new Set(),
+          incorrectExercises: {},
+          scores: {},
+        },
+      };
+    }
+
+    const testProgress = newProgress.testExerciseProgress[testType];
+
+    // Mark as completed and record score
+    testProgress.completedExercises.add(exerciseId);
+    testProgress.scores[exerciseId] = score;
+
+    // Handle incorrect answers
+    if (score === 0) {
+      const now = Date.now();
+      const currentIncorrect = testProgress.incorrectExercises[exerciseId] || {
+        count: 0,
+        lastAttempt: 0,
+      };
+
+      testProgress.incorrectExercises[exerciseId] = {
+        count: currentIncorrect.count + 1,
+        lastAttempt: now,
+      };
+    } else if (score === 1 && testProgress.incorrectExercises[exerciseId]) {
+      // Remove from incorrect list if answered correctly
+      const { [exerciseId]: removed, ...remaining } =
+        testProgress.incorrectExercises;
+      testProgress.incorrectExercises = remaining;
+    }
+
+    saveProgress(newProgress);
+  };
+
+  const getTestExerciseProgress = (testType: 'test1' | 'test2') => {
+    if (!progress.testExerciseProgress) {
+      return {
+        completedExercises: new Set<string>(),
+        incorrectExercises: {},
+        scores: {},
+      };
+    }
+    return progress.testExerciseProgress[testType];
   };
 
   return {
@@ -114,5 +249,7 @@ export function useProgress() {
     setCurrentChapter,
     toggleMistakeMode,
     resetProgress,
+    markTestExerciseCompleted,
+    getTestExerciseProgress,
   };
 }
