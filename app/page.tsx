@@ -395,11 +395,11 @@ export default function DutchLearningPlatform() {
               </p>
               <div className="space-y-4">
                 {/* First row - Primary actions */}
-                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   <Button
                     size="default"
                     onClick={() => startNewSession('vocabulary')}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground w-full"
                   >
                     <Play className="h-5 w-5 mr-2" />
                     Vocabulary
@@ -408,7 +408,7 @@ export default function DutchLearningPlatform() {
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('articles')}
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
                   >
                     <Play className="h-5 w-5 mr-2" />
                     Articles
@@ -417,7 +417,7 @@ export default function DutchLearningPlatform() {
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('plural')}
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
                   >
                     <Play className="h-5 w-5 mr-2" />
                     Plural
@@ -425,12 +425,12 @@ export default function DutchLearningPlatform() {
                 </div>
 
                 {/* Second row - Advanced features */}
-                <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3">
                   <Button
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('perfect')}
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
                   >
                     <Clock className="h-5 w-5 mr-2" />
                     Perfect Tense
@@ -439,16 +439,20 @@ export default function DutchLearningPlatform() {
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('imperfectum')}
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
                   >
                     <Clock className="h-5 w-5 mr-2" />
                     Imperfectum
                   </Button>
+                </div>
+
+                {/* Third row - Test options */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <Button
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('test1')}
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
                     Test 1 (Basic)
@@ -457,7 +461,7 @@ export default function DutchLearningPlatform() {
                     size="default"
                     variant="outline"
                     onClick={() => startNewSession('test2')}
-                    className="border-secondary text-secondary hover:bg-secondary/10"
+                    className="border-secondary text-secondary hover:bg-secondary/10 w-full"
                   >
                     <GraduationCap className="h-5 w-5 mr-2" />
                     Test 2 (Advanced)
