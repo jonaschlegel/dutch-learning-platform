@@ -60,9 +60,14 @@ export function VocabularyCard({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && hasAnswered) {
-      e.preventDefault();
-      handleNext();
+    if (e.key === 'Enter') {
+      if (hasAnswered) {
+        e.preventDefault();
+        handleNext();
+      } else if (userAnswer.trim()) {
+        e.preventDefault();
+        checkAnswer();
+      }
     }
   };
 
@@ -134,9 +139,12 @@ export function VocabularyCard({
             onChange={(e) => setUserAnswer(e.target.value)}
             placeholder="Type your answer in Dutch..."
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !hasAnswered) {
-                e.stopPropagation();
-                checkAnswer();
+              if (e.key === 'Enter') {
+                if (!hasAnswered) {
+                  e.stopPropagation();
+                  checkAnswer();
+                }
+                // If hasAnswered is true, let the event bubble up to the card handler
               }
             }}
             disabled={hasAnswered}

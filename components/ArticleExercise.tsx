@@ -36,10 +36,14 @@ export function ArticleExercise({ word, onComplete }: ArticleExerciseProps) {
     setSelectedArticle(null);
   };
 
-  // Handle Enter key for next exercise
+  // Handle Enter key for checking answer and next exercise
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && showFeedback) {
-      handleNext();
+    if (e.key === 'Enter') {
+      if (showFeedback) {
+        handleNext();
+      } else if (selectedArticle) {
+        checkAnswer();
+      }
     }
   };
 

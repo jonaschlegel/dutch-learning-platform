@@ -90,9 +90,23 @@ export function PerfectTenseExercise({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && hasAnswered) {
-      e.preventDefault();
-      handleNext();
+    if (e.key === 'Enter') {
+      if (hasAnswered) {
+        e.preventDefault();
+        handleNext();
+      } else {
+        // Check if we have valid answers based on mode
+        const canCheck =
+          (mode === 'participle' && userParticiple.trim()) ||
+          (mode === 'auxiliary' && userAuxiliary) ||
+          (mode === 'complete' && userParticiple.trim() && userAuxiliary) ||
+          (mode === 'translate' && userTranslation.trim());
+
+        if (canCheck) {
+          e.preventDefault();
+          checkAnswer();
+        }
+      }
     }
   };
 
@@ -174,9 +188,12 @@ export function PerfectTenseExercise({
               placeholder="Type the past participle..."
               disabled={hasAnswered}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !hasAnswered) {
-                  e.stopPropagation();
-                  checkAnswer();
+                if (e.key === 'Enter') {
+                  if (!hasAnswered) {
+                    e.stopPropagation();
+                    checkAnswer();
+                  }
+                  // If hasAnswered is true, let the event bubble up to the card handler
                 }
               }}
               className="text-center text-lg"
@@ -233,9 +250,12 @@ export function PerfectTenseExercise({
                   disabled={hasAnswered}
                   className="flex-1 max-w-[150px] text-center"
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !hasAnswered) {
-                      e.stopPropagation();
-                      checkAnswer();
+                    if (e.key === 'Enter') {
+                      if (!hasAnswered) {
+                        e.stopPropagation();
+                        checkAnswer();
+                      }
+                      // If hasAnswered is true, let the event bubble up to the card handler
                     }
                   }}
                 />
@@ -250,9 +270,12 @@ export function PerfectTenseExercise({
               placeholder="Type your Dutch translation..."
               disabled={hasAnswered}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !hasAnswered) {
-                  e.stopPropagation();
-                  checkAnswer();
+                if (e.key === 'Enter') {
+                  if (!hasAnswered) {
+                    e.stopPropagation();
+                    checkAnswer();
+                  }
+                  // If hasAnswered is true, let the event bubble up to the card handler
                 }
               }}
               className="text-center"

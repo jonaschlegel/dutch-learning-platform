@@ -46,8 +46,12 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && showFeedback) {
-      handleNext();
+    if (e.key === 'Enter') {
+      if (showFeedback) {
+        handleNext();
+      } else if (userAnswer.trim()) {
+        checkAnswer();
+      }
     }
   };
 
@@ -119,7 +123,15 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
             placeholder="Type the plural form..."
-            onKeyPress={(e) => e.key === 'Enter' && checkAnswer()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                if (!showFeedback && userAnswer.trim()) {
+                  e.stopPropagation();
+                  checkAnswer();
+                }
+                // If showFeedback is true, let the event bubble up to the card handler
+              }
+            }}
             disabled={showFeedback}
             className="border-input focus:ring-ring focus:border-primary"
           />

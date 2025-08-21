@@ -94,9 +94,22 @@ export function ImperfectumExercise({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && hasAnswered) {
-      e.preventDefault();
-      handleNext();
+    if (e.key === 'Enter') {
+      if (hasAnswered) {
+        e.preventDefault();
+        handleNext();
+      } else {
+        // Check if we have valid answers based on mode
+        const canCheck =
+          (mode === 'conjugation' && userConjugation.trim()) ||
+          (mode === 'complete' && userSentence.trim()) ||
+          (mode === 'translate' && userTranslation.trim());
+
+        if (canCheck) {
+          e.preventDefault();
+          checkAnswer();
+        }
+      }
     }
   };
 
@@ -211,9 +224,12 @@ export function ImperfectumExercise({
                   disabled={hasAnswered}
                   className="flex-1 max-w-[200px] text-center text-lg"
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !hasAnswered) {
-                      e.stopPropagation();
-                      checkAnswer();
+                    if (e.key === 'Enter') {
+                      if (!hasAnswered) {
+                        e.stopPropagation();
+                        checkAnswer();
+                      }
+                      // If hasAnswered is true, let the event bubble up to the card handler
                     }
                   }}
                 />
@@ -246,9 +262,12 @@ export function ImperfectumExercise({
                 disabled={hasAnswered}
                 className="text-center"
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !hasAnswered) {
-                    e.stopPropagation();
-                    checkAnswer();
+                  if (e.key === 'Enter') {
+                    if (!hasAnswered) {
+                      e.stopPropagation();
+                      checkAnswer();
+                    }
+                    // If hasAnswered is true, let the event bubble up to the card handler
                   }
                 }}
               />
@@ -262,9 +281,12 @@ export function ImperfectumExercise({
               placeholder="Type your Dutch translation..."
               disabled={hasAnswered}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !hasAnswered) {
-                  e.stopPropagation();
-                  checkAnswer();
+                if (e.key === 'Enter') {
+                  if (!hasAnswered) {
+                    e.stopPropagation();
+                    checkAnswer();
+                  }
+                  // If hasAnswered is true, let the event bubble up to the card handler
                 }
               }}
               className="text-center"

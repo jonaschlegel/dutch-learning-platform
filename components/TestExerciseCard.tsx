@@ -126,8 +126,12 @@ export function TestExerciseCard({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && showAnswer) {
-      handleNext();
+    if (e.key === 'Enter') {
+      if (showAnswer) {
+        handleNext();
+      } else if (userAnswer.trim()) {
+        handleSubmit();
+      }
     }
   };
 
