@@ -182,13 +182,21 @@ export default function DutchLearningPlatform() {
     return Array.from(categories).sort();
   }, [currentChapterWords, progress.currentChapter]);
 
+  const testReviewModeValues = useMemo(
+    () => ({
+      test1: testReviewMode.test1,
+      test2: testReviewMode.test2,
+    }),
+    [testReviewMode.test1, testReviewMode.test2],
+  );
+
   useEffect(() => {
     if (exerciseMode === 'test1') {
       const testExercises = createTestExercises();
       const test1Progress = getTestExerciseProgress('test1');
       const incorrectIds = Object.keys(test1Progress.incorrectExercises);
 
-      if (testReviewMode.test1 && incorrectIds.length > 0) {
+      if (testReviewModeValues.test1 && incorrectIds.length > 0) {
         const incorrectExercises = testExercises.filter((ex) =>
           incorrectIds.includes(ex.id),
         );
@@ -201,7 +209,7 @@ export default function DutchLearningPlatform() {
       const test2Progress = getTestExerciseProgress('test2');
       const incorrectIds = Object.keys(test2Progress.incorrectExercises);
 
-      if (testReviewMode.test2 && incorrectIds.length > 0) {
+      if (testReviewModeValues.test2 && incorrectIds.length > 0) {
         const incorrectExercises = testExercises.filter((ex) =>
           incorrectIds.includes(ex.id),
         );
@@ -255,8 +263,7 @@ export default function DutchLearningPlatform() {
     exerciseMode,
     progress.incorrectWords,
     progress.mistakeMode,
-    getTestExerciseProgress,
-    testReviewMode,
+    testReviewModeValues,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
