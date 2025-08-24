@@ -28,9 +28,10 @@ type TestExerciseType =
   | 'perfectTense'
   | 'imperfectum'
   | 'readingComprehension'
-  | 'listeningComprehension'
   | 'grammar'
-  | 'dialogue';
+  | 'situationalResponse'
+  | 'questionFormation'
+  | 'modalVerbs';
 
 interface TestExercise {
   id: string;
@@ -172,12 +173,14 @@ export function TestExerciseCard({
         return 'Imperfectum';
       case 'readingComprehension':
         return 'Reading Comprehension';
-      case 'listeningComprehension':
-        return 'Listening Comprehension';
       case 'grammar':
         return 'Grammar';
-      case 'dialogue':
-        return 'Dialogue';
+      case 'situationalResponse':
+        return 'Situational Response';
+      case 'questionFormation':
+        return 'Question Formation';
+      case 'modalVerbs':
+        return 'Modal Verbs';
       default:
         return 'Exercise';
     }
@@ -227,33 +230,6 @@ export function TestExerciseCard({
             <p className="text-sm leading-relaxed whitespace-pre-line">
               {exercise.text}
             </p>
-          </div>
-        )}
-
-        {/* Listening comprehension audio */}
-        {exercise.type === 'listeningComprehension' && exercise.audioScript && (
-          <div className="text-center p-4 bg-blue-50 rounded-lg">
-            <h4 className="font-semibold mb-2">{exercise.title}</h4>
-            <p className="text-muted-foreground mb-4">
-              Listen carefully to the audio
-            </p>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => playAudio(exercise.audioScript!)}
-              className="mb-4"
-            >
-              <Volume2 className="h-5 w-5 mr-2" />
-              Play Audio
-            </Button>
-          </div>
-        )}
-
-        {/* Dialogue scenario */}
-        {exercise.type === 'dialogue' && exercise.scenario && (
-          <div className="p-4 bg-yellow-50 rounded-lg">
-            <h4 className="font-semibold mb-2">Scenario</h4>
-            <p className="text-sm">{exercise.scenario}</p>
           </div>
         )}
 
@@ -463,21 +439,6 @@ export function createTestExercises(): TestExercise[] {
 export function createTestExercises2(): TestExercise[] {
   const exercises: TestExercise[] = [];
 
-  // Vocabulary exercises
-  testExercises2.vocabulary.forEach((vocabEx, exerciseIndex) => {
-    exercises.push({
-      id: `vocab2-${vocabEx.id}`,
-      type: 'vocabulary',
-      exerciseIndex,
-      questionIndex: 0,
-      question: vocabEx.question,
-      correctAnswer: vocabEx.answer,
-      options: vocabEx.options,
-      level: vocabEx.level,
-      instructions: 'Select the correct translation or answer.',
-    });
-  });
-
   // Perfect tense exercises
   testExercises2.perfectTense.forEach((perfectEx, exerciseIndex) => {
     exercises.push({
@@ -488,8 +449,7 @@ export function createTestExercises2(): TestExercise[] {
       question: perfectEx.question,
       correctAnswer: perfectEx.answer,
       level: perfectEx.level,
-      instructions:
-        'Complete the sentence with the correct perfect tense form.',
+      instructions: perfectEx.instruction,
     });
   });
 
@@ -503,7 +463,52 @@ export function createTestExercises2(): TestExercise[] {
       question: imperfectEx.question,
       correctAnswer: imperfectEx.answer,
       level: imperfectEx.level,
-      instructions: 'Complete the sentence with the correct imperfectum form.',
+      instructions: imperfectEx.instruction,
+    });
+  });
+
+  // Situational Response exercises
+  testExercises2.situationalResponses.forEach(
+    (situationalEx, exerciseIndex) => {
+      exercises.push({
+        id: `situational2-${situationalEx.id}`,
+        type: 'situationalResponse',
+        exerciseIndex,
+        questionIndex: 0,
+        question: situationalEx.question,
+        correctAnswer: situationalEx.answer,
+        level: situationalEx.level,
+        instructions: situationalEx.instruction,
+      });
+    },
+  );
+
+  // Question Formation exercises
+  testExercises2.questionFormation.forEach((questionEx, exerciseIndex) => {
+    exercises.push({
+      id: `question2-${questionEx.id}`,
+      type: 'questionFormation',
+      exerciseIndex,
+      questionIndex: 0,
+      question: `Given answer: "${questionEx.answer}" - ${questionEx.instruction}`,
+      correctAnswer: questionEx.question,
+      level: questionEx.level,
+      instructions: questionEx.instruction,
+    });
+  });
+
+  // Modal Verbs exercises
+  testExercises2.modalVerbs.forEach((modalEx, exerciseIndex) => {
+    exercises.push({
+      id: `modal2-${modalEx.id}`,
+      type: 'modalVerbs',
+      exerciseIndex,
+      questionIndex: 0,
+      question: modalEx.question,
+      correctAnswer: modalEx.answer,
+      options: modalEx.options,
+      level: modalEx.level,
+      instructions: modalEx.instruction,
     });
   });
 
@@ -526,27 +531,6 @@ export function createTestExercises2(): TestExercise[] {
     });
   });
 
-  // Listening comprehension exercises
-  testExercises2.listeningComprehension.forEach(
-    (listeningEx, exerciseIndex) => {
-      listeningEx.questions.forEach((questionItem, questionIndex) => {
-        exercises.push({
-          id: `listening2-${listeningEx.id}-${questionIndex}`,
-          type: 'listeningComprehension',
-          exerciseIndex,
-          questionIndex,
-          question: questionItem.question,
-          correctAnswer: questionItem.answer,
-          options: questionItem.options,
-          level: listeningEx.level,
-          title: listeningEx.title,
-          audioScript: listeningEx.audioScript,
-          instructions: 'Listen to the audio and answer the questions.',
-        });
-      });
-    },
-  );
-
   // Grammar exercises
   testExercises2.grammar.forEach((grammarEx, exerciseIndex) => {
     exercises.push({
@@ -559,23 +543,6 @@ export function createTestExercises2(): TestExercise[] {
       options: grammarEx.options,
       level: grammarEx.level,
       instructions: 'Complete the sentence with the correct grammar form.',
-    });
-  });
-
-  // Dialogue exercises
-  testExercises2.dialogue.forEach((dialogueEx, exerciseIndex) => {
-    exercises.push({
-      id: `dialogue2-${dialogueEx.id}`,
-      type: 'dialogue',
-      exerciseIndex,
-      questionIndex: 0,
-      question: `Complete the dialogue: ${dialogueEx.title}`,
-      level: dialogueEx.level,
-      title: dialogueEx.title,
-      scenario: dialogueEx.scenario,
-      dialogue: dialogueEx.dialogue,
-      instructions:
-        'Complete the dialogue by selecting the appropriate responses.',
     });
   });
 

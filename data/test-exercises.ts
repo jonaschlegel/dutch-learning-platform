@@ -12,9 +12,48 @@ export interface GrammarExercise {
   id: string;
   level: string;
   type: 'fill' | 'multiple-choice' | 'reorder';
+  title?: string;
+  text?: string;
   question: string;
   answer: string;
   options?: string[];
+  hint?: string;
+}
+
+export interface SituationalResponseExercise {
+  id: string;
+  level: string;
+  title: string;
+  text: string;
+  situation: string;
+  question: string;
+  instruction: string;
+  answer: string;
+  alternativeAnswers: string[];
+  hint?: string;
+}
+
+export interface QuestionFormationExercise {
+  id: string;
+  level: string;
+  title: string;
+  text: string;
+  answer: string;
+  instruction: string;
+  question: string;
+  alternativeQuestions: string[];
+  hint?: string;
+}
+
+export interface ModalVerbsExercise {
+  id: string;
+  level: string;
+  title: string;
+  text: string;
+  question: string;
+  instruction: string;
+  answer: string;
+  options: string[];
   hint?: string;
 }
 
@@ -747,351 +786,443 @@ export const testExercises = {
 
 // Test 2 - Advanced (Chapters 5-10 + Perfect Tense + Imperfectum + Reading/Listening)
 export const testExercises2 = {
-  vocabulary: [
-    // Advanced vocabulary from chapters 5-10
+  // Reading Comprehension with Multiple Choice Questions
+  readingComprehension: [
     {
-      id: 'v2-1',
+      id: 'rc2-work-letter',
       level: 'A2',
-      type: 'translate',
-      question:
-        'How do you say "I have been living here for two years" in Dutch?',
-      answer: 'Ik woon hier al twee jaar',
-      options: [
-        'Ik woon hier al twee jaar',
-        'Ik woonde hier twee jaar',
-        'Ik ga hier twee jaar wonen',
-        'Ik heb hier twee jaar gewoond',
-      ],
-      hint: 'Use "al" to indicate duration that continues to the present',
-    },
-    {
-      id: 'v2-2',
-      level: 'A2',
-      type: 'translate',
-      question: 'What does "Hoeveel kost dat?" mean?',
-      answer: 'How much does that cost?',
-      options: [
-        'How much does that cost?',
-        'When does that start?',
-        'Where is that located?',
-        'Why is that expensive?',
-      ],
-      hint: 'This is a common shopping question',
-    },
-    {
-      id: 'v2-3',
-      level: 'A2',
-      type: 'translate',
-      question: 'How do you say "The weather is getting worse" in Dutch?',
-      answer: 'Het weer wordt slechter',
-      options: [
-        'Het weer wordt slechter',
-        'Het weer was slecht',
-        'Het weer is slecht',
-        'Het weer zal slecht zijn',
-      ],
-      hint: 'Use "wordt" for becoming/getting',
-    },
-  ] as VocabularyExercise[],
+      title: 'Brief van werkgever',
+      text: `Beste Cynthia,
 
-  perfectTense: [
-    {
-      id: 'pt2-1',
-      level: 'A2',
-      infinitive: 'spreken',
-      pastParticiple: 'gesproken',
-      auxiliary: 'hebben',
-      question: 'Complete: Ik ___ Nederlands ___.',
-      answer: 'heb gesproken',
-      hint: 'Use the auxiliary verb "hebben" with "gesproken"',
-    },
-    {
-      id: 'pt2-2',
-      level: 'A2',
-      infinitive: 'vertrekken',
-      pastParticiple: 'vertrokken',
-      auxiliary: 'zijn',
-      question: 'Complete: De trein ___ al ___.',
-      answer: 'is vertrokken',
-      hint: 'Movement verbs typically use "zijn"',
-    },
-    {
-      id: 'pt2-3',
-      level: 'A2',
-      infinitive: 'beginnen',
-      pastParticiple: 'begonnen',
-      auxiliary: 'zijn',
-      question: 'Complete: De les ___ nog niet ___.',
-      answer: 'is begonnen',
-      hint: 'State changes often use "zijn"',
-    },
-  ] as PerfectTenseTestExercise[],
+Welkom bij onze winkel! We zijn blij dat je bij ons komt werken.
 
+Je begint maandag 15 mei om 9.30. Je moet dan om 9.30 in de winkel zijn. Hayat Amiri komt je ophalen bij de ingang. Je hebt dan eerst een gesprek met haar over je contract. En van haar krijg je een pasje voor je kluisje.
+
+Om 10.00 zal Mariem Aziza met je meelopen door de winkel. Je kunt de andere medewerkers dan ontmoeten. Mariem zal je ook laten zien waar de kluisjes zijn. Daar kun je je tas en kleding in hangen. Het kluisje gaat op slot met het pasje.
+
+Om 10.30 ga je aan het werk. Mariem legt je uit wat voor werk je precies moet doen.
+
+Bij deze brief vind je een formulier. Het formulier kun je alvast thuis invullen. Neem het mee op je eerste werkdag.
+
+Veel succes!
+
+Groeten,
+Judith Lansveld
+Manager`,
+      questions: [
+        {
+          question: 'Waarom stuurt Judith Lansveld deze brief?',
+          options: [
+            'om een afspraak te verzetten',
+            'om informatie te geven',
+            'om te solliciteren',
+          ],
+          answer: 'om informatie te geven',
+        },
+        {
+          question: 'Hoe laat ontvangt Cynthia het pasje voor haar kluisje?',
+          options: ['om 9.30', 'om 10.00', 'om 10.30'],
+          answer: 'om 9.30',
+        },
+        {
+          question:
+            'Wie gaat Cynthia uitleggen wat voor werk ze precies moet doen?',
+          options: ['Mariem Aziza', 'Hayat Amiri', 'Judith Lansveld'],
+          answer: 'Mariem Aziza',
+        },
+        {
+          question: 'Waar kan Cynthia het kluisje voor gebruiken?',
+          options: [
+            'om haar werkschoenen in te zetten',
+            'om haar geld (portemonnee) in te stoppen',
+            'om haar werkkleding in te hangen',
+          ],
+          answer: 'om haar werkkleding in te hangen',
+        },
+        {
+          question: 'Wat moet Cynthia meenemen op haar eerste werkdag?',
+          options: [
+            'een formulier en een foto',
+            'een pasje en een formulier',
+            'alleen een formulier',
+          ],
+          answer: 'alleen een formulier',
+        },
+      ],
+    },
+  ],
+
+  // Imperfectum exercises (regular verbs)
   imperfectum: [
     {
       id: 'imp2-1',
       level: 'A2',
-      infinitive: 'willen',
-      imperfectForm: 'wilde',
-      pronoun: 'hij',
-      question: 'Complete: ___ ___ graag een auto kopen.',
-      answer: 'Hij wilde',
-      hint: 'Irregular verb: willen -> wilde',
+      question: 'Was het gisteren mooi weer? (de hele dag regenen)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Nee, het regende de hele dag',
+      targetVerb: 'regenen',
+      imperfectForm: 'regende',
+      hint: 'Regelmatig werkwoord: regenen -> regende',
     },
     {
       id: 'imp2-2',
       level: 'A2',
-      infinitive: 'kunnen',
-      imperfectForm: 'kon',
-      pronoun: 'ik',
-      question: 'Complete: ___ ___ gisteren niet komen.',
-      answer: 'Ik kon',
-      hint: 'Modal verb: kunnen -> kon',
+      question:
+        'Wat hebben Carlo en Elisa gisteren tijdens hun vakantie op Cyprus gedaan? (huren - een auto)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ze huurden een auto',
+      targetVerb: 'huren',
+      imperfectForm: 'huurden',
+      hint: 'Regelmatig werkwoord: huren -> huurden',
     },
     {
       id: 'imp2-3',
       level: 'A2',
-      infinitive: 'moeten',
-      imperfectForm: 'moest',
-      pronoun: 'zij',
-      question: 'Complete: ___ ___ vroeg opstaan.',
-      answer: 'Zij moest',
-      hint: 'Modal verb: moeten -> moest',
-    },
-  ] as ImperfectumTestExercise[],
-
-  readingComprehension: [
-    {
-      id: 'rc2-1',
-      level: 'A2',
-      title: 'Een dag in Amsterdam',
-      text: `Sarah woont sinds vorig jaar in Amsterdam. Ze heeft een kleine flat in het centrum. Elke ochtend fietst ze naar haar werk bij een reisbureau. Amsterdam heeft veel toeristen, dus haar werk is altijd interessant.
-
-In de weekenden gaat Sarah vaak naar musea of parken. Het Vondelpark is haar favoriet omdat het dicht bij haar huis is. Soms ontmoet ze vrienden in een café voor koffie en taart.
-
-Sarah vindt Amsterdam een perfecte stad om te wonen. Het is niet te groot en niet te klein. Er zijn altijd activiteiten, maar het is ook rustig genoeg om te ontspannen.`,
-      questions: [
-        {
-          question: 'Waar woont Sarah?',
-          options: [
-            'In het centrum van Amsterdam',
-            'Bij het Vondelpark',
-            'Bij haar werk',
-            'In een groot huis',
-          ],
-          answer: 'In het centrum van Amsterdam',
-        },
-        {
-          question: 'Hoe gaat Sarah naar haar werk?',
-          options: ['Met de bus', 'Met de auto', 'Op de fiets', 'Te voet'],
-          answer: 'Op de fiets',
-        },
-        {
-          question: 'Waarom vindt Sarah haar werk interessant?',
-          options: [
-            'Het is makkelijk',
-            'Er zijn veel toeristen',
-            'Het is dicht bij huis',
-            'Ze verdient veel geld',
-          ],
-          answer: 'Er zijn veel toeristen',
-        },
-        {
-          question: 'Wat is Sarahs favoriete park?',
-          options: [
-            'Het centrum park',
-            'Het Vondelpark',
-            'Het museum park',
-            'Het café park',
-          ],
-          answer: 'Het Vondelpark',
-        },
-      ],
+      question: 'Wat deden de kinderen in de speeltuin? (spelen - de schommel)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ze speelden op de schommel',
+      targetVerb: 'spelen',
+      imperfectForm: 'speelden',
+      hint: 'Regelmatig werkwoord: spelen -> speelden',
     },
     {
-      id: 'rc2-2',
+      id: 'imp2-4',
       level: 'A2',
-      title: 'Nederlandse tradities',
-      text: `In Nederland zijn er veel interessante tradities. Koningsdag op 27 april is een van de belangrijkste feestdagen. Mensen dragen oranje kleding en er zijn markten en feesten in elke stad.
-
-Sinterklaas is ook heel belangrijk voor Nederlandse kinderen. Op 5 december krijgen kinderen cadeaus van Sinterklaas. Dit is anders dan Kerstmis in andere landen.
-
-Veel Nederlanders eten stamppot in de winter. Dit is een traditioneel gerecht met aardappels en groenten. Het is warm en lekker op koude dagen.`,
-      questions: [
-        {
-          question: 'Wanneer is Koningsdag?',
-          options: ['5 december', '27 april', '25 december', '31 oktober'],
-          answer: '27 april',
-        },
-        {
-          question: 'Welke kleur dragen mensen op Koningsdag?',
-          options: ['Rood', 'Blauw', 'Oranje', 'Groen'],
-          answer: 'Oranje',
-        },
-        {
-          question: 'Wanneer krijgen kinderen cadeaus van Sinterklaas?',
-          options: ['27 april', '25 december', '31 december', '5 december'],
-          answer: '5 december',
-        },
-        {
-          question: 'Wat is stamppot?',
-          options: [
-            'Een drank',
-            'Een traditioneel gerecht',
-            'Een feestdag',
-            'Een kleding',
-          ],
-          answer: 'Een traditioneel gerecht',
-        },
-      ],
-    },
-  ] as ReadingComprehensionExercise[],
-
-  listeningComprehension: [
-    {
-      id: 'lc2-1',
-      level: 'A2',
-      title: 'Op het station',
-      audioScript:
-        'Goedemorgen. De trein naar Utrecht vertrekt over vijf minuten van spoor drie. Let op: de trein naar Amsterdam is vijftien minuten vertraagd. Dank je wel.',
-      questions: [
-        {
-          question: 'Wanneer vertrekt de trein naar Utrecht?',
-          options: [
-            'Over drie minuten',
-            'Over vijf minuten',
-            'Over vijftien minuten',
-            'Nu',
-          ],
-          answer: 'Over vijf minuten',
-        },
-        {
-          question: 'Van welk spoor vertrekt de trein naar Utrecht?',
-          options: ['Spoor 1', 'Spoor 2', 'Spoor 3', 'Spoor 5'],
-          answer: 'Spoor 3',
-        },
-        {
-          question: 'Wat is er met de trein naar Amsterdam?',
-          options: [
-            'Hij is geannuleerd',
-            'Hij vertrekt vroeger',
-            'Hij is vertraagd',
-            'Hij is op tijd',
-          ],
-          answer: 'Hij is vertraagd',
-        },
-      ],
+      question: 'Waarmee heb je gisteren betaald? (betalen - creditcard)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ik betaalde met een creditcard',
+      targetVerb: 'betalen',
+      imperfectForm: 'betaalde',
+      hint: 'Regelmatig werkwoord: betalen -> betaalde',
     },
     {
-      id: 'lc2-2',
+      id: 'imp2-5',
       level: 'A2',
-      title: 'In de supermarkt',
-      audioScript:
-        'We hebben vandaag een speciale aanbieding op appels. Twee kilo voor drie euro. Ook hebben we verse broccoli voor één euro vijftig per kilo. De bakkerij sluit om zes uur.',
-      questions: [
-        {
-          question: 'Hoeveel kosten twee kilo appels?',
-          options: ['Twee euro', 'Drie euro', 'Vier euro', 'Vijf euro'],
-          answer: 'Drie euro',
-        },
-        {
-          question: 'Hoeveel kost broccoli per kilo?',
-          options: ['Een euro', 'Een euro vijftig', 'Twee euro', 'Drie euro'],
-          answer: 'Een euro vijftig',
-        },
-        {
-          question: 'Wanneer sluit de bakkerij?',
-          options: ['Om vijf uur', 'Om zes uur', 'Om zeven uur', 'Om acht uur'],
-          answer: 'Om zes uur',
-        },
-      ],
-    },
-  ] as ListeningComprehensionExercise[],
-
-  grammar: [
-    // Advanced grammar for A2 level
-    {
-      id: 'g2-1',
-      level: 'A2',
-      type: 'fill',
       question:
-        'Complete the sentence: Als het morgen regent, ___ ik thuis (blijven).',
-      answer: 'blijf',
-      options: ['blijf', 'bleef', 'gebleven', 'zal blijven'],
-      hint: 'In conditional sentences with "als", use present tense in both clauses',
+        'Wat deed oma gisteren? (vertellen - een verhaal - kleinkinderen)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ze vertelde een verhaal aan de kleinkinderen',
+      targetVerb: 'vertellen',
+      imperfectForm: 'vertelde',
+      hint: 'Regelmatig werkwoord: vertellen -> vertelde',
     },
     {
-      id: 'g2-2',
+      id: 'imp2-6',
       level: 'A2',
-      type: 'fill',
-      question: 'Complete: De man ___ ik gisteren sprak, is mijn buur.',
-      answer: 'die',
-      options: ['die', 'dat', 'wie', 'wat'],
-      hint: 'Use "die" for masculine and feminine nouns, "dat" for neuter',
+      question: 'Waarom was je gisteren te laat op je werk? (missen - de bus)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ik miste de bus',
+      targetVerb: 'missen',
+      imperfectForm: 'miste',
+      hint: 'Regelmatig werkwoord: missen -> miste',
     },
     {
-      id: 'g2-3',
+      id: 'imp2-7',
       level: 'A2',
-      type: 'fill',
-      question: 'Complete: Ik zou graag naar Frankrijk ___ gaan.',
-      answer: 'willen',
-      options: ['willen', 'wilde', 'gewild', 'zal willen'],
-      hint: 'Use infinitive after "zou graag"',
+      question: 'Hoe kwamen de kinderen elke dag op school? (fietsen - school)',
+      instruction:
+        'Geef een reactie in het imperfectum. Gebruik de woorden tussen haakjes.',
+      answer: 'Ze fietsten naar school',
+      targetVerb: 'fietsen',
+      imperfectForm: 'fietsten',
+      hint: 'Regelmatig werkwoord: fietsen -> fietsten',
     },
-  ] as GrammarExercise[],
+  ],
 
-  dialogue: [
-    // Advanced dialogues
+  // Perfectum exercises
+  perfectTense: [
     {
-      id: 'd2-1',
+      id: 'pt2-1',
       level: 'A2',
-      title: 'Making an appointment at the doctor',
-      scenario:
-        'You need to make an appointment with your doctor for next week.',
-      dialogue: [
-        {
-          speaker: 'Receptionist',
-          text: 'Goedemorgen, praktijk Dr. de Vries.',
-        },
-        {
-          speaker: 'You',
-          text: '',
-          isUserInput: true,
-          answerOptions: [
-            'Goedemorgen, ik zou graag een afspraak maken.',
-            'Hallo, is de dokter er?',
-            'Dag, ik ben ziek.',
-          ],
-          correctAnswer: 'Goedemorgen, ik zou graag een afspraak maken.',
-        },
-        {
-          speaker: 'Receptionist',
-          text: 'Natuurlijk. Voor wanneer zou u willen komen?',
-        },
-        {
-          speaker: 'You',
-          text: '',
-          isUserInput: true,
-          answerOptions: [
-            'Volgende week dinsdag, als dat mogelijk is.',
-            'Nu meteen graag.',
-            'Ik weet het niet.',
-          ],
-          correctAnswer: 'Volgende week dinsdag, als dat mogelijk is.',
-        },
-        { speaker: 'Receptionist', text: 'Dinsdag om 10:30 kan. Is dat goed?' },
-        {
-          speaker: 'You',
-          text: '',
-          isUserInput: true,
-          answerOptions: [
-            'Ja, dat is perfect. Dank je wel.',
-            'Nee, dat is te vroeg.',
-            'Misschien later.',
-          ],
-          correctAnswer: 'Ja, dat is perfect. Dank je wel.',
-        },
-      ],
+      question: '(dit rondje - betalen)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'Ik heb dit rondje betaald',
+      infinitive: 'betalen',
+      pastParticiple: 'betaald',
+      auxiliary: 'hebben',
+      hint: 'Gebruik "hebben" met "betaald"',
     },
-  ] as DialogueExercise[],
+    {
+      id: 'pt2-2',
+      level: 'A2',
+      question: '(twee glazen wijn/koffie - drinken)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'We hebben twee glazen wijn/koffie gedronken',
+      infinitive: 'drinken',
+      pastParticiple: 'gedronken',
+      auxiliary: 'hebben',
+      hint: 'Gebruik "hebben" met "gedronken"',
+    },
+    {
+      id: 'pt2-3',
+      level: 'A2',
+      question: '(19.30 - afspreken)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'We hebben om 19.30 afgesproken',
+      infinitive: 'afspreken',
+      pastParticiple: 'afgesproken',
+      auxiliary: 'hebben',
+      hint: 'Gebruik "hebben" met "afgesproken"',
+    },
+    {
+      id: 'pt2-4',
+      level: 'A2',
+      question: '(de markt - gaan)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'We zijn naar de markt gegaan',
+      infinitive: 'gaan',
+      pastParticiple: 'gegaan',
+      auxiliary: 'zijn',
+      hint: 'Bewegingswerkwoorden gebruiken "zijn"',
+    },
+    {
+      id: 'pt2-5',
+      level: 'A2',
+      question: '(huiswerk - doen)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'Ik heb huiswerk gedaan',
+      infinitive: 'doen',
+      pastParticiple: 'gedaan',
+      auxiliary: 'hebben',
+      hint: 'Gebruik "hebben" met "gedaan"',
+    },
+    {
+      id: 'pt2-6',
+      level: 'A2',
+      question: '(ziek - worden)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'Ik ben ziek geworden',
+      infinitive: 'worden',
+      pastParticiple: 'geworden',
+      auxiliary: 'zijn',
+      hint: 'Toestandsverandering gebruikt "zijn"',
+    },
+    {
+      id: 'pt2-7',
+      level: 'A2',
+      question: '(romantische film - maken)',
+      instruction: 'Antwoord met "Ik" of met "We/Wij"',
+      answer: 'We hebben een romantische film gemaakt',
+      infinitive: 'maken',
+      pastParticiple: 'gemaakt',
+      auxiliary: 'hebben',
+      hint: 'Gebruik "hebben" met "gemaakt"',
+    },
+  ],
+
+  // Situational responses
+  situationalResponses: [
+    {
+      id: 'sr2-1',
+      level: 'A2',
+      title: 'In het restaurant',
+      text: `Je bent in een restaurant en hebt zojuist gegeten. Je wilt nu graag betalen en naar huis gaan. De ober komt naar je tafel.`,
+      situation: 'In een restaurant',
+      question: 'Kan ik betalen?',
+      instruction: 'Geef een reactie (als je wilt afrekenen)',
+      answer: 'Natuurlijk, de rekening alstublieft',
+      alternativeAnswers: ['Ja, dat kan', 'De rekening, graag'],
+      hint: 'Je wilt de rekening om te kunnen betalen',
+    },
+    {
+      id: 'sr2-2',
+      level: 'A2',
+      title: 'In de kledingzaak',
+      text: `Je bent in een grote kledingzaak en hebt een mooie jas gevonden die je wilt passen. Je zoekt naar een plek waar je de jas kunt aantrekken om te kijken of hij goed staat.`,
+      situation: 'In een kledingzaak',
+      question: 'Je wil vragen of er ergens een paskamer is',
+      instruction: 'Stel een vraag',
+      answer: 'Waar is de paskamer?',
+      alternativeAnswers: ['Is er een paskamer?', 'Heeft u een paskamer?'],
+      hint: 'Je zoekt een plek om kleding te passen',
+    },
+    {
+      id: 'sr2-3',
+      level: 'A2',
+      title: 'Kleding ruilen',
+      text: `Je hebt vorige week een broek gekocht, maar thuis merk je dat de maat niet goed is. Je gaat terug naar de winkel met de bon om een andere maat te halen.`,
+      situation: 'In een kledingzaak',
+      question: 'Je wil een broek / jas ruilen',
+      instruction: 'Stel een vraag',
+      answer: 'Kan ik deze broek/jas ruilen?',
+      alternativeAnswers: [
+        'Is het mogelijk om dit te ruilen?',
+        'Mag ik dit omruilen?',
+      ],
+      hint: 'Je wilt iets teruggeven en iets anders ervoor krijgen',
+    },
+    {
+      id: 'sr2-4',
+      level: 'A2',
+      title: 'Bij de makelaar',
+      text: `Je bent op zoek naar een nieuwe woning en hebt een afspraak gemaakt met een makelaar. Je zit nu in het kantoor en de makelaar wil weten wat voor soort huis je zoekt.`,
+      situation: 'Bij de makelaar',
+      question: 'Wat voor type woning zoekt u?',
+      instruction: 'Geef antwoord',
+      answer: 'Ik zoek een appartement met twee slaapkamers',
+      alternativeAnswers: ['Een huis met tuin', 'Een studio in het centrum'],
+      hint: 'Beschrijf wat voor woning je wilt',
+    },
+    {
+      id: 'sr2-5',
+      level: 'A2',
+      title: 'Bij de huisarts',
+      text: `Je voelt je al een paar dagen niet lekker en hebt een afspraak gemaakt bij de huisarts. Je zit nu in de spreekkamer en de dokter vraagt naar je klachten.`,
+      situation: 'Bij de dokter',
+      question: 'Wat zijn uw klachten?',
+      instruction: 'Geef antwoord',
+      answer: 'Ik heb hoofdpijn',
+      alternativeAnswers: ['Ik voel me niet lekker', 'Ik heb koorts'],
+      hint: 'Vertel wat er mis is met je gezondheid',
+    },
+  ],
+
+  // Question formation exercises
+  questionFormation: [
+    {
+      id: 'qf2-1',
+      level: 'A2',
+      title: 'Fietsherstel',
+      text: `Piet brengt zijn fiets naar de fietsenmaker omdat er iets kapot is. Hij wijst naar een onderdeel achter op zijn fiets en vraagt hoe het heet. De fietsenmaker geeft uitleg.`,
+      answer: 'Dat heet een bagagedrager',
+      instruction: 'Maak een vraag bij deze reactie',
+      question: 'Hoe heet dat ding achter op de fiets?',
+      alternativeQuestions: ['Wat is dat achter op de fiets?'],
+      hint: 'Vraag naar de naam van iets',
+    },
+    {
+      id: 'qf2-2',
+      level: 'A2',
+      title: 'Fiets ophalen',
+      text: `Maria heeft haar fiets gisteren bij de fietsenmaker gebracht voor reparatie. Ze belt om te vragen wanneer haar fiets klaar is. De fietsenmaker geeft informatie over de ophaaltijd.`,
+      answer: 'U kunt uw fiets morgen na 15.00 ophalen',
+      instruction: 'Maak een vraag bij deze reactie',
+      question: 'Wanneer kan ik mijn fiets ophalen?',
+      alternativeQuestions: ['Hoe laat kan ik mijn fiets ophalen?'],
+      hint: 'Vraag naar tijd',
+    },
+    {
+      id: 'qf2-3',
+      level: 'A2',
+      title: 'Kleding kiezen',
+      text: `In een kledingzaak zoekt een klant naar een broek in een bepaalde kleur. De klant heeft gevraagd naar verschillende kleuren, maar de verkoper heeft slecht nieuws.`,
+      answer: 'Nee, we hebben deze broek helaas alleen nog in deze kleur',
+      instruction: 'Maak een vraag bij deze reactie',
+      question: 'Hebben jullie deze broek ook in andere kleuren?',
+      alternativeQuestions: ['Is deze broek er ook in andere kleuren?'],
+      hint: 'Vraag naar verschillende opties',
+    },
+    {
+      id: 'qf2-4',
+      level: 'A2',
+      title: 'Wijn kiezen',
+      text: `In een restaurant kijkt een gast naar de wijnkaart. Hij zoekt specifiek naar Duitse wijnen omdat hij die het lekkerst vindt. De ober vertelt wat er beschikbaar is.`,
+      answer:
+        'Nee, helaas hebben we op dit moment alleen Franse en Spaanse wijnen',
+      instruction: 'Maak een vraag bij deze reactie',
+      question: 'Hebben jullie ook Duitse wijnen?',
+      alternativeQuestions: ['Welke wijnen hebben jullie?'],
+      hint: 'Vraag naar een specifiek product',
+    },
+  ],
+
+  // Modal verbs exercises
+  modalVerbs: [
+    {
+      id: 'mv2-1',
+      level: 'A2',
+      title: 'Nieuwe woning',
+      text: `Kees zoekt een nieuwe woning. Hij kijkt naar verschillende opties online. Bij sommige huizen staat vermeld dat er een balkon bij zit, maar Kees heeft andere voorkeuren.`,
+      question: 'Kees ............. geen balkon. Hij heeft liever een tuin.',
+      instruction:
+        'Vul de goede vorm van een modaal werkwoord in (moeten, mogen, willen, kunnen, zullen)',
+      answer: 'wil',
+      options: ['wil', 'moet', 'mag', 'kan', 'zal'],
+      hint: 'Kees heeft een voorkeur - wat uitdrukt wens/verlangen?',
+    },
+    {
+      id: 'mv2-2',
+      level: 'A2',
+      title: 'Beleefde vraag',
+      text: `Een man is op bezoek in een kantoor voor een sollicitatiegesprek. Hij heeft koffie gedronken en moet nu dringend naar het toilet. Hij vraagt dit beleefd aan de receptionist.`,
+      question:
+        'Meneer, ................... ik even gebruik maken van het toilet?',
+      instruction:
+        'Vul de goede vorm van een modaal werkwoord in (moeten, mogen, willen, kunnen, zullen)',
+      answer: 'mag',
+      options: ['mag', 'moet', 'wil', 'kan', 'zal'],
+      hint: 'Dit is een beleefde vraag om toestemming',
+    },
+    {
+      id: 'mv2-3',
+      level: 'A2',
+      title: 'Weekend plannen',
+      text: `Het is vrijdagavond en twee vrienden zitten samen thuis. Ze hebben geen plannen voor morgenavond en willen graag iets leuks gaan doen. Een van hen doet een voorstel.`,
+      question:
+        '............................. we morgenavond naar de bioscoop?',
+      instruction:
+        'Vul de goede vorm van een modaal werkwoord in (moeten, mogen, willen, kunnen, zullen)',
+      answer: 'Zullen',
+      options: ['Zullen', 'Moeten', 'Mogen', 'Kunnen', 'Willen'],
+      hint: 'Dit is een voorstel voor de toekomst',
+    },
+    {
+      id: 'mv2-4',
+      level: 'A2',
+      title: 'Werk verplichting',
+      text: `Lisa vraagt aan haar collega Tom of hij tijd heeft om vanavond samen een film te kijken. Tom zou graag willen, maar hij heeft helaas andere verplichtingen.`,
+      question:
+        'Ben je vrij vanavond? Nee, vanavond ............................. ik werken.',
+      instruction:
+        'Vul de goede vorm van een modaal werkwoord in (moeten, mogen, willen, kunnen, zullen)',
+      answer: 'moet',
+      options: ['moet', 'mag', 'wil', 'kan', 'zal'],
+      hint: 'Dit drukt verplichting/noodzaak uit',
+    },
+    {
+      id: 'mv2-5',
+      level: 'A2',
+      title: 'Afspraak maken',
+      text: `Anna wil een afspraak maken met haar vriend Peter. Ze stelt een tijd voor, maar Peter heeft op dat moment andere plannen en is niet beschikbaar.`,
+      question:
+        'Kun je morgen om 16.00? Nee, dan ..................... ik niet.',
+      instruction:
+        'Vul de goede vorm van een modaal werkwoord in (moeten, mogen, willen, kunnen, zullen)',
+      answer: 'kan',
+      options: ['kan', 'moet', 'mag', 'wil', 'zal'],
+      hint: 'Dit drukt mogelijkheid/vermogen uit',
+    },
+  ],
+
+  // Additional grammar exercises
+  grammar: [
+    {
+      id: 'gr2-1',
+      level: 'A2',
+      title: 'Weekend activiteiten',
+      text: `Tom vertelt aan zijn collega wat hij gisteren heeft gedaan. Hij was vrij van werk en heeft de hele dag leuke dingen ondernomen in de stad.`,
+      question: 'Kies de juiste vorm: "Gisteren ___ ik naar de bioscoop."',
+      options: ['ging', 'ga', 'ben gegaan'],
+      answer: 'ging',
+      type: 'multiple-choice',
+      hint: 'Voor gisteren gebruik je imperfectum',
+    },
+    {
+      id: 'gr2-2',
+      level: 'A2',
+      title: 'Dagelijkse routine',
+      text: `Sarah beschrijft de dagelijkse gewoonten van haar broer. Hij is een zeer georganiseerde persoon die elke dag hetzelfde patroon volgt.`,
+      question: 'Vul in: "Hij ___ altijd zijn huiswerk voordat hij tv kijkt."',
+      options: ['maakt', 'maakte', 'heeft gemaakt'],
+      answer: 'maakt',
+      type: 'multiple-choice',
+      hint: '"Altijd" duidt op een gewoonte in het heden',
+    },
+  ],
 };

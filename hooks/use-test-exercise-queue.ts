@@ -13,9 +13,10 @@ type TestExerciseType =
   | 'perfectTense'
   | 'imperfectum'
   | 'readingComprehension'
-  | 'listeningComprehension'
   | 'grammar'
-  | 'dialogue';
+  | 'situationalResponse'
+  | 'questionFormation'
+  | 'modalVerbs';
 
 interface TestExercise {
   id: string;
