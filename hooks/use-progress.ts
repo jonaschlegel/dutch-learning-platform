@@ -31,6 +31,7 @@ export function useProgress() {
     sessionScore: { correct: number; total: number };
     perfectTenseMode: string;
     imperfectumMode: string;
+    modalVerbsMode: string;
     selectedCategory: string | null;
     testReviewMode: { test1: boolean; test2: boolean };
     hasStartedLearning: boolean;
@@ -40,6 +41,7 @@ export function useProgress() {
     sessionScore: { correct: 0, total: 0 },
     perfectTenseMode: 'complete',
     imperfectumMode: 'conjugation',
+    modalVerbsMode: 'conjugation',
     selectedCategory: null,
     testReviewMode: { test1: false, test2: false },
     hasStartedLearning: false,
@@ -100,6 +102,7 @@ export function useProgress() {
         sessionScore: parsedSession.sessionScore || { correct: 0, total: 0 },
         perfectTenseMode: parsedSession.perfectTenseMode || 'complete',
         imperfectumMode: parsedSession.imperfectumMode || 'conjugation',
+        modalVerbsMode: parsedSession.modalVerbsMode || 'conjugation',
         selectedCategory: parsedSession.selectedCategory || null,
         testReviewMode: parsedSession.testReviewMode || {
           test1: false,
@@ -151,6 +154,7 @@ export function useProgress() {
       sessionScore: { correct: 0, total: 0 },
       perfectTenseMode: 'complete',
       imperfectumMode: 'conjugation',
+      modalVerbsMode: 'conjugation',
       selectedCategory: null,
       testReviewMode: { test1: false, test2: false },
       hasStartedLearning: false,
@@ -252,6 +256,7 @@ export function useProgress() {
       sessionScore: { correct: 0, total: 0 },
       perfectTenseMode: 'complete',
       imperfectumMode: 'conjugation',
+      modalVerbsMode: 'conjugation',
       selectedCategory: null,
       testReviewMode: { test1: false, test2: false },
       hasStartedLearning: false,
