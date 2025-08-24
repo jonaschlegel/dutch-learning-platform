@@ -28,6 +28,14 @@ export function ProgressDashboard({
   onToggleMistakeMode,
 }: ProgressDashboardProps) {
   const { toast } = useToast();
+
+  console.log('ProgressDashboard render:', {
+    currentChapter: progress.currentChapter,
+    completedWords: Array.from(progress.completedWords),
+    totalCompleted: progress.completedWords.size,
+    scores: progress.scores,
+  });
+
   const currentChapterWords = vocabulary.filter((w) =>
     progress.currentChapter === 0
       ? true
@@ -40,6 +48,12 @@ export function ProgressDashboard({
     currentChapterWords.length > 0
       ? (completedInCurrentChapter / currentChapterWords.length) * 100
       : 0;
+
+  console.log('Progress calculation:', {
+    currentChapterWords: currentChapterWords.length,
+    completedInCurrentChapter,
+    progressPercentage,
+  });
 
   const averageScore =
     Object.values(progress.scores).length > 0

@@ -111,6 +111,7 @@ export function useProgress() {
   }, []);
 
   const saveProgress = (newProgress: UserProgress) => {
+    console.log('saveProgress called with:', newProgress);
     const toSave = {
       ...newProgress,
       completedWords: Array.from(newProgress.completedWords),
@@ -131,8 +132,10 @@ export function useProgress() {
           }
         : undefined,
     };
+    console.log('Saving to localStorage:', toSave);
     localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
     setProgress(newProgress);
+    console.log('Progress state updated');
   };
 
   const saveExerciseSession = (newSession: typeof exerciseSession) => {
@@ -155,6 +158,7 @@ export function useProgress() {
   };
 
   const markWordCompleted = (wordId: string, score: number) => {
+    console.log('markWordCompleted called:', { wordId, score });
     const newProgress = {
       ...progress,
       completedWords: new Set([...progress.completedWords, wordId]),
@@ -182,6 +186,10 @@ export function useProgress() {
       newProgress.incorrectWords = remainingIncorrect;
     }
 
+    console.log('Saving progress:', {
+      completedWords: Array.from(newProgress.completedWords),
+      scores: newProgress.scores,
+    });
     saveProgress(newProgress);
   };
 
