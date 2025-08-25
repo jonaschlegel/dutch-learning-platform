@@ -75,17 +75,17 @@ export default function DutchLearningPlatform() {
 
   const perfectTenseQueue = usePerfectTenseQueue({
     maxRecentItems: 6,
-    prioritizeIncorrect: progress.mistakeMode || true,
+    prioritizeIncorrect: true,
   });
 
   const imperfectumQueue = useImperfectumQueue({
     maxRecentItems: 6,
-    prioritizeIncorrect: progress.mistakeMode || true,
+    prioritizeIncorrect: true,
   });
 
   const modalVerbsQueue = useModalVerbsQueue({
     maxRecentItems: 6,
-    prioritizeIncorrect: progress.mistakeMode || true,
+    prioritizeIncorrect: true,
   });
 
   // Use state from exerciseSession instead of local state
@@ -122,8 +122,10 @@ export default function DutchLearningPlatform() {
     exerciseSession.testReviewMode,
   );
 
-  // Function to save current exercise session state
+  // Function to save current exercise session state (simplified to prevent infinite loops)
   const saveCurrentSession = useCallback(() => {
+    if (!hasStartedLearning) return;
+
     const currentProgress =
       exerciseMode === 'test1'
         ? test1ExerciseQueue.getTestProgress()
@@ -153,15 +155,11 @@ export default function DutchLearningPlatform() {
     sessionScore,
     perfectTenseMode,
     imperfectumMode,
+    modalVerbsMode,
     selectedCategory,
     testReviewMode,
     hasStartedLearning,
     saveExerciseSession,
-    test1ExerciseQueue,
-    test2ExerciseQueue,
-    perfectTenseQueue,
-    imperfectumQueue,
-    exerciseQueue,
   ]);
 
   useEffect(() => {
@@ -179,18 +177,20 @@ export default function DutchLearningPlatform() {
     }
   }, [progress.currentChapter]);
 
-  // Save session state when relevant values change
+  // Save session state when relevant values change (simplified to prevent infinite loops)
   useEffect(() => {
     if (hasStartedLearning) {
       saveCurrentSession();
     }
   }, [
+    exerciseMode,
     perfectTenseMode,
     imperfectumMode,
     modalVerbsMode,
     selectedCategory,
     hasStartedLearning,
-    saveCurrentSession,
+    sessionScore,
+    testReviewMode,
   ]);
 
   const currentChapterWords = useMemo(() => {
@@ -355,12 +355,14 @@ export default function DutchLearningPlatform() {
         );
       }
     } else if (exerciseMode === 'modalverbs') {
+      // Modal verbs should ALWAYS be available regardless of chapters or mistake mode
       const incorrectWordIds: Record<string, number> = {};
       Object.entries(progress.incorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
-      if (progress.mistakeMode) {
+      if (progress.mistakeMode && Object.keys(incorrectWordIds).length > 0) {
+        // In mistake mode: only show modal verbs that were answered incorrectly
         const modalVerbIds = new Set(modalVerbs.map((w) => w.id));
         const filteredIncorrectWords: Record<string, number> = {};
         Object.entries(incorrectWordIds).forEach(([id, count]) => {
@@ -368,15 +370,20 @@ export default function DutchLearningPlatform() {
             filteredIncorrectWords[id] = count;
           }
         });
-        modalVerbsQueue.initializeQueue(
-          filteredIncorrectWords,
-          exerciseSession.currentIndex,
-        );
+
+        // If there are modal verb mistakes, use them, otherwise show all modal verbs
+        if (Object.keys(filteredIncorrectWords).length > 0) {
+          modalVerbsQueue.initializeQueue(
+            filteredIncorrectWords,
+            exerciseSession.currentIndex,
+          );
+        } else {
+          // No modal verb mistakes, show all modal verbs even in mistake mode
+          modalVerbsQueue.initializeQueue({}, exerciseSession.currentIndex);
+        }
       } else {
-        modalVerbsQueue.initializeQueue(
-          incorrectWordIds,
-          exerciseSession.currentIndex,
-        );
+        // Normal mode: always show all modal verbs
+        modalVerbsQueue.initializeQueue({}, exerciseSession.currentIndex);
       }
     } else {
       exerciseQueue.initializeQueue(
@@ -392,6 +399,13 @@ export default function DutchLearningPlatform() {
     progress.mistakeMode,
     testReviewModeValues,
     exerciseSession.currentIndex,
+    test1ExerciseQueue,
+    test2ExerciseQueue,
+    perfectTenseQueue,
+    imperfectumQueue,
+    modalVerbsQueue,
+    exerciseQueue,
+    getTestExerciseProgress,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
@@ -526,23 +540,8 @@ export default function DutchLearningPlatform() {
         imperfectumQueue.initializeQueue(incorrectWordIds, 0);
       }
     } else if (exerciseMode === 'modalverbs') {
-      const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
-        incorrectWordIds[id] = data.count;
-      });
-
-      if (progress.mistakeMode) {
-        const modalVerbIds = new Set(modalVerbs.map((w) => w.id));
-        const filteredIncorrectWords: Record<string, number> = {};
-        Object.entries(incorrectWordIds).forEach(([id, count]) => {
-          if (modalVerbIds.has(id)) {
-            filteredIncorrectWords[id] = count;
-          }
-        });
-        modalVerbsQueue.initializeQueue(filteredIncorrectWords, 0);
-      } else {
-        modalVerbsQueue.initializeQueue(incorrectWordIds, 0);
-      }
+      // Modal verbs should ALWAYS be available
+      modalVerbsQueue.initializeQueue({}, 0);
     } else {
       exerciseQueue.initializeQueue(availableWords, progress.incorrectWords, 0);
     }
@@ -577,6 +576,12 @@ export default function DutchLearningPlatform() {
     }
 
     setHasStartedLearning(true);
+
+    // For modal verbs, ensure immediate initialization
+    if (mode === 'modalverbs') {
+      // Initialize modal verbs immediately
+      modalVerbsQueue.initializeQueue({}, 0);
+    }
 
     // Save the session state
     const newSession = {
@@ -704,9 +709,10 @@ export default function DutchLearningPlatform() {
                 Start with "Vocabulary" to learn new words, challenge yourself
                 with "Articles" to get the de/het right, master "Perfect Tense"
                 to learn the perfectum, practice "Imperfectum" for past tense
-                (A1/A2), learn "Modal Verbs" (kunnen, mogen, moeten, willen,
-                zullen), or prepare for your test with "Test Prep"! You can also
-                browse vocabulary by chapter.
+                (A1/A2), learn "Modal Verbs" (essential Dutch verbs like kunnen,
+                mogen, moeten, willen, zullen - available at any level), or
+                prepare for your test with "Test Prep"! You can also browse
+                vocabulary by chapter.
               </p>
               <div className="space-y-4">
                 {/* First row - Primary actions */}
@@ -764,9 +770,10 @@ export default function DutchLearningPlatform() {
                     variant="outline"
                     onClick={() => startNewSession('modalverbs')}
                     className="border-primary text-primary hover:bg-primary/10 w-full"
+                    title="Modal verbs are always available - not tied to any specific chapter"
                   >
                     <Brain className="h-5 w-5 mr-2" />
-                    Modal Verbs
+                    Modal Verbs ✨
                   </Button>
                 </div>
 
@@ -997,8 +1004,9 @@ export default function DutchLearningPlatform() {
                             ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                             : ''
                         }
+                        title="Modal verbs are always available - not tied to any specific chapter"
                       >
-                        Modal Verbs
+                        Modal Verbs ✨
                       </Button>
                       <Button
                         variant={
@@ -1263,7 +1271,7 @@ export default function DutchLearningPlatform() {
                     (exerciseMode === 'perfect' && currentPerfectTenseWord) ||
                     (exerciseMode === 'imperfectum' &&
                       currentImperfectumWord) ||
-                    (exerciseMode === 'modalverbs' && currentModalVerb) ? (
+                    exerciseMode === 'modalverbs' ? (
                       <div className="space-y-4">
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
@@ -1355,13 +1363,22 @@ export default function DutchLearningPlatform() {
                             mode={imperfectumMode}
                             onComplete={handleExerciseComplete}
                           />
-                        ) : exerciseMode === 'modalverbs' &&
+                        ) : exerciseMode === 'modalverbs' ? (
                           currentModalVerb ? (
-                          <ModalVerbsExercise
-                            word={currentModalVerb}
-                            mode={modalVerbsMode}
-                            onComplete={handleExerciseComplete}
-                          />
+                            <ModalVerbsExercise
+                              word={currentModalVerb}
+                              mode={modalVerbsMode}
+                              onComplete={handleExerciseComplete}
+                            />
+                          ) : (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <p className="text-lg text-muted-foreground">
+                                  Loading modal verbs exercises...
+                                </p>
+                              </CardContent>
+                            </Card>
+                          )
                         ) : exerciseMode === 'vocabulary' && currentWord ? (
                           <VocabularyCard
                             word={currentWord}
