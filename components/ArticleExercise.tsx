@@ -90,7 +90,13 @@ export function ArticleExercise({ word, onComplete }: ArticleExerciseProps) {
               ? word.dutch.join(' ').replace(/^(de|het)\s+/, '')
               : ''}
           </p>
-          <p className="text-lg text-muted-foreground">({word.english})</p>
+          <p className="text-lg text-muted-foreground">
+            (
+            {Array.isArray(word.english)
+              ? word.english.join(', ')
+              : word.english}
+            )
+          </p>
         </div>
 
         <div className="flex space-x-4 justify-center">

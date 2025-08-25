@@ -1547,7 +1547,9 @@ export default function DutchLearningPlatform() {
                               <div className="space-y-2">
                                 <div className="flex justify-between items-start">
                                   <span className="font-semibold text-lg text-foreground">
-                                    {word.dutch}
+                                    {Array.isArray(word.dutch)
+                                      ? word.dutch.join(' / ')
+                                      : word.dutch}
                                   </span>
                                   {word.article && (
                                     <Badge

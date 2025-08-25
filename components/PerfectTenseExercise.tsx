@@ -170,7 +170,13 @@ export function PerfectTenseExercise({
           <p className="text-2xl font-bold text-primary mb-2">
             {word.infinitive}
           </p>
-          <p className="text-lg text-muted-foreground mb-1">({word.english})</p>
+          <p className="text-lg text-muted-foreground mb-1">
+            (
+            {Array.isArray(word.english)
+              ? word.english.join(', ')
+              : word.english}
+            )
+          </p>
           <p className="text-sm text-muted-foreground">
             Category: {word.category} {word.rule && `• ${word.rule}`}
           </p>

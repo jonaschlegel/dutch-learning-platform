@@ -113,9 +113,15 @@ export function PluralExercise({ word, onComplete }: PluralExerciseProps) {
                 {word.article}
               </span>
             )}
-            {word.dutch}
+            {Array.isArray(word.dutch) ? word.dutch.join(' / ') : word.dutch}
           </p>
-          <p className="text-lg text-muted-foreground">({word.english})</p>
+          <p className="text-lg text-muted-foreground">
+            (
+            {Array.isArray(word.english)
+              ? word.english.join(', ')
+              : word.english}
+            )
+          </p>
         </div>
 
         <div className="space-y-4">
