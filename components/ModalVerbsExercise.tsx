@@ -36,15 +36,13 @@ export function ModalVerbsExercise({
   const pronouns = ['ik', 'jij', 'hij', 'wij', 'jullie', 'zij'];
   const currentPronoun = selectedPronoun as keyof typeof word.present;
 
-  // Usage options for usage mode
+  // Usage options for usage mode (updated for 5 core modal verbs)
   const usageOptions = [
     'ability/possibility',
     'permission',
     'necessity/obligation',
     'desire/wish',
     'future tense',
-    'causative',
-    'courage',
   ];
 
   const checkAnswer = () => {
@@ -64,12 +62,10 @@ export function ModalVerbsExercise({
       case 'usage':
         const usageMap: Record<string, string[]> = {
           'ability/possibility': ['kunnen'],
-          permission: ['mogen', 'laten'],
-          'necessity/obligation': ['moeten', 'hoeven'],
+          permission: ['mogen'],
+          'necessity/obligation': ['moeten'],
           'desire/wish': ['willen'],
           'future tense': ['zullen'],
-          causative: ['laten'],
-          courage: ['durven'],
         };
         correct = usageMap[selectedUsage]?.includes(word.infinitive) || false;
         break;
