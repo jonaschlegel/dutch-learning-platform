@@ -6,6 +6,7 @@ import { Badge } from '@/components/Badge';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { ChapterSelector } from '@/components/ChapterSelector';
+import { ConjunctionsExercise } from '@/components/ConjunctionsExercise';
 import { ImperfectumExercise } from '@/components/ImperfectumExercise';
 import { ModalVerbsExercise } from '@/components/ModalVerbsExercise';
 import { PerfectTenseExercise } from '@/components/PerfectTenseExercise';
@@ -18,11 +19,13 @@ import {
   TestExerciseCard,
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
+import { conjunctions } from '@/data/conjunctions';
 import { imperfectumVocabulary } from '@/data/imperfectum';
 import { modalVerbs } from '@/data/modal-verbs';
 import { perfectTenseVocabulary } from '@/data/perfect-tense';
 import { testExercises2 } from '@/data/test-exercises';
 import { vocabulary } from '@/data/vocabulary';
+import { useConjunctionsQueue } from '@/hooks/use-conjunctions-queue';
 import { useExerciseQueue } from '@/hooks/use-exercise-queue';
 import { useImperfectumQueue } from '@/hooks/use-imperfectum-queue';
 import { useModalVerbsQueue } from '@/hooks/use-modal-verbs-queue';
@@ -118,6 +121,16 @@ export default function DutchLearningPlatform() {
 
   const modalVerbsQueue = useModalVerbsQueue(modalVerbsQueueOptions);
 
+  const conjunctionsQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 6,
+      prioritizeIncorrect: true,
+    }),
+    [],
+  );
+
+  const conjunctionsQueue = useConjunctionsQueue(conjunctionsQueueOptions);
+
   // Use state from exerciseSession instead of local state
   const [exerciseMode, setExerciseMode] = useState<
     | 'vocabulary'
@@ -126,6 +139,7 @@ export default function DutchLearningPlatform() {
     | 'perfect'
     | 'imperfectum'
     | 'modalverbs'
+    | 'conjunctions'
     | 'test1'
     | 'test2'
   >((exerciseSession.exerciseMode as any) || 'vocabulary');
@@ -138,6 +152,9 @@ export default function DutchLearningPlatform() {
   const [modalVerbsMode, setModalVerbsMode] = useState<
     'conjugation' | 'usage' | 'translate' | 'negative' | 'question'
   >((exerciseSession.modalVerbsMode as any) || 'conjugation');
+  const [conjunctionsMode, setConjunctionsMode] = useState<
+    'complete' | 'translate' | 'identify' | 'wordOrder' | 'usage'
+  >('complete');
   const [showResults, setShowResults] = useState(false);
   const [sessionScore, setSessionScore] = useState(
     exerciseSession.sessionScore || { correct: 0, total: 0 },
@@ -167,6 +184,8 @@ export default function DutchLearningPlatform() {
         ? imperfectumQueue.getProgress()
         : exerciseMode === 'modalverbs'
         ? modalVerbsQueue.getProgress()
+        : exerciseMode === 'conjunctions'
+        ? conjunctionsQueue.getProgress()
         : exerciseQueue.getProgress();
 
     saveExerciseSession({
@@ -186,6 +205,7 @@ export default function DutchLearningPlatform() {
     perfectTenseMode,
     imperfectumMode,
     modalVerbsMode,
+    conjunctionsMode,
     selectedCategory,
     testReviewMode,
     hasStartedLearning,
@@ -241,7 +261,8 @@ export default function DutchLearningPlatform() {
       exerciseMode === 'test2' ||
       exerciseMode === 'perfect' ||
       exerciseMode === 'imperfectum' ||
-      exerciseMode === 'modalverbs'
+      exerciseMode === 'modalverbs' ||
+      exerciseMode === 'conjunctions'
     ) {
       return [];
     }
@@ -420,6 +441,37 @@ export default function DutchLearningPlatform() {
         // Normal mode: always show all modal verbs
         modalVerbsQueue.initializeQueue({}, exerciseSession.currentIndex);
       }
+    } else if (exerciseMode === 'conjunctions') {
+      // Conjunctions should ALWAYS be available regardless of chapters or mistake mode
+      const incorrectWordIds: Record<string, number> = {};
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
+        incorrectWordIds[id] = data.count;
+      });
+
+      if (progress.mistakeMode && Object.keys(incorrectWordIds).length > 0) {
+        // In mistake mode: only show conjunctions that were answered incorrectly
+        const conjunctionIds = new Set(conjunctions.map((w) => w.id));
+        const filteredIncorrectWords: Record<string, number> = {};
+        Object.entries(incorrectWordIds).forEach(([id, count]) => {
+          if (conjunctionIds.has(id)) {
+            filteredIncorrectWords[id] = count;
+          }
+        });
+
+        // If there are conjunction mistakes, use them, otherwise show all conjunctions
+        if (Object.keys(filteredIncorrectWords).length > 0) {
+          conjunctionsQueue.initializeQueue(
+            filteredIncorrectWords,
+            exerciseSession.currentIndex,
+          );
+        } else {
+          // No conjunction mistakes, show all conjunctions even in mistake mode
+          conjunctionsQueue.initializeQueue({}, exerciseSession.currentIndex);
+        }
+      } else {
+        // Normal mode: always show all conjunctions
+        conjunctionsQueue.initializeQueue({}, exerciseSession.currentIndex);
+      }
     } else {
       exerciseQueue.initializeQueue(
         availableWords,
@@ -440,6 +492,7 @@ export default function DutchLearningPlatform() {
     perfectTenseQueue.initializeQueue,
     imperfectumQueue.initializeQueue,
     modalVerbsQueue.initializeQueue,
+    conjunctionsQueue.initializeQueue,
     getTestExerciseProgress,
   ]);
 
@@ -449,6 +502,7 @@ export default function DutchLearningPlatform() {
   const currentPerfectTenseWord = perfectTenseQueue.getCurrentItem();
   const currentImperfectumWord = imperfectumQueue.getCurrentItem();
   const currentModalVerb = modalVerbsQueue.getCurrentItem();
+  const currentConjunction = conjunctionsQueue.getCurrentItem();
 
   const handleExerciseComplete = (correct: boolean) => {
     if (exerciseMode === 'test1' && currentTest1Exercise) {
@@ -474,6 +528,9 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'modalverbs' && currentModalVerb) {
       markWordCompleted(currentModalVerb.id, correct ? 1 : 0);
       modalVerbsQueue.moveToNext(currentModalVerb.id, correct);
+    } else if (exerciseMode === 'conjunctions' && currentConjunction) {
+      markWordCompleted(currentConjunction.id, correct ? 1 : 0);
+      conjunctionsQueue.moveToNext(currentConjunction.id, correct);
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
       exerciseQueue.moveToNext(currentWord.id, correct);
@@ -496,6 +553,8 @@ export default function DutchLearningPlatform() {
         ? imperfectumQueue.hasMoreItems()
         : exerciseMode === 'modalverbs'
         ? modalVerbsQueue.hasMoreItems()
+        : exerciseMode === 'conjunctions'
+        ? conjunctionsQueue.hasMoreItems()
         : exerciseQueue.hasMoreItems();
 
     if (progress.mistakeMode && correct) {
@@ -503,7 +562,8 @@ export default function DutchLearningPlatform() {
         currentWord?.id ||
         currentPerfectTenseWord?.id ||
         currentImperfectumWord?.id ||
-        currentModalVerb?.id;
+        currentModalVerb?.id ||
+        currentConjunction?.id;
       if (currentId) {
         const remainingIncorrectWords = Object.keys(
           memoizedIncorrectWords,
@@ -590,6 +650,7 @@ export default function DutchLearningPlatform() {
       | 'perfect'
       | 'imperfectum'
       | 'modalverbs'
+      | 'conjunctions'
       | 'test1'
       | 'test2',
   ) => {
@@ -616,6 +677,12 @@ export default function DutchLearningPlatform() {
     if (mode === 'modalverbs') {
       // Initialize modal verbs immediately
       modalVerbsQueue.initializeQueue({}, 0);
+    }
+
+    // For conjunctions, ensure immediate initialization
+    if (mode === 'conjunctions') {
+      // Initialize conjunctions immediately
+      conjunctionsQueue.initializeQueue({}, 0);
     }
 
     // Save the session state
@@ -781,7 +848,7 @@ export default function DutchLearningPlatform() {
                 </div>
 
                 {/* Second row - Advanced features */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   <Button
                     size="default"
                     variant="outline"
@@ -809,6 +876,16 @@ export default function DutchLearningPlatform() {
                   >
                     <Brain className="h-5 w-5 mr-2" />
                     Modal Verbs
+                  </Button>
+                  <Button
+                    size="default"
+                    variant="outline"
+                    onClick={() => startNewSession('conjunctions')}
+                    className="border-primary text-primary hover:bg-primary/10 w-full"
+                    title="Learn conjunctions (A1-A2 level) - not tied to any specific chapter"
+                  >
+                    <BookOpen className="h-5 w-5 mr-2" />
+                    Conjunctions
                   </Button>
                 </div>
 
@@ -1042,6 +1119,22 @@ export default function DutchLearningPlatform() {
                         title="Modal verbs are always available - not tied to any specific chapter"
                       >
                         Modal Verbs
+                      </Button>
+                      <Button
+                        variant={
+                          exerciseMode === 'conjunctions'
+                            ? 'default'
+                            : 'outline'
+                        }
+                        onClick={() => startNewSession('conjunctions')}
+                        className={
+                          exerciseMode === 'conjunctions'
+                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                            : ''
+                        }
+                        title="Learn conjunctions (A1-A2 level) - not tied to any specific chapter"
+                      >
+                        Conjunctions
                       </Button>
                       <Button
                         variant={
@@ -1294,11 +1387,78 @@ export default function DutchLearningPlatform() {
                       </div>
                     )}
 
+                    {exerciseMode === 'conjunctions' && (
+                      <div className="flex justify-center space-x-2 mb-4 flex-wrap">
+                        <span className="text-sm text-muted-foreground self-center mr-2">
+                          Conjunctions Mode:
+                        </span>
+                        <Button
+                          variant={
+                            conjunctionsMode === 'complete'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => setConjunctionsMode('complete')}
+                          className="mb-1"
+                        >
+                          Complete
+                        </Button>
+                        <Button
+                          variant={
+                            conjunctionsMode === 'translate'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => setConjunctionsMode('translate')}
+                          className="mb-1"
+                        >
+                          Translate
+                        </Button>
+                        <Button
+                          variant={
+                            conjunctionsMode === 'identify'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => setConjunctionsMode('identify')}
+                          className="mb-1"
+                        >
+                          Identify
+                        </Button>
+                        <Button
+                          variant={
+                            conjunctionsMode === 'wordOrder'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => setConjunctionsMode('wordOrder')}
+                          className="mb-1"
+                        >
+                          Word Order
+                        </Button>
+                        <Button
+                          variant={
+                            conjunctionsMode === 'usage' ? 'default' : 'outline'
+                          }
+                          size="sm"
+                          onClick={() => setConjunctionsMode('usage')}
+                          className="mb-1"
+                        >
+                          Usage
+                        </Button>
+                      </div>
+                    )}
+
                     {(exerciseMode !== 'test1' &&
                       exerciseMode !== 'test2' &&
                       exerciseMode !== 'perfect' &&
                       exerciseMode !== 'imperfectum' &&
                       exerciseMode !== 'modalverbs' &&
+                      exerciseMode !== 'conjunctions' &&
                       availableWords.length > 0 &&
                       currentWord) ||
                     (exerciseMode === 'test1' && currentTest1Exercise) ||
@@ -1306,7 +1466,8 @@ export default function DutchLearningPlatform() {
                     (exerciseMode === 'perfect' && currentPerfectTenseWord) ||
                     (exerciseMode === 'imperfectum' &&
                       currentImperfectumWord) ||
-                    exerciseMode === 'modalverbs' ? (
+                    exerciseMode === 'modalverbs' ||
+                    exerciseMode === 'conjunctions' ? (
                       <div className="space-y-4">
                         <div className="text-center">
                           <p className="text-sm text-muted-foreground">
@@ -1321,6 +1482,8 @@ export default function DutchLearningPlatform() {
                               ? imperfectumQueue.getProgress().current + 1
                               : exerciseMode === 'modalverbs'
                               ? modalVerbsQueue.getProgress().current + 1
+                              : exerciseMode === 'conjunctions'
+                              ? conjunctionsQueue.getProgress().current + 1
                               : exerciseQueue.getProgress().current + 1}{' '}
                             of{' '}
                             {exerciseMode === 'test1'
@@ -1333,6 +1496,8 @@ export default function DutchLearningPlatform() {
                               ? imperfectumQueue.getProgress().total
                               : exerciseMode === 'modalverbs'
                               ? modalVerbsQueue.getProgress().total
+                              : exerciseMode === 'conjunctions'
+                              ? conjunctionsQueue.getProgress().total
                               : exerciseQueue.getProgress().total}
                           </p>
                           {/* Review Mode Indicator */}
@@ -1410,6 +1575,22 @@ export default function DutchLearningPlatform() {
                               <CardContent>
                                 <p className="text-lg text-muted-foreground">
                                   Loading modal verbs exercises...
+                                </p>
+                              </CardContent>
+                            </Card>
+                          )
+                        ) : exerciseMode === 'conjunctions' ? (
+                          currentConjunction ? (
+                            <ConjunctionsExercise
+                              conjunction={currentConjunction}
+                              mode={conjunctionsMode}
+                              onComplete={handleExerciseComplete}
+                            />
+                          ) : (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <p className="text-lg text-muted-foreground">
+                                  Loading conjunctions exercises...
                                 </p>
                               </CardContent>
                             </Card>
