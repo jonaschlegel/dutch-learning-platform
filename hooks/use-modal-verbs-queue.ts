@@ -28,17 +28,24 @@ export function useModalVerbsQueue(config: ModalVerbsQueueConfig = {}) {
 
   const initializeQueue = useCallback(
     (incorrectWords: Record<string, number> = {}, startIndex?: number) => {
+      // Get current values to avoid stale closure
+      const currentFocusLevel = focusLevel;
+      const currentPrioritizeIncorrect = prioritizeIncorrect;
+
       let availableWords = [...modalVerbs];
 
       // Filter by level if specified
-      if (focusLevel) {
+      if (currentFocusLevel) {
         availableWords = availableWords.filter(
-          (word) => word.level === focusLevel,
+          (word) => word.level === currentFocusLevel,
         );
       }
 
       // If prioritizing incorrect words and we have some, focus on those
-      if (prioritizeIncorrect && Object.keys(incorrectWords).length > 0) {
+      if (
+        currentPrioritizeIncorrect &&
+        Object.keys(incorrectWords).length > 0
+      ) {
         const incorrectWordIds = Object.keys(incorrectWords);
         const incorrectModalVerbs = availableWords.filter((word) =>
           incorrectWordIds.includes(word.id),
@@ -102,7 +109,7 @@ export function useModalVerbsQueue(config: ModalVerbsQueueConfig = {}) {
       setRecentItems([]);
       setIncorrectItems(new Set(Object.keys(incorrectWords)));
     },
-    [focusLevel, prioritizeIncorrect],
+    [], // Empty dependency array - function is now stable
   );
 
   const getCurrentItem = useCallback(() => {

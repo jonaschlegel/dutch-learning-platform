@@ -28,24 +28,32 @@ export function useImperfectumQueue(config: ImperfectumQueueConfig = {}) {
 
   const initializeQueue = useCallback(
     (incorrectWords: Record<string, number> = {}, startIndex?: number) => {
+      // Get current values to avoid stale closure
+      const currentFocusCategory = focusCategory;
+      const currentFocusLevel = focusLevel;
+      const currentPrioritizeIncorrect = prioritizeIncorrect;
+
       let availableWords = [...imperfectumVocabulary];
 
       // Filter by category if specified
-      if (focusCategory) {
+      if (currentFocusCategory) {
         availableWords = availableWords.filter(
-          (word) => word.category === focusCategory,
+          (word) => word.category === currentFocusCategory,
         );
       }
 
       // Filter by level if specified
-      if (focusLevel) {
+      if (currentFocusLevel) {
         availableWords = availableWords.filter(
-          (word) => word.level === focusLevel,
+          (word) => word.level === currentFocusLevel,
         );
       }
 
       // If prioritizing incorrect words and we have some, focus on those
-      if (prioritizeIncorrect && Object.keys(incorrectWords).length > 0) {
+      if (
+        currentPrioritizeIncorrect &&
+        Object.keys(incorrectWords).length > 0
+      ) {
         const incorrectWordIds = Object.keys(incorrectWords);
         const incorrectImperfectumWords = availableWords.filter((word) =>
           incorrectWordIds.includes(word.id),
@@ -109,7 +117,7 @@ export function useImperfectumQueue(config: ImperfectumQueueConfig = {}) {
       setRecentItems([]);
       setIncorrectItems(new Set(Object.keys(incorrectWords)));
     },
-    [focusCategory, focusLevel, prioritizeIncorrect],
+    [], // Empty dependency array - function is now stable
   );
 
   const getCurrentItem = useCallback(() => {

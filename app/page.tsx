@@ -58,35 +58,65 @@ export default function DutchLearningPlatform() {
   const { initial, color } = useUserAvatar();
   const { toast } = useToast();
 
-  const exerciseQueue = useExerciseQueue({
-    maxRecentItems: 8,
-    prioritizeIncorrect: true,
-  });
+  const exerciseQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 8,
+      prioritizeIncorrect: true,
+    }),
+    [],
+  );
 
-  const test1ExerciseQueue = useTestExerciseQueue({
-    maxRecentExercises: 6,
-    ensureTypeDistribution: true,
-  });
+  const exerciseQueue = useExerciseQueue(exerciseQueueOptions);
 
-  const test2ExerciseQueue = useTestExerciseQueue({
-    maxRecentExercises: 6,
-    ensureTypeDistribution: true,
-  });
+  const test1ExerciseQueueOptions = useMemo(
+    () => ({
+      maxRecentExercises: 6,
+      ensureTypeDistribution: true,
+    }),
+    [],
+  );
 
-  const perfectTenseQueue = usePerfectTenseQueue({
-    maxRecentItems: 6,
-    prioritizeIncorrect: true,
-  });
+  const test1ExerciseQueue = useTestExerciseQueue(test1ExerciseQueueOptions);
 
-  const imperfectumQueue = useImperfectumQueue({
-    maxRecentItems: 6,
-    prioritizeIncorrect: true,
-  });
+  const test2ExerciseQueueOptions = useMemo(
+    () => ({
+      maxRecentExercises: 6,
+      ensureTypeDistribution: true,
+    }),
+    [],
+  );
 
-  const modalVerbsQueue = useModalVerbsQueue({
-    maxRecentItems: 6,
-    prioritizeIncorrect: true,
-  });
+  const test2ExerciseQueue = useTestExerciseQueue(test2ExerciseQueueOptions);
+
+  const perfectTenseQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 6,
+      prioritizeIncorrect: true,
+    }),
+    [],
+  );
+
+  const perfectTenseQueue = usePerfectTenseQueue(perfectTenseQueueOptions);
+
+  const imperfectumQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 6,
+      prioritizeIncorrect: true,
+    }),
+    [],
+  );
+
+  const imperfectumQueue = useImperfectumQueue(imperfectumQueueOptions);
+
+  const modalVerbsQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 6,
+      prioritizeIncorrect: true,
+    }),
+    [],
+  );
+
+  const modalVerbsQueue = useModalVerbsQueue(modalVerbsQueueOptions);
 
   // Use state from exerciseSession instead of local state
   const [exerciseMode, setExerciseMode] = useState<
@@ -110,16 +140,16 @@ export default function DutchLearningPlatform() {
   >((exerciseSession.modalVerbsMode as any) || 'conjugation');
   const [showResults, setShowResults] = useState(false);
   const [sessionScore, setSessionScore] = useState(
-    exerciseSession.sessionScore,
+    exerciseSession.sessionScore || { correct: 0, total: 0 },
   );
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    exerciseSession.selectedCategory,
+    exerciseSession.selectedCategory || null,
   );
   const [hasStartedLearning, setHasStartedLearning] = useState(
-    exerciseSession.hasStartedLearning,
+    exerciseSession.hasStartedLearning || false,
   );
   const [testReviewMode, setTestReviewMode] = useState(
-    exerciseSession.testReviewMode,
+    exerciseSession.testReviewMode || { test1: false, test2: false },
   );
 
   // Function to save current exercise session state (simplified to prevent infinite loops)
@@ -200,6 +230,11 @@ export default function DutchLearningPlatform() {
     return vocabulary.filter((w) => w.chapter === progress.currentChapter);
   }, [progress.currentChapter]);
 
+  // Memoize incorrectWords to prevent infinite loops
+  const memoizedIncorrectWords = useMemo(() => {
+    return progress.incorrectWords;
+  }, [JSON.stringify(progress.incorrectWords)]);
+
   const availableWords = useMemo(() => {
     if (
       exerciseMode === 'test1' ||
@@ -214,7 +249,7 @@ export default function DutchLearningPlatform() {
     let words = currentChapterWords;
 
     if (progress.mistakeMode) {
-      const incorrectWordIds = Object.keys(progress.incorrectWords);
+      const incorrectWordIds = Object.keys(memoizedIncorrectWords);
       words = words.filter((w) => incorrectWordIds.includes(w.id));
     }
 
@@ -238,7 +273,7 @@ export default function DutchLearningPlatform() {
     exerciseMode,
     selectedCategory,
     progress.mistakeMode,
-    progress.incorrectWords,
+    memoizedIncorrectWords,
     progress.currentChapter,
   ]);
 
@@ -306,7 +341,7 @@ export default function DutchLearningPlatform() {
       }
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
@@ -332,7 +367,7 @@ export default function DutchLearningPlatform() {
       }
     } else if (exerciseMode === 'imperfectum') {
       const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
@@ -357,7 +392,7 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'modalverbs') {
       // Modal verbs should ALWAYS be available regardless of chapters or mistake mode
       const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
@@ -388,23 +423,23 @@ export default function DutchLearningPlatform() {
     } else {
       exerciseQueue.initializeQueue(
         availableWords,
-        progress.incorrectWords,
+        memoizedIncorrectWords,
         exerciseSession.currentIndex,
       );
     }
   }, [
     availableWords,
     exerciseMode,
-    progress.incorrectWords,
+    memoizedIncorrectWords,
     progress.mistakeMode,
     testReviewModeValues,
     exerciseSession.currentIndex,
-    test1ExerciseQueue,
-    test2ExerciseQueue,
-    perfectTenseQueue,
-    imperfectumQueue,
-    modalVerbsQueue,
-    exerciseQueue,
+    exerciseQueue.initializeQueue,
+    test1ExerciseQueue.initializeTestQueue,
+    test2ExerciseQueue.initializeTestQueue,
+    perfectTenseQueue.initializeQueue,
+    imperfectumQueue.initializeQueue,
+    modalVerbsQueue.initializeQueue,
     getTestExerciseProgress,
   ]);
 
@@ -471,7 +506,7 @@ export default function DutchLearningPlatform() {
         currentModalVerb?.id;
       if (currentId) {
         const remainingIncorrectWords = Object.keys(
-          progress.incorrectWords,
+          memoizedIncorrectWords,
         ).filter((id) => id !== currentId);
 
         if (remainingIncorrectWords.length === 0) {
@@ -503,7 +538,7 @@ export default function DutchLearningPlatform() {
       test2ExerciseQueue.initializeTestQueue(exercises, 0);
     } else if (exerciseMode === 'perfect') {
       const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
@@ -523,7 +558,7 @@ export default function DutchLearningPlatform() {
       }
     } else if (exerciseMode === 'imperfectum') {
       const incorrectWordIds: Record<string, number> = {};
-      Object.entries(progress.incorrectWords).forEach(([id, data]) => {
+      Object.entries(memoizedIncorrectWords).forEach(([id, data]) => {
         incorrectWordIds[id] = data.count;
       });
 
@@ -543,7 +578,7 @@ export default function DutchLearningPlatform() {
       // Modal verbs should ALWAYS be available
       modalVerbsQueue.initializeQueue({}, 0);
     } else {
-      exerciseQueue.initializeQueue(availableWords, progress.incorrectWords, 0);
+      exerciseQueue.initializeQueue(availableWords, memoizedIncorrectWords, 0);
     }
   };
 
@@ -773,7 +808,7 @@ export default function DutchLearningPlatform() {
                     title="Modal verbs are always available - not tied to any specific chapter"
                   >
                     <Brain className="h-5 w-5 mr-2" />
-                    Modal Verbs ✨
+                    Modal Verbs
                   </Button>
                 </div>
 
@@ -847,7 +882,7 @@ export default function DutchLearningPlatform() {
                       <span className="text-sm text-orange-600">
                         {(() => {
                           const incorrectWordIds = Object.keys(
-                            progress.incorrectWords,
+                            memoizedIncorrectWords,
                           );
                           if (exerciseMode === 'perfect') {
                             const perfectTenseIds = new Set(
@@ -1006,7 +1041,7 @@ export default function DutchLearningPlatform() {
                         }
                         title="Modal verbs are always available - not tied to any specific chapter"
                       >
-                        Modal Verbs ✨
+                        Modal Verbs
                       </Button>
                       <Button
                         variant={

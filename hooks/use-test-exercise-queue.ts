@@ -83,16 +83,20 @@ export function useTestExerciseQueue(
 
   const createSmartTestQueue = useCallback(
     (allExercises: TestExercise[]): TestExercise[] => {
+      // Get current values to avoid stale closure
+      const currentMaxRecentExercises = maxRecentExercises;
+      const currentEnsureTypeDistribution = ensureTypeDistribution;
+
       if (allExercises.length === 0) return [];
 
       const exercises = [...allExercises];
       const result: TestExercise[] = [];
 
-      if (!ensureTypeDistribution) {
+      if (!currentEnsureTypeDistribution) {
         const available = new Set(exercises.map((ex) => ex.id));
         const recentlyUsed = new Set<string>();
         const maxRecent = Math.min(
-          maxRecentExercises,
+          currentMaxRecentExercises,
           Math.floor(exercises.length / 4),
         );
 
@@ -185,14 +189,19 @@ export function useTestExerciseQueue(
 
       return result;
     },
-    [maxRecentExercises, ensureTypeDistribution],
+    [], // Empty dependency array - function is now stable
   );
 
   const initializeTestQueue = useCallback(
     (exercises: TestExercise[], startIndex?: number) => {
+      // Get current values to avoid stale closure
+      const currentReviewMode = reviewMode;
+      const currentIncorrectExerciseIds = incorrectExerciseIds;
+      const currentMaxRecentExercises = maxRecentExercises;
+
       // If in review mode, filter to only incorrect exercises
-      const exercisesToUse = reviewMode
-        ? exercises.filter((ex) => incorrectExerciseIds.includes(ex.id))
+      const exercisesToUse = currentReviewMode
+        ? exercises.filter((ex) => currentIncorrectExerciseIds.includes(ex.id))
         : exercises;
 
       const smartQueue = createSmartTestQueue(exercisesToUse);
@@ -202,16 +211,11 @@ export function useTestExerciseQueue(
         completedExercises: new Set(),
         incorrectExercises: new Set(),
         recentlySeenExercises: new Set(),
-        maxRecentExercises,
+        maxRecentExercises: currentMaxRecentExercises,
         allExercisesCompleted: false,
       });
     },
-    [
-      createSmartTestQueue,
-      maxRecentExercises,
-      reviewMode,
-      incorrectExerciseIds,
-    ],
+    [], // Empty dependency array - function is now stable
   );
 
   const getCurrentTestExercise = useCallback((): TestExercise | null => {

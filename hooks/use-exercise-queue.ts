@@ -3,6 +3,7 @@
 import type { VocabularyItem } from '@/types/vocabulary';
 import { useCallback, useState } from 'react';
 
+// Exercise queue hook for managing vocabulary exercises
 interface ExerciseQueue {
   items: VocabularyItem[];
   currentIndex: number;
@@ -27,109 +28,107 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
     maxRecentItems,
   });
 
-  const createSmartQueue = useCallback(
-    (
-      allItems: VocabularyItem[],
-      incorrectWords?: Record<string, { count: number; lastAttempt: number }>,
-    ): VocabularyItem[] => {
-      if (allItems.length === 0) return [];
-
-      const items = [...allItems];
-      const result: VocabularyItem[] = [];
-      const available = new Set(items.map((item) => item.id));
-      const recentlyUsed = new Set<string>();
-      const maxRecent = Math.min(maxRecentItems, Math.floor(items.length / 3));
-
-      const incorrectItems = items.filter(
-        (item) =>
-          incorrectWords &&
-          incorrectWords[item.id] &&
-          incorrectWords[item.id].count > 0,
-      );
-      const regularItems = items.filter(
-        (item) =>
-          !incorrectWords ||
-          !incorrectWords[item.id] ||
-          incorrectWords[item.id].count === 0,
-      );
-
-      const selectNext = (): VocabularyItem | null => {
-        const availableItems = items.filter(
-          (item) => available.has(item.id) && !recentlyUsed.has(item.id),
-        );
-
-        if (availableItems.length === 0) {
-          recentlyUsed.clear();
-          const fallbackItems = items.filter((item) => available.has(item.id));
-          if (fallbackItems.length === 0) return null;
-          return fallbackItems[
-            Math.floor(Math.random() * fallbackItems.length)
-          ];
-        }
-
-        if (prioritizeIncorrect && incorrectItems.length > 0) {
-          const availableIncorrect = availableItems.filter(
-            (item) =>
-              incorrectWords &&
-              incorrectWords[item.id] &&
-              incorrectWords[item.id].count > 0,
-          );
-
-          if (availableIncorrect.length > 0) {
-            if (Math.random() < 0.7) {
-              return availableIncorrect[
-                Math.floor(Math.random() * availableIncorrect.length)
-              ];
-            }
-          }
-        }
-
-        return availableItems[
-          Math.floor(Math.random() * availableItems.length)
-        ];
-      };
-
-      while (available.size > 0) {
-        const selected = selectNext();
-        if (!selected) break;
-
-        result.push(selected);
-        available.delete(selected.id);
-
-        recentlyUsed.add(selected.id);
-        if (recentlyUsed.size > maxRecent) {
-          const firstItem = Array.from(recentlyUsed)[0];
-          recentlyUsed.delete(firstItem);
-        }
-      }
-
-      return result;
-    },
-    [maxRecentItems, prioritizeIncorrect],
-  );
-
   const initializeQueue = useCallback(
     (
       items: VocabularyItem[],
       incorrectWords?: Record<string, { count: number; lastAttempt: number }>,
       startIndex?: number,
     ) => {
-      const smartQueue = createSmartQueue(items, incorrectWords);
+      // Get current options to avoid stale closure
+      const currentMaxRecentItems = maxRecentItems;
+      const currentPrioritizeIncorrect = prioritizeIncorrect;
+
+      // Inline the smart queue creation to avoid dependency on createSmartQueue
+      const createQueue = (
+        allItems: VocabularyItem[],
+        incorrectWordsParam?: Record<
+          string,
+          { count: number; lastAttempt: number }
+        >,
+      ): VocabularyItem[] => {
+        if (allItems.length === 0) return [];
+
+        const itemList = [...allItems];
+        const result: VocabularyItem[] = [];
+        const available = new Set(itemList.map((item) => item.id));
+        const recentlyUsed = new Set<string>();
+        const maxRecent = Math.min(
+          currentMaxRecentItems,
+          Math.floor(itemList.length / 3),
+        );
+
+        const incorrectItems = itemList.filter(
+          (item) =>
+            incorrectWordsParam &&
+            incorrectWordsParam[item.id] &&
+            incorrectWordsParam[item.id].count > 0,
+        );
+
+        const selectNext = (): VocabularyItem | null => {
+          const availableItems = itemList.filter(
+            (item) => available.has(item.id) && !recentlyUsed.has(item.id),
+          );
+
+          if (availableItems.length === 0) {
+            const stillAvailable = itemList.filter((item) =>
+              available.has(item.id),
+            );
+            if (stillAvailable.length === 0) return null;
+            recentlyUsed.clear();
+            return stillAvailable[
+              Math.floor(Math.random() * stillAvailable.length)
+            ];
+          }
+
+          if (currentPrioritizeIncorrect && incorrectItems.length > 0) {
+            const availableIncorrect = availableItems.filter((item) =>
+              incorrectItems.some((incorrect) => incorrect.id === item.id),
+            );
+            if (availableIncorrect.length > 0) {
+              return availableIncorrect[
+                Math.floor(Math.random() * availableIncorrect.length)
+              ];
+            }
+          }
+
+          return availableItems[
+            Math.floor(Math.random() * availableItems.length)
+          ];
+        };
+
+        while (available.size > 0) {
+          const selected = selectNext();
+          if (!selected) break;
+
+          result.push(selected);
+          available.delete(selected.id);
+
+          recentlyUsed.add(selected.id);
+          if (recentlyUsed.size > maxRecent) {
+            const firstItem = Array.from(recentlyUsed)[0];
+            recentlyUsed.delete(firstItem);
+          }
+        }
+
+        return result;
+      };
+
+      const smartQueue = createQueue(items, incorrectWords);
       setQueue({
         items: smartQueue,
         currentIndex: startIndex || 0,
         completedItems: new Set(),
         recentlySeenItems: new Set(),
-        maxRecentItems,
+        maxRecentItems: currentMaxRecentItems,
       });
     },
-    [createSmartQueue, maxRecentItems],
+    [], // Empty dependency array - function is now stable
   );
 
-  const getCurrentItem = useCallback((): VocabularyItem | null => {
+  const getCurrentItem = (): VocabularyItem | null => {
     if (queue.currentIndex >= queue.items.length) return null;
     return queue.items[queue.currentIndex];
-  }, [queue]);
+  };
 
   const moveToNext = useCallback((itemId: string, wasCorrect: boolean) => {
     setQueue((prev) => {
@@ -156,11 +155,11 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
     });
   }, []);
 
-  const hasMoreItems = useCallback((): boolean => {
+  const hasMoreItems = (): boolean => {
     return queue.currentIndex < queue.items.length;
-  }, [queue]);
+  };
 
-  const getProgress = useCallback(() => {
+  const getProgress = () => {
     return {
       current: queue.currentIndex,
       total: queue.items.length,
@@ -170,7 +169,7 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
           ? (queue.currentIndex / queue.items.length) * 100
           : 0,
     };
-  }, [queue]);
+  };
 
   const reshuffleRemaining = useCallback(
     (
@@ -178,21 +177,16 @@ export function useExerciseQueue(options: UseExerciseQueueOptions = {}) {
     ) => {
       setQueue((prev) => {
         const remainingItems = prev.items.slice(prev.currentIndex);
-        const newShuffledItems = createSmartQueue(
-          remainingItems,
-          incorrectWords,
-        );
+        // Simple shuffle for remaining items
+        const shuffled = [...remainingItems].sort(() => Math.random() - 0.5);
 
         return {
           ...prev,
-          items: [
-            ...prev.items.slice(0, prev.currentIndex),
-            ...newShuffledItems,
-          ],
+          items: [...prev.items.slice(0, prev.currentIndex), ...shuffled],
         };
       });
     },
-    [createSmartQueue],
+    [],
   );
 
   const reset = useCallback(() => {

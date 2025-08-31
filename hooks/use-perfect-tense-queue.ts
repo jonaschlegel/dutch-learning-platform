@@ -32,17 +32,24 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
 
   const initializeQueue = useCallback(
     (incorrectWords: Record<string, number> = {}, startIndex?: number) => {
+      // Get current values to avoid stale closure
+      const currentFocusCategory = focusCategory;
+      const currentPrioritizeIncorrect = prioritizeIncorrect;
+
       let availableWords = [...perfectTenseVocabulary];
 
       // Filter by category if specified
-      if (focusCategory) {
+      if (currentFocusCategory) {
         availableWords = availableWords.filter(
-          (word) => word.category === focusCategory,
+          (word) => word.category === currentFocusCategory,
         );
       }
 
       // If prioritizing incorrect words and we have some, focus on those
-      if (prioritizeIncorrect && Object.keys(incorrectWords).length > 0) {
+      if (
+        currentPrioritizeIncorrect &&
+        Object.keys(incorrectWords).length > 0
+      ) {
         const incorrectWordIds = Object.keys(incorrectWords);
         const incorrectPerfectWords = availableWords.filter((word) =>
           incorrectWordIds.includes(word.id),
@@ -106,7 +113,7 @@ export function usePerfectTenseQueue(config: PerfectTenseQueueConfig = {}) {
       setRecentItems([]);
       setIncorrectItems(new Set(Object.keys(incorrectWords)));
     },
-    [focusCategory, prioritizeIncorrect],
+    [], // Empty dependency array - function is now stable
   );
 
   const getCurrentItem = useCallback(() => {

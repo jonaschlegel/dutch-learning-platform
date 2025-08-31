@@ -1,7 +1,7 @@
 'use client';
 
 import type { UserProgress } from '@/types/vocabulary';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export function useProgress() {
   const [progress, setProgress] = useState<UserProgress>({
@@ -113,40 +113,18 @@ export function useProgress() {
     }
   }, []);
 
-  const saveProgress = (newProgress: UserProgress) => {
-    console.log('saveProgress called with:', newProgress);
-    const toSave = {
-      ...newProgress,
-      completedWords: Array.from(newProgress.completedWords),
-      testExerciseProgress: newProgress.testExerciseProgress
-        ? {
-            test1: {
-              ...newProgress.testExerciseProgress.test1,
-              completedExercises: Array.from(
-                newProgress.testExerciseProgress.test1.completedExercises,
-              ),
-            },
-            test2: {
-              ...newProgress.testExerciseProgress.test2,
-              completedExercises: Array.from(
-                newProgress.testExerciseProgress.test2.completedExercises,
-              ),
-            },
-          }
-        : undefined,
-    };
-    console.log('Saving to localStorage:', toSave);
-    localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
-    setProgress(newProgress);
-    console.log('Progress state updated');
-  };
+  const saveExerciseSession = useCallback(
+    (newSession: typeof exerciseSession) => {
+      localStorage.setItem(
+        'dutch-learning-session',
+        JSON.stringify(newSession),
+      );
+      setExerciseSession(newSession);
+    },
+    [],
+  );
 
-  const saveExerciseSession = (newSession: typeof exerciseSession) => {
-    localStorage.setItem('dutch-learning-session', JSON.stringify(newSession));
-    setExerciseSession(newSession);
-  };
-
-  const clearExerciseSession = () => {
+  const clearExerciseSession = useCallback(() => {
     localStorage.removeItem('dutch-learning-session');
     setExerciseSession({
       exerciseMode: null,
@@ -159,76 +137,182 @@ export function useProgress() {
       testReviewMode: { test1: false, test2: false },
       hasStartedLearning: false,
     });
-  };
+  }, []);
 
-  const markWordCompleted = (wordId: string, score: number) => {
+  const markWordCompleted = useCallback((wordId: string, score: number) => {
     console.log('markWordCompleted called:', { wordId, score });
-    const newProgress = {
-      ...progress,
-      completedWords: new Set([...progress.completedWords, wordId]),
-      scores: { ...progress.scores, [wordId]: score },
-      incorrectWords: { ...progress.incorrectWords },
-    };
+    setProgress((currentProgress) => {
+      const newProgress = {
+        ...currentProgress,
+        completedWords: new Set([...currentProgress.completedWords, wordId]),
+        scores: { ...currentProgress.scores, [wordId]: score },
+        incorrectWords: { ...currentProgress.incorrectWords },
+      };
 
-    // Handle incorrect answers
-    if (score === 0) {
+      // Handle incorrect answers
+      if (score === 0) {
+        const now = Date.now();
+        const currentIncorrect = currentProgress.incorrectWords[wordId] || {
+          count: 0,
+          lastAttempt: 0,
+        };
+
+        newProgress.incorrectWords[wordId] = {
+          count: currentIncorrect.count + 1,
+          lastAttempt: now,
+        };
+      }
+
+      if (score === 1 && currentProgress.incorrectWords[wordId]) {
+        const { [wordId]: removed, ...remainingIncorrect } =
+          newProgress.incorrectWords;
+        newProgress.incorrectWords = remainingIncorrect;
+      }
+
+      console.log('Saving progress:', {
+        completedWords: Array.from(newProgress.completedWords),
+        scores: newProgress.scores,
+      });
+
+      // Save to localStorage
+      const toSave = {
+        ...newProgress,
+        completedWords: Array.from(newProgress.completedWords),
+        testExerciseProgress: newProgress.testExerciseProgress
+          ? {
+              test1: {
+                ...newProgress.testExerciseProgress.test1,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test1.completedExercises,
+                ),
+              },
+              test2: {
+                ...newProgress.testExerciseProgress.test2,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test2.completedExercises,
+                ),
+              },
+            }
+          : undefined,
+      };
+      localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+      return newProgress;
+    });
+  }, []);
+
+  const markWordIncorrect = useCallback((wordId: string) => {
+    setProgress((currentProgress) => {
       const now = Date.now();
-      const currentIncorrect = progress.incorrectWords[wordId] || {
+      const currentIncorrect = currentProgress.incorrectWords[wordId] || {
         count: 0,
         lastAttempt: 0,
       };
 
-      newProgress.incorrectWords[wordId] = {
-        count: currentIncorrect.count + 1,
-        lastAttempt: now,
-      };
-    }
-
-    if (score === 1 && progress.incorrectWords[wordId]) {
-      const { [wordId]: removed, ...remainingIncorrect } =
-        newProgress.incorrectWords;
-      newProgress.incorrectWords = remainingIncorrect;
-    }
-
-    console.log('Saving progress:', {
-      completedWords: Array.from(newProgress.completedWords),
-      scores: newProgress.scores,
-    });
-    saveProgress(newProgress);
-  };
-
-  const markWordIncorrect = (wordId: string) => {
-    const now = Date.now();
-    const currentIncorrect = progress.incorrectWords[wordId] || {
-      count: 0,
-      lastAttempt: 0,
-    };
-
-    const newProgress = {
-      ...progress,
-      incorrectWords: {
-        ...progress.incorrectWords,
-        [wordId]: {
-          count: currentIncorrect.count + 1,
-          lastAttempt: now,
+      const newProgress = {
+        ...currentProgress,
+        incorrectWords: {
+          ...currentProgress.incorrectWords,
+          [wordId]: {
+            count: currentIncorrect.count + 1,
+            lastAttempt: now,
+          },
         },
-      },
-    };
+      };
 
-    saveProgress(newProgress);
-  };
+      // Save to localStorage
+      const toSave = {
+        ...newProgress,
+        completedWords: Array.from(newProgress.completedWords),
+        testExerciseProgress: newProgress.testExerciseProgress
+          ? {
+              test1: {
+                ...newProgress.testExerciseProgress.test1,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test1.completedExercises,
+                ),
+              },
+              test2: {
+                ...newProgress.testExerciseProgress.test2,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test2.completedExercises,
+                ),
+              },
+            }
+          : undefined,
+      };
+      localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
 
-  const setCurrentChapter = (chapter: number) => {
-    const newProgress = { ...progress, currentChapter: chapter };
-    saveProgress(newProgress);
-  };
+      return newProgress;
+    });
+  }, []);
 
-  const toggleMistakeMode = () => {
-    const newProgress = { ...progress, mistakeMode: !progress.mistakeMode };
-    saveProgress(newProgress);
-  };
+  const setCurrentChapter = useCallback((chapter: number) => {
+    setProgress((currentProgress) => {
+      const newProgress = { ...currentProgress, currentChapter: chapter };
 
-  const resetProgress = () => {
+      // Save to localStorage
+      const toSave = {
+        ...newProgress,
+        completedWords: Array.from(newProgress.completedWords),
+        testExerciseProgress: newProgress.testExerciseProgress
+          ? {
+              test1: {
+                ...newProgress.testExerciseProgress.test1,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test1.completedExercises,
+                ),
+              },
+              test2: {
+                ...newProgress.testExerciseProgress.test2,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test2.completedExercises,
+                ),
+              },
+            }
+          : undefined,
+      };
+      localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+      return newProgress;
+    });
+  }, []);
+
+  const toggleMistakeMode = useCallback(() => {
+    setProgress((currentProgress) => {
+      const newProgress = {
+        ...currentProgress,
+        mistakeMode: !currentProgress.mistakeMode,
+      };
+
+      // Save to localStorage
+      const toSave = {
+        ...newProgress,
+        completedWords: Array.from(newProgress.completedWords),
+        testExerciseProgress: newProgress.testExerciseProgress
+          ? {
+              test1: {
+                ...newProgress.testExerciseProgress.test1,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test1.completedExercises,
+                ),
+              },
+              test2: {
+                ...newProgress.testExerciseProgress.test2,
+                completedExercises: Array.from(
+                  newProgress.testExerciseProgress.test2.completedExercises,
+                ),
+              },
+            }
+          : undefined,
+      };
+      localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+      return newProgress;
+    });
+  }, []);
+
+  const resetProgress = useCallback(() => {
     localStorage.removeItem('dutch-learning-progress');
     localStorage.removeItem('dutch-learning-session');
     setProgress({
@@ -261,69 +345,97 @@ export function useProgress() {
       testReviewMode: { test1: false, test2: false },
       hasStartedLearning: false,
     });
-  };
+  }, []);
 
-  const markTestExerciseCompleted = (
-    testType: 'test1' | 'test2',
-    exerciseId: string,
-    score: number,
-  ) => {
-    const newProgress = { ...progress };
+  const markTestExerciseCompleted = useCallback(
+    (testType: 'test1' | 'test2', exerciseId: string, score: number) => {
+      setProgress((currentProgress) => {
+        const newProgress = { ...currentProgress };
 
-    // Initialize test exercise progress if it doesn't exist
-    if (!newProgress.testExerciseProgress) {
-      newProgress.testExerciseProgress = {
-        test1: {
-          completedExercises: new Set(),
+        // Initialize test exercise progress if it doesn't exist
+        if (!newProgress.testExerciseProgress) {
+          newProgress.testExerciseProgress = {
+            test1: {
+              completedExercises: new Set(),
+              incorrectExercises: {},
+              scores: {},
+            },
+            test2: {
+              completedExercises: new Set(),
+              incorrectExercises: {},
+              scores: {},
+            },
+          };
+        }
+
+        const testProgress = newProgress.testExerciseProgress[testType];
+
+        // Mark as completed and record score
+        testProgress.completedExercises.add(exerciseId);
+        testProgress.scores[exerciseId] = score;
+
+        // Handle incorrect answers
+        if (score === 0) {
+          const now = Date.now();
+          const currentIncorrect = testProgress.incorrectExercises[
+            exerciseId
+          ] || {
+            count: 0,
+            lastAttempt: 0,
+          };
+
+          testProgress.incorrectExercises[exerciseId] = {
+            count: currentIncorrect.count + 1,
+            lastAttempt: now,
+          };
+        } else if (score === 1 && testProgress.incorrectExercises[exerciseId]) {
+          // Remove from incorrect list if answered correctly
+          const { [exerciseId]: removed, ...remaining } =
+            testProgress.incorrectExercises;
+          testProgress.incorrectExercises = remaining;
+        }
+
+        // Save to localStorage
+        const toSave = {
+          ...newProgress,
+          completedWords: Array.from(newProgress.completedWords),
+          testExerciseProgress: newProgress.testExerciseProgress
+            ? {
+                test1: {
+                  ...newProgress.testExerciseProgress.test1,
+                  completedExercises: Array.from(
+                    newProgress.testExerciseProgress.test1.completedExercises,
+                  ),
+                },
+                test2: {
+                  ...newProgress.testExerciseProgress.test2,
+                  completedExercises: Array.from(
+                    newProgress.testExerciseProgress.test2.completedExercises,
+                  ),
+                },
+              }
+            : undefined,
+        };
+        localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+        return newProgress;
+      });
+    },
+    [],
+  );
+
+  const getTestExerciseProgress = useCallback(
+    (testType: 'test1' | 'test2') => {
+      return (
+        progress.testExerciseProgress?.[testType] || {
+          completedExercises: new Set<string>(),
           incorrectExercises: {},
           scores: {},
-        },
-        test2: {
-          completedExercises: new Set(),
-          incorrectExercises: {},
-          scores: {},
-        },
-      };
-    }
-
-    const testProgress = newProgress.testExerciseProgress[testType];
-
-    // Mark as completed and record score
-    testProgress.completedExercises.add(exerciseId);
-    testProgress.scores[exerciseId] = score;
-
-    // Handle incorrect answers
-    if (score === 0) {
-      const now = Date.now();
-      const currentIncorrect = testProgress.incorrectExercises[exerciseId] || {
-        count: 0,
-        lastAttempt: 0,
-      };
-
-      testProgress.incorrectExercises[exerciseId] = {
-        count: currentIncorrect.count + 1,
-        lastAttempt: now,
-      };
-    } else if (score === 1 && testProgress.incorrectExercises[exerciseId]) {
-      // Remove from incorrect list if answered correctly
-      const { [exerciseId]: removed, ...remaining } =
-        testProgress.incorrectExercises;
-      testProgress.incorrectExercises = remaining;
-    }
-
-    saveProgress(newProgress);
-  };
-
-  const getTestExerciseProgress = (testType: 'test1' | 'test2') => {
-    if (!progress.testExerciseProgress) {
-      return {
-        completedExercises: new Set<string>(),
-        incorrectExercises: {},
-        scores: {},
-      };
-    }
-    return progress.testExerciseProgress[testType];
-  };
+        }
+      );
+    },
+    [progress.testExerciseProgress],
+  );
 
   return {
     progress,

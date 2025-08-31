@@ -1513,3 +1513,68 @@ Voor bezichtiging kunt u contact opnemen met makelaar Van der Berg via telefoonn
     },
   ],
 };
+
+// Create test exercises for Test 1
+export function createTestExercises(): (
+  | VocabularyExercise
+  | GrammarExercise
+)[] {
+  return [
+    // Simple vocabulary exercises for Test 1
+    {
+      id: 'vocab1',
+      level: 'A1',
+      type: 'translate',
+      question: 'Translate to Dutch: "house"',
+      answer: 'huis',
+      hint: 'A place where people live',
+    },
+    {
+      id: 'vocab2',
+      level: 'A1',
+      type: 'multiple-choice',
+      question: 'What is "water" in Dutch?',
+      answer: 'water',
+      options: ['water', 'wijn', 'bier', 'melk'],
+      hint: "It's the same word in both languages",
+    },
+    {
+      id: 'vocab3',
+      level: 'A1',
+      type: 'translate',
+      question: 'Translate to Dutch: "cat"',
+      answer: 'kat',
+      hint: 'A small furry pet',
+    },
+    {
+      id: 'vocab4',
+      level: 'A1',
+      type: 'multiple-choice',
+      question: 'How do you say "dog" in Dutch?',
+      answer: 'hond',
+      options: ['kat', 'hond', 'vis', 'vogel'],
+      hint: "Man's best friend",
+    },
+    {
+      id: 'vocab5',
+      level: 'A1',
+      type: 'translate',
+      question: 'Translate to Dutch: "bread"',
+      answer: 'brood',
+      hint: 'You eat it for breakfast',
+    },
+  ] as (VocabularyExercise | GrammarExercise)[];
+}
+
+// Create comprehensive test exercises for Test 2
+export function createTestExercises2(): any[] {
+  return [
+    ...testExercises2.readingComprehension,
+    ...testExercises2.imperfectum,
+    ...testExercises2.perfectTense,
+    ...testExercises2.situationalResponses,
+    ...testExercises2.questionFormation,
+    ...testExercises2.modalVerbs,
+    ...testExercises2.grammar,
+  ];
+}
