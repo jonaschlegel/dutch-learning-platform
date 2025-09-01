@@ -79,13 +79,34 @@ export function ConjunctionsExercise({
   };
 
   const handleNext = () => {
-    onComplete(isCorrect);
+    // If we're in complete mode and have more exercises, cycle to the next one
+    if (mode === 'complete' && completeExercises.length > 1) {
+      const nextIndex = (currentExerciseIndex + 1) % completeExercises.length;
+      setCurrentExerciseIndex(nextIndex);
+
+      // Only mark as complete after doing a few exercises (or all if less than 3)
+      const requiredExercises = Math.min(3, completeExercises.length);
+      if (currentExerciseIndex + 1 >= requiredExercises) {
+        onComplete(isCorrect);
+      } else {
+        // Reset for next exercise in the same conjunction
+        setShowFeedback(false);
+        setUserAnswer('');
+        setHasAnswered(false);
+        return;
+      }
+    } else {
+      onComplete(isCorrect);
+    }
+
+    // Reset everything for next conjunction
     setShowFeedback(false);
     setUserAnswer('');
     setSelectedType('');
     setSelectedCategory('');
     setSelectedWordOrder('');
     setHasAnswered(false);
+    setCurrentExerciseIndex(0);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -125,24 +146,252 @@ export function ConjunctionsExercise({
     }
   };
 
+  // Generate multiple example sentences for the complete mode
+  const getCompleteExercises = (conjunction: Conjunction) => {
+    const exercises: string[] = [];
+
+    // Always include the original example if available
+    if (conjunction.exampleSentence) {
+      exercises.push(
+        conjunction.exampleSentence.replace(conjunction.dutch, '___'),
+      );
+    }
+
+    // Generate additional context-specific sentences based on the conjunction
+    switch (conjunction.dutch) {
+      case 'en':
+        exercises.push(
+          'Ik drink koffie ___ lees een boek',
+          'Mijn broer ___ ik gaan naar school',
+          'Ze koopt brood ___ melk in de winkel',
+          'We kijken TV ___ eten chips',
+        );
+        break;
+      case 'of':
+        exercises.push(
+          'Wil je thee ___ koffie?',
+          'Gaan we lopen ___ met de fiets?',
+          'Kom je vandaag ___ morgen?',
+          'Neem je de trein ___ de bus?',
+        );
+        break;
+      case 'maar':
+        exercises.push(
+          'Het is koud, ___ de zon schijnt',
+          'Hij is slim, ___ ook lui',
+          'Ze wil komen, ___ heeft geen tijd',
+          'Het eten is duur, ___ zeer lekker',
+        );
+        break;
+      case 'want':
+        exercises.push(
+          'Ik draag een jas, ___ het is koud',
+          'We blijven thuis, ___ het regent hard',
+          'Hij leert Nederlands, ___ hij woont hier',
+          'Ze is blij, ___ ze heeft vakantie',
+        );
+        break;
+      case 'dus':
+        exercises.push(
+          'Het regent, ___ pak ik een paraplu',
+          'Ik ben moe, ___ ga ik vroeg slapen',
+          'Het is laat, ___ moeten we gaan',
+          'Ze heeft honger, ___ maakt ze eten',
+        );
+        break;
+      case 'als':
+        exercises.push(
+          '___ het mooi weer is, gaan we wandelen',
+          'Ik ben blij ___ je komt',
+          '___ je tijd hebt, bel me dan',
+          'We gaan uit ___ het niet regent',
+        );
+        break;
+      case 'dat':
+        exercises.push(
+          'Ik weet ___ hij Nederlands spreekt',
+          'Ze zegt ___ de les interessant is',
+          'Hij denkt ___ we te laat zijn',
+          'We hopen ___ jullie komen',
+        );
+        break;
+      case 'omdat':
+        exercises.push(
+          'Hij blijft thuis ___ hij ziek is',
+          'We leren Nederlands ___ we hier wonen',
+          'Ze is gelukkig ___ ze verliefd is',
+          'Ik kook ___ ik honger heb',
+        );
+        break;
+      case 'toen':
+        exercises.push(
+          '___ ik klein was, speelde ik veel',
+          'We waren blij ___ hij kwam',
+          '___ het donker werd, gingen we naar huis',
+          'Hij lachte ___ hij de grap hoorde',
+        );
+        break;
+      case 'waar':
+        exercises.push(
+          'Dit is de straat ___ ik woon',
+          'Ik ken het café ___ we altijd zitten',
+          'Ze toont de kamer ___ ze werkt',
+          'Hier is de plek ___ we elkaar ontmoetten',
+        );
+        break;
+      case 'hoewel':
+        exercises.push(
+          '___ het regent, gaan we wandelen',
+          'Hij werkt door, ___ hij moe is',
+          '___ ze rijk is, is ze niet gelukkig',
+          'We vertrekken ___ het nog vroeg is',
+        );
+        break;
+      case 'terwijl':
+        exercises.push(
+          'Ik kook ___ zij studeert',
+          'Hij slaapt ___ wij werken',
+          'Ze belt ___ ze naar huis loopt',
+          'We praten ___ we koffie drinken',
+        );
+        break;
+      case 'voordat':
+        exercises.push(
+          'Was je handen ___ je eet',
+          'Check je email ___ je weggaat',
+          'Doe de deur dicht ___ je vertrekt',
+          'Lees het boek ___ je naar bed gaat',
+        );
+        break;
+      case 'nadat':
+        exercises.push(
+          '___ hij gegeten had, ging hij slapen',
+          'We gingen weg ___ de film afgelopen was',
+          '___ ze douched, kleedde ze zich aan',
+          'Hij belde ___ hij thuis gekomen was',
+        );
+        break;
+      case 'sinds':
+        exercises.push(
+          '___ ik hier woon, spreek ik Nederlands',
+          'Hij is gelukkig ___ hij getrouwd is',
+          '___ vorige maand werk ik hier',
+          'Ze leert piano ___ ze zes jaar is',
+        );
+        break;
+      case 'totdat':
+        exercises.push(
+          'Wacht hier ___ ik terugkom',
+          'Hij werkte ___ het donker werd',
+          'We blijven ___ de regen stopt',
+          'Ze oefende ___ ze het kon',
+        );
+        break;
+      case 'zodra':
+        exercises.push(
+          '___ hij komt, beginnen we',
+          'Bel me ___ je klaar bent',
+          '___ de zon opkomt, worden we wakker',
+          'We vertrekken ___ iedereen er is',
+        );
+        break;
+      case 'zodat':
+        exercises.push(
+          'Ik spreek langzaam ___ je me verstaat',
+          'We vertrekken vroeg ___ we op tijd zijn',
+          'Hij zet muziek aan ___ hij kan ontspannen',
+          'Ze studeert hard ___ ze slaagt',
+        );
+        break;
+      case 'tenzij':
+        exercises.push(
+          'We gaan picknicken, ___ het regent',
+          'Hij komt vanavond, ___ hij ziek wordt',
+          'De winkel is open, ___ het zondag is',
+          'We spelen buiten, ___ het te koud is',
+        );
+        break;
+      case 'wanneer':
+        exercises.push(
+          '___ ga je op vakantie?',
+          'Ik weet niet ___ hij komt',
+          '___ de winter komt, wordt het koud',
+          'Ze vraagt ___ we gaan eten',
+        );
+        break;
+      case 'doordat':
+        exercises.push(
+          'De trein is laat ___ er een storing is',
+          'Hij viel ___ de weg glad was',
+          'We zijn nat ___ het regent',
+          'Ze is moe ___ ze hard werkte',
+        );
+        break;
+      case 'aangezien':
+        exercises.push(
+          '___ het laat is, gaan we naar huis',
+          'We nemen de auto, ___ het ver is',
+          '___ hij ziek is, blijft hij thuis',
+          'Ze draagt een jas, ___ het koud is',
+        );
+        break;
+      case 'indien':
+        exercises.push(
+          '___ u vragen heeft, bel ons',
+          'We helpen u, ___ dat nodig is',
+          '___ mogelijk, kom dan morgen',
+          'Het is gratis ___ u student bent',
+        );
+        break;
+      default:
+        // Generic examples based on category
+        if (conjunction.category === 'basic') {
+          exercises.push(
+            `Ik studeer Nederlands ___ het is interessant`,
+            `Hij werkt hard ___ hij wil slagen`,
+            `We gaan weg ___ we klaar zijn`,
+          );
+        } else if (conjunction.category === 'contrast') {
+          exercises.push(
+            `Ze is moe, ___ ze werkt door`,
+            `Het is duur, ___ ze koopt het toch`,
+            `Hij wil komen, ___ hij heeft geen tijd`,
+          );
+        } else if (conjunction.category === 'cause') {
+          exercises.push(
+            `Hij komt niet, ___ hij is ziek`,
+            `We blijven binnen, ___ het regent`,
+            `Ze is blij, ___ ze heeft vakantie`,
+          );
+        } else if (conjunction.category === 'time') {
+          exercises.push(
+            `Ik bel je ___ ik thuis ben`,
+            `We eten ___ iedereen er is`,
+            `Hij werkt ___ het donker wordt`,
+          );
+        } else if (conjunction.category === 'condition') {
+          exercises.push(
+            `___ je komt, zijn we blij`,
+            `We gaan ___ het mooi weer is`,
+            `Hij helpt ___ je het vraagt`,
+          );
+        }
+    }
+
+    // Remove duplicates and return array
+    return Array.from(new Set(exercises)).filter((ex) => ex.length > 0);
+  };
+
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const completeExercises =
+    mode === 'complete' ? getCompleteExercises(conjunction) : [];
+
   const getPrompt = () => {
     switch (mode) {
       case 'complete':
-        // Create a sentence with a blank where the conjunction should go
-        if (conjunction.exampleSentence) {
-          return conjunction.exampleSentence.replace(conjunction.dutch, '___');
-        }
-        // Create context-appropriate fallback sentences based on conjunction type
-        if (conjunction.category === 'basic') {
-          return `Complete: "Ik studeer Nederlands ___ het is interessant"`;
-        } else if (conjunction.category === 'contrast') {
-          return `Complete: "Ze is moe, ___ ze werkt door"`;
-        } else if (conjunction.category === 'cause') {
-          return `Complete: "Hij komt niet, ___ hij is ziek"`;
-        } else if (conjunction.category === 'time') {
-          return `Complete: "Ik bel je ___ ik thuis ben"`;
-        } else if (conjunction.category === 'condition') {
-          return `Complete: "___ je komt, zijn we blij"`;
+        // Use the current exercise from our generated list
+        if (completeExercises.length > 0) {
+          return `Complete the sentence: "${completeExercises[currentExerciseIndex]}"`;
         }
         return `Complete: "Hij wil komen ___ hij heeft tijd"`;
       case 'translate':
@@ -188,7 +437,15 @@ export function ConjunctionsExercise({
     >
       <CardHeader>
         <CardTitle className="flex items-center justify-between font-nunito">
-          <span>{getInstructions()}</span>
+          <div className="flex flex-col">
+            <span>{getInstructions()}</span>
+            {mode === 'complete' && completeExercises.length > 1 && (
+              <span className="text-xs text-muted-foreground mt-1">
+                Exercise {currentExerciseIndex + 1} of{' '}
+                {Math.min(3, completeExercises.length)}
+              </span>
+            )}
+          </div>
           <div className="flex items-center space-x-2">
             <span
               className={`px-2 py-1 rounded text-xs font-medium ${getLevelBadgeColor()}`}
@@ -358,7 +615,13 @@ export function ConjunctionsExercise({
               onClick={handleNext}
               className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90 flex items-center justify-center space-x-2"
             >
-              <span>Next Question</span>
+              <span>
+                {mode === 'complete' &&
+                completeExercises.length > 1 &&
+                currentExerciseIndex + 1 < Math.min(3, completeExercises.length)
+                  ? 'Next Exercise'
+                  : 'Next Question'}
+              </span>
               <ChevronRight className="h-4 w-4" />
             </Button>
           )}
@@ -385,6 +648,17 @@ export function ConjunctionsExercise({
                   <p className="font-medium text-sm">
                     {isCorrect ? 'Correct! Well done!' : 'Not quite right.'}
                   </p>
+                  {isCorrect && mode === 'complete' && (
+                    <div className="mt-2 p-2 bg-white/50 rounded text-sm">
+                      <p className="font-medium">Complete sentence:</p>
+                      <p className="text-dutch-blue">
+                        {completeExercises[currentExerciseIndex]?.replace(
+                          '___',
+                          conjunction.dutch,
+                        )}
+                      </p>
+                    </div>
+                  )}
                   {!isCorrect && (
                     <div className="mt-2 text-sm">
                       {mode === 'complete' && (
@@ -395,9 +669,22 @@ export function ConjunctionsExercise({
                               {conjunction.dutch}
                             </span>
                           </p>
+                          <div className="mt-2 p-2 bg-white/50 rounded text-sm">
+                            <p className="font-medium">Complete sentence:</p>
+                            <p className="text-dutch-blue">
+                              {completeExercises[currentExerciseIndex]?.replace(
+                                '___',
+                                conjunction.dutch,
+                              )}
+                            </p>
+                          </div>
                           <p className="text-xs mt-1 text-muted-foreground">
                             💡 This is a {conjunction.type} conjunction used for{' '}
                             {conjunction.category} relationships.
+                            {conjunction.wordOrder === 'verb-to-end' &&
+                              ' Notice the verb goes to the end!'}
+                            {conjunction.wordOrder === 'inverted' &&
+                              ' Notice the inverted word order!'}
                           </p>
                         </div>
                       )}
