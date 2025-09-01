@@ -132,7 +132,19 @@ export function ConjunctionsExercise({
         if (conjunction.exampleSentence) {
           return conjunction.exampleSentence.replace(conjunction.dutch, '___');
         }
-        return `Complete: "Ik hou van thee ___ koffie" (${conjunction.english})`;
+        // Create context-appropriate fallback sentences based on conjunction type
+        if (conjunction.category === 'basic') {
+          return `Complete: "Ik studeer Nederlands ___ het is interessant"`;
+        } else if (conjunction.category === 'contrast') {
+          return `Complete: "Ze is moe, ___ ze werkt door"`;
+        } else if (conjunction.category === 'cause') {
+          return `Complete: "Hij komt niet, ___ hij is ziek"`;
+        } else if (conjunction.category === 'time') {
+          return `Complete: "Ik bel je ___ ik thuis ben"`;
+        } else if (conjunction.category === 'condition') {
+          return `Complete: "___ je komt, zijn we blij"`;
+        }
+        return `Complete: "Hij wil komen ___ hij heeft tijd"`;
       case 'translate':
         return `Translate "${conjunction.english}" to Dutch:`;
       case 'identify':
@@ -183,11 +195,13 @@ export function ConjunctionsExercise({
             >
               {conjunction.level}
             </span>
-            <span
-              className={`px-2 py-1 rounded text-xs font-medium ${getTypeBadgeColor()}`}
-            >
-              {conjunction.type}
-            </span>
+            {mode !== 'identify' && (
+              <span
+                className={`px-2 py-1 rounded text-xs font-medium ${getTypeBadgeColor()}`}
+              >
+                {conjunction.type}
+              </span>
+            )}
             {conjunction.hint && (
               <TooltipProvider>
                 <Tooltip>
@@ -212,14 +226,22 @@ export function ConjunctionsExercise({
       <CardContent className="space-y-4 flex-1 flex flex-col">
         <div className="text-center">
           <p className="text-2xl font-bold text-primary mb-2">
-            {mode !== 'translate' ? conjunction.dutch : '?'}
+            {mode === 'translate' || mode === 'complete'
+              ? '?'
+              : conjunction.dutch}
           </p>
           <p className="text-lg text-muted-foreground mb-1">
-            ({mode !== 'complete' ? conjunction.english : '?'})
+            (
+            {mode === 'translate' || mode === 'identify' || mode === 'wordOrder'
+              ? conjunction.english
+              : '?'}
+            )
           </p>
-          <p className="text-sm text-muted-foreground">
-            Category: {conjunction.category}
-          </p>
+          {mode !== 'identify' && (
+            <p className="text-sm text-muted-foreground">
+              Category: {conjunction.category}
+            </p>
+          )}
         </div>
 
         <div className="text-center bg-muted p-3 rounded-lg">
@@ -366,20 +388,32 @@ export function ConjunctionsExercise({
                   {!isCorrect && (
                     <div className="mt-2 text-sm">
                       {mode === 'complete' && (
-                        <p className="font-semibold">
-                          Correct answer:{' '}
-                          <span className="text-dutch-blue">
-                            {conjunction.dutch}
-                          </span>
-                        </p>
+                        <div>
+                          <p className="font-semibold">
+                            Correct answer:{' '}
+                            <span className="text-dutch-blue">
+                              {conjunction.dutch}
+                            </span>
+                          </p>
+                          <p className="text-xs mt-1 text-muted-foreground">
+                            💡 This is a {conjunction.type} conjunction used for{' '}
+                            {conjunction.category} relationships.
+                          </p>
+                        </div>
                       )}
                       {mode === 'translate' && (
-                        <p className="font-semibold">
-                          Translation:{' '}
-                          <span className="text-dutch-blue">
-                            {conjunction.dutch}
-                          </span>
-                        </p>
+                        <div>
+                          <p className="font-semibold">
+                            Translation:{' '}
+                            <span className="text-dutch-blue">
+                              {conjunction.dutch}
+                            </span>
+                          </p>
+                          <p className="text-xs mt-1 text-muted-foreground">
+                            💡 Remember: "{conjunction.english}" = "
+                            {conjunction.dutch}"
+                          </p>
+                        </div>
                       )}
                       {mode === 'identify' && (
                         <div>
@@ -395,23 +429,47 @@ export function ConjunctionsExercise({
                               {conjunction.category}
                             </span>
                           </p>
+                          <p className="text-xs mt-1 text-muted-foreground">
+                            💡{' '}
+                            {conjunction.type === 'coordinating'
+                              ? 'Coordinating conjunctions connect equal elements with normal word order.'
+                              : conjunction.type === 'subordinating'
+                              ? 'Subordinating conjunctions send the verb to the end of the clause.'
+                              : 'Correlative conjunctions work in pairs.'}
+                          </p>
                         </div>
                       )}
                       {mode === 'wordOrder' && (
-                        <p className="font-semibold">
-                          Word order:{' '}
-                          <span className="text-dutch-blue">
-                            {conjunction.wordOrder}
-                          </span>
-                        </p>
+                        <div>
+                          <p className="font-semibold">
+                            Word order:{' '}
+                            <span className="text-dutch-blue">
+                              {conjunction.wordOrder}
+                            </span>
+                          </p>
+                          <p className="text-xs mt-1 text-muted-foreground">
+                            💡{' '}
+                            {conjunction.wordOrder === 'verb-to-end'
+                              ? 'Subordinating conjunctions send the verb to the end of the clause.'
+                              : conjunction.wordOrder === 'inverted'
+                              ? 'This conjunction causes subject-verb inversion in the following clause.'
+                              : 'Normal word order: subject + verb + object.'}
+                          </p>
+                        </div>
                       )}
                       {mode === 'usage' && (
-                        <p className="font-semibold">
-                          Usage:{' '}
-                          <span className="text-dutch-blue">
-                            {conjunction.usage}
-                          </span>
-                        </p>
+                        <div>
+                          <p className="font-semibold">
+                            Usage:{' '}
+                            <span className="text-dutch-blue">
+                              {conjunction.usage}
+                            </span>
+                          </p>
+                          <p className="text-xs mt-1 text-muted-foreground">
+                            💡 Use "{conjunction.dutch}" when you want to{' '}
+                            {conjunction.usage.toLowerCase()}.
+                          </p>
+                        </div>
                       )}
                     </div>
                   )}
