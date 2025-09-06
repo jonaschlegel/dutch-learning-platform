@@ -511,13 +511,36 @@ export default function DutchLearningPlatform() {
         }))
         .reduce((acc, curr) => ({ ...acc, ...curr }), {});
 
+      // Filter vocabulary based on exercise mode
+      const filterVocabularyByMode = (items: typeof finalTestVocabulary) => {
+        switch (finalTestMode) {
+          case 'article':
+            // Only include nouns with articles
+            return items.filter((item) => item.type === 'noun' && item.article);
+          case 'conjugation':
+            // Only include verbs with conjugation data
+            return items.filter(
+              (item) => item.type === 'verb' && item.conjugation,
+            );
+          case 'translate':
+          case 'reverse':
+          case 'mixed':
+          default:
+            // Include all vocabulary for translation modes
+            return items;
+        }
+      };
+
       if (finalTestReviewMode && Object.keys(incorrectItemIds).length > 0) {
         // Review mode: only show incorrect items
         const incorrectFinalTestItems = finalTestVocabulary.filter(
           (item) => incorrectItemIds[item.id],
         );
-        finalTestQueue.initializeFinalTestQueue(
+        const filteredIncorrectItems = filterVocabularyByMode(
           incorrectFinalTestItems,
+        );
+        finalTestQueue.initializeFinalTestQueue(
+          filteredIncorrectItems,
           finalTestCategory === 'All Categories'
             ? undefined
             : finalTestCategory,
@@ -525,7 +548,7 @@ export default function DutchLearningPlatform() {
           exerciseSession.currentIndex,
         );
       } else {
-        // Normal mode: all items from selected category
+        // Normal mode: all items from selected category, filtered by mode
         const categoryItems =
           finalTestCategory === 'All Categories'
             ? finalTestVocabulary
@@ -533,8 +556,10 @@ export default function DutchLearningPlatform() {
                 (item) => item.category === finalTestCategory,
               );
 
+        const filteredCategoryItems = filterVocabularyByMode(categoryItems);
+
         finalTestQueue.initializeFinalTestQueue(
-          categoryItems,
+          filteredCategoryItems,
           finalTestCategory === 'All Categories'
             ? undefined
             : finalTestCategory,
@@ -567,6 +592,7 @@ export default function DutchLearningPlatform() {
     getTestExerciseProgress,
     finalTestCategory,
     finalTestReviewMode,
+    finalTestMode,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
@@ -768,7 +794,7 @@ export default function DutchLearningPlatform() {
 
     // For final test, ensure immediate initialization
     if (mode === 'finaltest') {
-      // Initialize final test immediately
+      // Initialize final test immediately with mode filtering
       const categoryItems =
         finalTestCategory === 'All Categories'
           ? finalTestVocabulary
@@ -776,8 +802,27 @@ export default function DutchLearningPlatform() {
               (item) => item.category === finalTestCategory,
             );
 
+      // Filter by exercise mode
+      const filteredItems = (() => {
+        switch (finalTestMode) {
+          case 'article':
+            return categoryItems.filter(
+              (item) => item.type === 'noun' && item.article,
+            );
+          case 'conjugation':
+            return categoryItems.filter(
+              (item) => item.type === 'verb' && item.conjugation,
+            );
+          case 'translate':
+          case 'reverse':
+          case 'mixed':
+          default:
+            return categoryItems;
+        }
+      })();
+
       finalTestQueue.initializeFinalTestQueue(
-        categoryItems,
+        filteredItems,
         finalTestCategory === 'All Categories' ? undefined : finalTestCategory,
         {},
         0,
@@ -1599,6 +1644,7 @@ export default function DutchLearningPlatform() {
                             size="sm"
                             onClick={() => setFinalTestMode('translate')}
                             className="mb-1"
+                            title="Translate from Dutch to English - includes all vocabulary"
                           >
                             Dutch → English
                           </Button>
@@ -1611,6 +1657,7 @@ export default function DutchLearningPlatform() {
                             size="sm"
                             onClick={() => setFinalTestMode('reverse')}
                             className="mb-1"
+                            title="Translate from English to Dutch - includes all vocabulary"
                           >
                             English → Dutch
                           </Button>
@@ -1621,6 +1668,7 @@ export default function DutchLearningPlatform() {
                             size="sm"
                             onClick={() => setFinalTestMode('mixed')}
                             className="mb-1"
+                            title="Random mix of translation directions - includes all vocabulary"
                           >
                             Mixed
                           </Button>
@@ -1633,6 +1681,7 @@ export default function DutchLearningPlatform() {
                             size="sm"
                             onClick={() => setFinalTestMode('article')}
                             className="mb-1"
+                            title="Practice only with nouns that have articles (de/het)"
                           >
                             Articles (de/het)
                           </Button>
@@ -1645,6 +1694,7 @@ export default function DutchLearningPlatform() {
                             size="sm"
                             onClick={() => setFinalTestMode('conjugation')}
                             className="mb-1"
+                            title="Practice only with verbs that have conjugation forms"
                           >
                             Conjugation
                           </Button>
