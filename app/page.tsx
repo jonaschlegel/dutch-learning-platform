@@ -208,6 +208,14 @@ export default function DutchLearningPlatform() {
     exerciseSession.testReviewMode || { test1: false, test2: false },
   );
 
+  // Session completion tracking
+  const [sessionCompleted, setSessionCompleted] = useState({
+    perfect: false,
+    imperfectum: false,
+    modalverbs: false,
+    conjunctions: false,
+  });
+
   // Function to save current exercise session state (simplified to prevent infinite loops)
   const saveCurrentSession = useCallback(() => {
     if (!hasStartedLearning) return;
@@ -617,9 +625,14 @@ export default function DutchLearningPlatform() {
   const currentConjunction = conjunctionsQueue.getCurrentItem();
   const currentFinalTestItem = finalTestQueue.getCurrentItem();
 
-  // Exam exercises state
+  // Exam exercises state with proper queue management
   const [currentExamExerciseIndex, setCurrentExamExerciseIndex] = useState(0);
   const [examExercises, setExamExercises] = useState(allExamExercises);
+  const [completedExamExercises, setCompletedExamExercises] = useState<
+    Set<string>
+  >(new Set());
+  const [examExerciseSessionCompleted, setExamExerciseSessionCompleted] =
+    useState(false);
 
   const currentExamExercise = useMemo(() => {
     const filteredExercises = (() => {
@@ -646,8 +659,62 @@ export default function DutchLearningPlatform() {
           return [];
       }
     })();
+
+    // If we've completed the session, return null
+    if (
+      examExerciseSessionCompleted ||
+      currentExamExerciseIndex >= filteredExercises.length
+    ) {
+      return null;
+    }
+
     return filteredExercises[currentExamExerciseIndex] || null;
-  }, [finalTestMode, currentExamExerciseIndex]);
+  }, [finalTestMode, currentExamExerciseIndex, examExerciseSessionCompleted]);
+
+  // Function to get exam exercise progress
+  const getExamExerciseProgress = () => {
+    const filteredExercises = (() => {
+      switch (finalTestMode) {
+        case 'exam-perfect':
+          return allExamExercises.filter(
+            (ex) => ex.type === 'perfect-construction',
+          );
+        case 'exam-imperfect':
+          return allExamExercises.filter((ex) => ex.type === 'imperfect-fill');
+        case 'exam-separable':
+          return allExamExercises.filter((ex) => ex.type === 'separable-verbs');
+        case 'exam-conjunctions':
+          return allExamExercises.filter(
+            (ex) => ex.type === 'conjunctions-combine',
+          );
+        case 'exam-multiple-choice':
+          return allExamExercises.filter((ex) => ex.type === 'multiple-choice');
+        case 'exam-writing':
+          return allExamExercises.filter((ex) => ex.type === 'writing-prompt');
+        case 'exam-mixed':
+          return allExamExercises;
+        default:
+          return [];
+      }
+    })();
+
+    return {
+      current: currentExamExerciseIndex,
+      total: filteredExercises.length,
+      completed: completedExamExercises.size,
+      percentage:
+        filteredExercises.length > 0
+          ? (currentExamExerciseIndex / filteredExercises.length) * 100
+          : 0,
+    };
+  };
+
+  // Reset exam exercise session when mode changes
+  useEffect(() => {
+    setCurrentExamExerciseIndex(0);
+    setCompletedExamExercises(new Set());
+    setExamExerciseSessionCompleted(false);
+  }, [finalTestMode]);
 
   // Auto-switch to "All Categories" when current category becomes irrelevant for the mode
   useEffect(() => {
@@ -676,15 +743,42 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'perfect' && currentPerfectTenseWord) {
       markWordCompleted(currentPerfectTenseWord.id, correct ? 1 : 0);
       perfectTenseQueue.moveToNext(currentPerfectTenseWord.id, correct);
+
+      // Check if we've completed a full cycle
+      const progress = perfectTenseQueue.getProgress();
+      if (progress.current >= progress.total && !sessionCompleted.perfect) {
+        setSessionCompleted((prev) => ({ ...prev, perfect: true }));
+      }
     } else if (exerciseMode === 'imperfectum' && currentImperfectumWord) {
       markWordCompleted(currentImperfectumWord.id, correct ? 1 : 0);
       imperfectumQueue.moveToNext(currentImperfectumWord.id, correct);
+
+      // Check if we've completed a full cycle
+      const progress = imperfectumQueue.getProgress();
+      if (progress.current >= progress.total && !sessionCompleted.imperfectum) {
+        setSessionCompleted((prev) => ({ ...prev, imperfectum: true }));
+      }
     } else if (exerciseMode === 'modalverbs' && currentModalVerb) {
       markWordCompleted(currentModalVerb.id, correct ? 1 : 0);
       modalVerbsQueue.moveToNext(currentModalVerb.id, correct);
+
+      // Check if we've completed a full cycle
+      const progress = modalVerbsQueue.getProgress();
+      if (progress.current >= progress.total && !sessionCompleted.modalverbs) {
+        setSessionCompleted((prev) => ({ ...prev, modalverbs: true }));
+      }
     } else if (exerciseMode === 'conjunctions' && currentConjunction) {
       markWordCompleted(currentConjunction.id, correct ? 1 : 0);
       conjunctionsQueue.moveToNext(currentConjunction.id, correct);
+
+      // Check if we've completed a full cycle
+      const progress = conjunctionsQueue.getProgress();
+      if (
+        progress.current >= progress.total &&
+        !sessionCompleted.conjunctions
+      ) {
+        setSessionCompleted((prev) => ({ ...prev, conjunctions: true }));
+      }
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
       // For final test, handle completion with review mode logic
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
@@ -706,8 +800,28 @@ export default function DutchLearningPlatform() {
         }, 100);
       }
     } else if (exerciseMode === 'finaltest' && currentExamExercise) {
-      // Handle exam exercises
-      setCurrentExamExerciseIndex((prev) => prev + 1);
+      // Handle exam exercises with proper completion tracking
+      setCompletedExamExercises(
+        (prev) => new Set([...prev, currentExamExercise.id]),
+      );
+
+      const nextIndex = currentExamExerciseIndex + 1;
+      const examProgress = getExamExerciseProgress();
+
+      // Check if we've completed all exercises in this mode
+      if (nextIndex >= examProgress.total) {
+        setExamExerciseSessionCompleted(true);
+
+        // Show completion message and ask if user wants to restart
+        setTimeout(() => {
+          toast({
+            title: 'Exam Section Complete!',
+            description: `You've completed all ${examProgress.total} exercises in this section. Great job!`,
+          });
+        }, 100);
+      } else {
+        setCurrentExamExerciseIndex(nextIndex);
+      }
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
       exerciseQueue.moveToNext(currentWord.id, correct);
@@ -767,7 +881,10 @@ export default function DutchLearningPlatform() {
                   return [];
               }
             })();
-            return currentExamExerciseIndex < filteredExercises.length - 1;
+            return (
+              !examExerciseSessionCompleted &&
+              currentExamExerciseIndex < filteredExercises.length
+            );
           })()
         : exerciseMode === 'finaltest'
         ? finalTestQueue.hasMoreItems() &&
@@ -939,6 +1056,17 @@ export default function DutchLearningPlatform() {
       // Starting a fresh session
       resetExercises();
       setSessionScore({ correct: 0, total: 0 });
+
+      // Reset session completion flags for the current mode
+      if (mode === 'perfect') {
+        setSessionCompleted((prev) => ({ ...prev, perfect: false }));
+      } else if (mode === 'imperfectum') {
+        setSessionCompleted((prev) => ({ ...prev, imperfectum: false }));
+      } else if (mode === 'modalverbs') {
+        setSessionCompleted((prev) => ({ ...prev, modalverbs: false }));
+      } else if (mode === 'conjunctions') {
+        setSessionCompleted((prev) => ({ ...prev, conjunctions: false }));
+      }
     } else {
       // Continuing existing session - restore session score
       setSessionScore(exerciseSession.sessionScore);
@@ -2103,7 +2231,27 @@ export default function DutchLearningPlatform() {
                               : exerciseMode === 'conjunctions'
                               ? conjunctionsQueue.getProgress().current + 1
                               : exerciseMode === 'finaltest'
-                              ? finalTestQueue.getProgress().current + 1
+                              ? (() => {
+                                  // Check if we're in exam mode
+                                  if (
+                                    [
+                                      'exam-perfect',
+                                      'exam-imperfect',
+                                      'exam-separable',
+                                      'exam-conjunctions',
+                                      'exam-multiple-choice',
+                                      'exam-writing',
+                                      'exam-mixed',
+                                    ].includes(finalTestMode)
+                                  ) {
+                                    return (
+                                      getExamExerciseProgress().current + 1
+                                    );
+                                  }
+                                  return (
+                                    finalTestQueue.getProgress().current + 1
+                                  );
+                                })()
                               : exerciseQueue.getProgress().current + 1}{' '}
                             of{' '}
                             {exerciseMode === 'test1'
@@ -2119,7 +2267,23 @@ export default function DutchLearningPlatform() {
                               : exerciseMode === 'conjunctions'
                               ? conjunctionsQueue.getProgress().total
                               : exerciseMode === 'finaltest'
-                              ? finalTestQueue.getProgress().total
+                              ? (() => {
+                                  // Check if we're in exam mode
+                                  if (
+                                    [
+                                      'exam-perfect',
+                                      'exam-imperfect',
+                                      'exam-separable',
+                                      'exam-conjunctions',
+                                      'exam-multiple-choice',
+                                      'exam-writing',
+                                      'exam-mixed',
+                                    ].includes(finalTestMode)
+                                  ) {
+                                    return getExamExerciseProgress().total;
+                                  }
+                                  return finalTestQueue.getProgress().total;
+                                })()
                               : exerciseQueue.getProgress().total}
                           </p>
                           {/* Review Mode Indicator */}
@@ -2190,6 +2354,48 @@ export default function DutchLearningPlatform() {
                             mode={perfectTenseMode}
                             onComplete={handleExerciseComplete}
                           />
+                        ) : exerciseMode === 'perfect' &&
+                          sessionCompleted.perfect ? (
+                          <Card className="text-center py-8">
+                            <CardContent>
+                              <div className="space-y-4">
+                                <div className="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+                                  <h3 className="text-xl font-bold text-blue-800 mb-2">
+                                    🎉 Perfect Tense Complete!
+                                  </h3>
+                                  <p className="text-blue-700 mb-4">
+                                    You've completed all Perfect Tense
+                                    exercises! Great job mastering Dutch perfect
+                                    tense.
+                                  </p>
+                                  <div className="space-y-2">
+                                    <Button
+                                      onClick={() => {
+                                        perfectTenseQueue.resetQueue();
+                                        perfectTenseQueue.initializeQueue({});
+                                        setSessionCompleted((prev) => ({
+                                          ...prev,
+                                          perfect: false,
+                                        }));
+                                      }}
+                                      className="bg-blue-600 text-white hover:bg-blue-700 mr-2"
+                                    >
+                                      Practice Again
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() =>
+                                        startNewSession('vocabulary')
+                                      }
+                                      className="text-blue-700 border-blue-300 hover:bg-blue-50"
+                                    >
+                                      Try Different Exercise
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
                         ) : exerciseMode === 'imperfectum' &&
                           currentImperfectumWord ? (
                           <ImperfectumExercise
@@ -2197,6 +2403,48 @@ export default function DutchLearningPlatform() {
                             mode={imperfectumMode}
                             onComplete={handleExerciseComplete}
                           />
+                        ) : exerciseMode === 'imperfectum' &&
+                          sessionCompleted.imperfectum ? (
+                          <Card className="text-center py-8">
+                            <CardContent>
+                              <div className="space-y-4">
+                                <div className="bg-purple-50 p-6 rounded-lg border-2 border-purple-200">
+                                  <h3 className="text-xl font-bold text-purple-800 mb-2">
+                                    🎉 Imperfect Tense Complete!
+                                  </h3>
+                                  <p className="text-purple-700 mb-4">
+                                    You've completed all Imperfect Tense
+                                    exercises! Well done mastering Dutch
+                                    imperfect tense.
+                                  </p>
+                                  <div className="space-y-2">
+                                    <Button
+                                      onClick={() => {
+                                        imperfectumQueue.resetQueue();
+                                        imperfectumQueue.initializeQueue({});
+                                        setSessionCompleted((prev) => ({
+                                          ...prev,
+                                          imperfectum: false,
+                                        }));
+                                      }}
+                                      className="bg-purple-600 text-white hover:bg-purple-700 mr-2"
+                                    >
+                                      Practice Again
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() =>
+                                        startNewSession('vocabulary')
+                                      }
+                                      className="text-purple-700 border-purple-300 hover:bg-purple-50"
+                                    >
+                                      Try Different Exercise
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
                         ) : exerciseMode === 'modalverbs' ? (
                           currentModalVerb ? (
                             <ModalVerbsExercise
@@ -2204,6 +2452,47 @@ export default function DutchLearningPlatform() {
                               mode={modalVerbsMode}
                               onComplete={handleExerciseComplete}
                             />
+                          ) : sessionCompleted.modalverbs ? (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <div className="space-y-4">
+                                  <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+                                    <h3 className="text-xl font-bold text-green-800 mb-2">
+                                      🎉 Modal Verbs Complete!
+                                    </h3>
+                                    <p className="text-green-700 mb-4">
+                                      You've completed all Modal Verbs
+                                      exercises! Excellent work mastering Dutch
+                                      modal verbs.
+                                    </p>
+                                    <div className="space-y-2">
+                                      <Button
+                                        onClick={() => {
+                                          modalVerbsQueue.resetQueue();
+                                          modalVerbsQueue.initializeQueue({});
+                                          setSessionCompleted((prev) => ({
+                                            ...prev,
+                                            modalverbs: false,
+                                          }));
+                                        }}
+                                        className="bg-green-600 text-white hover:bg-green-700 mr-2"
+                                      >
+                                        Practice Again
+                                      </Button>
+                                      <Button
+                                        variant="outline"
+                                        onClick={() =>
+                                          startNewSession('vocabulary')
+                                        }
+                                        className="text-green-700 border-green-300 hover:bg-green-50"
+                                      >
+                                        Try Different Exercise
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
                           ) : (
                             <Card className="text-center py-8">
                               <CardContent>
@@ -2220,6 +2509,47 @@ export default function DutchLearningPlatform() {
                               mode={conjunctionsMode}
                               onComplete={handleExerciseComplete}
                             />
+                          ) : sessionCompleted.conjunctions ? (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <div className="space-y-4">
+                                  <div className="bg-orange-50 p-6 rounded-lg border-2 border-orange-200">
+                                    <h3 className="text-xl font-bold text-orange-800 mb-2">
+                                      🎉 Conjunctions Complete!
+                                    </h3>
+                                    <p className="text-orange-700 mb-4">
+                                      You've completed all Conjunctions
+                                      exercises! Great job mastering Dutch
+                                      conjunctions.
+                                    </p>
+                                    <div className="space-y-2">
+                                      <Button
+                                        onClick={() => {
+                                          conjunctionsQueue.resetQueue();
+                                          conjunctionsQueue.initializeQueue({});
+                                          setSessionCompleted((prev) => ({
+                                            ...prev,
+                                            conjunctions: false,
+                                          }));
+                                        }}
+                                        className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
+                                      >
+                                        Practice Again
+                                      </Button>
+                                      <Button
+                                        variant="outline"
+                                        onClick={() =>
+                                          startNewSession('vocabulary')
+                                        }
+                                        className="text-orange-700 border-orange-300 hover:bg-orange-50"
+                                      >
+                                        Try Different Exercise
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
                           ) : (
                             <Card className="text-center py-8">
                               <CardContent>
@@ -2244,6 +2574,52 @@ export default function DutchLearningPlatform() {
                                 exercise={currentExamExercise}
                                 onComplete={handleExerciseComplete}
                               />
+                            ) : examExerciseSessionCompleted ? (
+                              <Card className="text-center py-8">
+                                <CardContent>
+                                  <div className="space-y-4">
+                                    <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+                                      <h3 className="text-xl font-bold text-green-800 mb-2">
+                                        🎉 Section Complete!
+                                      </h3>
+                                      <p className="text-green-700 mb-4">
+                                        You've completed all{' '}
+                                        {getExamExerciseProgress().total}{' '}
+                                        exercises in this{' '}
+                                        {finalTestMode
+                                          .replace('exam-', '')
+                                          .replace('-', ' ')}{' '}
+                                        section!
+                                      </p>
+                                      <div className="space-y-2">
+                                        <Button
+                                          onClick={() => {
+                                            setCurrentExamExerciseIndex(0);
+                                            setCompletedExamExercises(
+                                              new Set(),
+                                            );
+                                            setExamExerciseSessionCompleted(
+                                              false,
+                                            );
+                                          }}
+                                          className="bg-green-600 text-white hover:bg-green-700 mr-2"
+                                        >
+                                          Practice Again
+                                        </Button>
+                                        <Button
+                                          variant="outline"
+                                          onClick={() =>
+                                            setFinalTestMode('mixed')
+                                          }
+                                          className="text-green-700 border-green-300 hover:bg-green-50"
+                                        >
+                                          Try Different Section
+                                        </Button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
                             ) : (
                               <Card className="text-center py-8">
                                 <CardContent>

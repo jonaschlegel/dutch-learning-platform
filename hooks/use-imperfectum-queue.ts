@@ -177,14 +177,16 @@ export function useImperfectumQueue(config: ImperfectumQueueConfig = {}) {
   );
 
   const hasMoreItems = useCallback(() => {
-    return currentIndex < currentQueue.length - 1 || incorrectItems.size > 0;
-  }, [currentIndex, currentQueue.length, incorrectItems.size]);
+    // Always has more items since we cycle through the queue
+    return currentQueue.length > 0;
+  }, [currentQueue.length]);
 
   const getProgress = useCallback(() => {
-    if (currentQueue.length === 0) return { current: 0, total: 0 };
+    if (currentQueue.length === 0)
+      return { current: 0, total: imperfectumVocabulary.length };
     return {
       current: Math.min(currentIndex + 1, currentQueue.length),
-      total: currentQueue.length,
+      total: imperfectumVocabulary.length, // Always show total available exercises
     };
   }, [currentIndex, currentQueue.length]);
 

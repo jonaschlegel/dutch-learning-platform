@@ -3994,12 +3994,7 @@ export const finalTestCategories = [
   'Conjunctions',
   'Prepositions',
   'Expressions',
-  'Nouns',
   'Pronouns and Question Words',
-  'Other Words and Adverbs',
-  'Conjunctions',
-  'Prepositions',
-  'Expressions',
   'Themed Vocabulary',
 ];
 
