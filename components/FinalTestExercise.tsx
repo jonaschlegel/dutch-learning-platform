@@ -29,7 +29,18 @@ import React, { useRef, useState } from 'react';
 interface FinalTestExerciseProps {
   item: FinalTestVocabulary;
   onComplete: (correct: boolean) => void;
-  exerciseMode: 'translate' | 'reverse' | 'mixed' | 'conjugation' | 'article';
+  exerciseMode:
+    | 'translate'
+    | 'reverse'
+    | 'mixed'
+    | 'conjugation'
+    | 'article'
+    | 'exam-perfect'
+    | 'exam-imperfect'
+    | 'exam-separable'
+    | 'exam-conjunctions'
+    | 'exam-multiple-choice'
+    | 'exam-mixed';
   showHints?: boolean;
 }
 

@@ -7,6 +7,7 @@ import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { ChapterSelector } from '@/components/ChapterSelector';
 import { ConjunctionsExercise } from '@/components/ConjunctionsExercise';
+import { ExamExerciseCard } from '@/components/ExamExerciseCard';
 import { FinalTestExercise } from '@/components/FinalTestExercise';
 import { FinalTestProgressDashboard } from '@/components/FinalTestProgressDashboard';
 import { ImperfectumExercise } from '@/components/ImperfectumExercise';
@@ -22,6 +23,7 @@ import {
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { conjunctions } from '@/data/conjunctions';
+import { allExamExercises, examCategories } from '@/data/final-exam-exercises';
 import {
   finalTestCategories,
   finalTestVocabulary,
@@ -176,7 +178,17 @@ export default function DutchLearningPlatform() {
     'complete' | 'translate' | 'identify' | 'wordOrder' | 'usage'
   >('complete');
   const [finalTestMode, setFinalTestMode] = useState<
-    'translate' | 'reverse' | 'mixed' | 'conjugation' | 'article'
+    | 'translate'
+    | 'reverse'
+    | 'mixed'
+    | 'conjugation'
+    | 'article'
+    | 'exam-perfect'
+    | 'exam-imperfect'
+    | 'exam-separable'
+    | 'exam-conjunctions'
+    | 'exam-multiple-choice'
+    | 'exam-mixed'
   >('mixed');
   const [finalTestCategory, setFinalTestCategory] =
     useState<string>('All Categories');
@@ -604,6 +616,36 @@ export default function DutchLearningPlatform() {
   const currentConjunction = conjunctionsQueue.getCurrentItem();
   const currentFinalTestItem = finalTestQueue.getCurrentItem();
 
+  // Exam exercises state
+  const [currentExamExerciseIndex, setCurrentExamExerciseIndex] = useState(0);
+  const [examExercises, setExamExercises] = useState(allExamExercises);
+
+  const currentExamExercise = useMemo(() => {
+    const filteredExercises = (() => {
+      switch (finalTestMode) {
+        case 'exam-perfect':
+          return allExamExercises.filter(
+            (ex) => ex.type === 'perfect-construction',
+          );
+        case 'exam-imperfect':
+          return allExamExercises.filter((ex) => ex.type === 'imperfect-fill');
+        case 'exam-separable':
+          return allExamExercises.filter((ex) => ex.type === 'separable-verbs');
+        case 'exam-conjunctions':
+          return allExamExercises.filter(
+            (ex) => ex.type === 'conjunctions-combine',
+          );
+        case 'exam-multiple-choice':
+          return allExamExercises.filter((ex) => ex.type === 'multiple-choice');
+        case 'exam-mixed':
+          return allExamExercises;
+        default:
+          return [];
+      }
+    })();
+    return filteredExercises[currentExamExerciseIndex] || null;
+  }, [finalTestMode, currentExamExerciseIndex]);
+
   const handleExerciseComplete = (correct: boolean) => {
     if (exerciseMode === 'test1' && currentTest1Exercise) {
       markTestExerciseCompleted(
@@ -634,6 +676,9 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
       // For final test, we mark completion but don't use the standard vocabulary system
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
+    } else if (exerciseMode === 'finaltest' && currentExamExercise) {
+      // Handle exam exercises
+      setCurrentExamExerciseIndex((prev) => prev + 1);
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
       exerciseQueue.moveToNext(currentWord.id, correct);
@@ -650,6 +695,46 @@ export default function DutchLearningPlatform() {
         ? test1ExerciseQueue.hasMoreTestExercises()
         : exerciseMode === 'test2'
         ? test2ExerciseQueue.hasMoreTestExercises()
+        : exerciseMode === 'finaltest' &&
+          [
+            'exam-perfect',
+            'exam-imperfect',
+            'exam-separable',
+            'exam-conjunctions',
+            'exam-multiple-choice',
+            'exam-mixed',
+          ].includes(finalTestMode)
+        ? (() => {
+            const filteredExercises = (() => {
+              switch (finalTestMode) {
+                case 'exam-perfect':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'perfect-construction',
+                  );
+                case 'exam-imperfect':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'imperfect-fill',
+                  );
+                case 'exam-separable':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'separable-verbs',
+                  );
+                case 'exam-conjunctions':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'conjunctions-combine',
+                  );
+                case 'exam-multiple-choice':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'multiple-choice',
+                  );
+                case 'exam-mixed':
+                  return allExamExercises;
+                default:
+                  return [];
+              }
+            })();
+            return currentExamExerciseIndex < filteredExercises.length - 1;
+          })()
         : exerciseMode === 'finaltest'
         ? finalTestQueue.hasMoreItems()
         : exerciseMode === 'perfect'
@@ -1702,6 +1787,94 @@ export default function DutchLearningPlatform() {
 
                         <div className="flex justify-center space-x-2 mb-4 flex-wrap">
                           <span className="text-sm text-muted-foreground self-center mr-2">
+                            Exam Exercises:
+                          </span>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-perfect'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('exam-perfect')}
+                            className="mb-1"
+                            title="Perfect tense construction exercises"
+                          >
+                            Perfect Tense
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-imperfect'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('exam-imperfect')}
+                            className="mb-1"
+                            title="Imperfect tense fill-in exercises"
+                          >
+                            Imperfect Tense
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-separable'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('exam-separable')}
+                            className="mb-1"
+                            title="Separable verbs exercises"
+                          >
+                            Separable Verbs
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-conjunctions'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() =>
+                              setFinalTestMode('exam-conjunctions')
+                            }
+                            className="mb-1"
+                            title="Conjunction combination exercises"
+                          >
+                            Conjunctions
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-multiple-choice'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() =>
+                              setFinalTestMode('exam-multiple-choice')
+                            }
+                            className="mb-1"
+                            title="Multiple choice grammar exercises"
+                          >
+                            Multiple Choice
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-mixed'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('exam-mixed')}
+                            className="mb-1"
+                            title="Mixed exam exercises from all categories"
+                          >
+                            Mixed Exam
+                          </Button>
+                        </div>
+
+                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
+                          <span className="text-sm text-muted-foreground self-center mr-2">
                             Category:
                           </span>
                           <select
@@ -1907,7 +2080,29 @@ export default function DutchLearningPlatform() {
                             </Card>
                           )
                         ) : exerciseMode === 'finaltest' ? (
-                          currentFinalTestItem ? (
+                          [
+                            'exam-perfect',
+                            'exam-imperfect',
+                            'exam-separable',
+                            'exam-conjunctions',
+                            'exam-multiple-choice',
+                            'exam-mixed',
+                          ].includes(finalTestMode) ? (
+                            currentExamExercise ? (
+                              <ExamExerciseCard
+                                exercise={currentExamExercise}
+                                onComplete={handleExerciseComplete}
+                              />
+                            ) : (
+                              <Card className="text-center py-8">
+                                <CardContent>
+                                  <p className="text-lg text-muted-foreground">
+                                    Loading exam exercises...
+                                  </p>
+                                </CardContent>
+                              </Card>
+                            )
+                          ) : currentFinalTestItem ? (
                             <FinalTestExercise
                               item={currentFinalTestItem}
                               exerciseMode={finalTestMode}
