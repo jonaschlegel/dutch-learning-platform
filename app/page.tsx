@@ -649,6 +649,15 @@ export default function DutchLearningPlatform() {
     return filteredExercises[currentExamExerciseIndex] || null;
   }, [finalTestMode, currentExamExerciseIndex]);
 
+  // Auto-switch to "All Categories" when current category becomes irrelevant for the mode
+  useEffect(() => {
+    if (finalTestCategory && finalTestCategory !== 'All Categories') {
+      if (!isCategoryRelevantForMode(finalTestCategory, finalTestMode)) {
+        setFinalTestCategory('All Categories');
+      }
+    }
+  }, [finalTestMode, finalTestCategory]);
+
   const handleExerciseComplete = (correct: boolean) => {
     if (exerciseMode === 'test1' && currentTest1Exercise) {
       markTestExerciseCompleted(
@@ -857,6 +866,52 @@ export default function DutchLearningPlatform() {
     } else {
       exerciseQueue.initializeQueue(availableWords, memoizedIncorrectWords, 0);
     }
+  };
+
+  // Helper function to determine if a category is relevant for the current final test mode
+  const isCategoryRelevantForMode = (
+    category: string,
+    mode: string,
+  ): boolean => {
+    // All exam modes use exam exercises with their own categories, not vocabulary categories
+    if (mode.startsWith('exam-')) {
+      // For exam modes, vocabulary categories are irrelevant since exam exercises
+      // have their own category system (Perfect Tense, Imperfect Tense, etc.)
+      // Only "All Categories" remains relevant for filtering
+      return category === 'All Categories';
+    }
+
+    if (mode === 'article') {
+      // Article mode should only show categories with nouns
+      const nounCategories = [
+        'Nouns',
+        'Substantieven',
+        'House',
+        'Body Parts',
+        'Food',
+        'Transportation',
+        'Professions',
+        'Themed Vocabulary',
+      ];
+      return category === 'All Categories' || nounCategories.includes(category);
+    }
+
+    if (mode === 'conjugation') {
+      // Conjugation mode should only show categories with verbs
+      const verbCategories = [
+        'Irregular Verbs',
+        'Onregelmatige verba',
+        'Regular Verbs',
+        'Regelmatige verba',
+        'Reflexive Verbs',
+        'Reflexief',
+        'Modal Verbs',
+      ];
+      return category === 'All Categories' || verbCategories.includes(category);
+    }
+
+    // For other vocabulary modes (translate, reverse, mixed), all categories are relevant
+    return true;
   };
 
   const startNewSession = (
@@ -1930,25 +1985,64 @@ export default function DutchLearningPlatform() {
                         </div>
 
                         <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                          <span className="text-sm text-muted-foreground self-center mr-2">
-                            Category:
-                          </span>
-                          <select
-                            value={finalTestCategory}
-                            onChange={(e) =>
-                              setFinalTestCategory(e.target.value)
-                            }
-                            className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-                          >
-                            <option value="All Categories">
-                              All Categories
-                            </option>
-                            {finalTestCategories.map((category) => (
-                              <option key={category} value={category}>
-                                {category}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="flex flex-col items-center">
+                            <div className="flex items-center space-x-2 mb-1">
+                              <span className="text-sm text-muted-foreground">
+                                Category:
+                              </span>
+                              <select
+                                value={finalTestCategory}
+                                onChange={(e) => {
+                                  const selectedCategory = e.target.value;
+                                  // Only allow selection if category is relevant for current mode
+                                  if (
+                                    isCategoryRelevantForMode(
+                                      selectedCategory,
+                                      finalTestMode,
+                                    )
+                                  ) {
+                                    setFinalTestCategory(selectedCategory);
+                                  }
+                                }}
+                                className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                              >
+                                <option value="All Categories">
+                                  All Categories
+                                </option>
+                                {finalTestCategories.map((category) => {
+                                  const isRelevant = isCategoryRelevantForMode(
+                                    category,
+                                    finalTestMode,
+                                  );
+                                  return (
+                                    <option
+                                      key={category}
+                                      value={category}
+                                      disabled={!isRelevant}
+                                      style={{
+                                        color: isRelevant ? 'inherit' : '#999',
+                                        backgroundColor: isRelevant
+                                          ? 'inherit'
+                                          : '#f5f5f5',
+                                      }}
+                                    >
+                                      {category}{' '}
+                                      {!isRelevant
+                                        ? finalTestMode.startsWith('exam-')
+                                          ? '(uses exam categories)'
+                                          : '(not applicable)'
+                                        : ''}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
+                            {finalTestMode.startsWith('exam-') && (
+                              <p className="text-xs text-muted-foreground text-center max-w-xs">
+                                Exam exercises use their own category system
+                              </p>
+                            )}
+                          </div>
 
                           <Button
                             variant={
