@@ -195,9 +195,18 @@ export default function DutchLearningPlatform() {
     useState<string>('All Categories');
   const [finalTestReviewMode, setFinalTestReviewMode] = useState(false);
   const [showResults, setShowResults] = useState(false);
-  const [sessionScore, setSessionScore] = useState(
-    exerciseSession.sessionScore || { correct: 0, total: 0 },
-  );
+  const [sessionScores, setSessionScores] = useState<{
+    [key: string]: { correct: number; total: number };
+  }>({
+    test1: { correct: 0, total: 0 },
+    test2: { correct: 0, total: 0 },
+    perfect: { correct: 0, total: 0 },
+    imperfectum: { correct: 0, total: 0 },
+    modalverbs: { correct: 0, total: 0 },
+    conjunctions: { correct: 0, total: 0 },
+    finaltest: { correct: 0, total: 0 },
+    default: { correct: 0, total: 0 },
+  });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(
     exerciseSession.selectedCategory || null,
   );
@@ -240,7 +249,7 @@ export default function DutchLearningPlatform() {
     saveExerciseSession({
       exerciseMode,
       currentIndex: currentProgress.current,
-      sessionScore,
+      sessionScore: sessionScores[exerciseMode] || { correct: 0, total: 0 },
       perfectTenseMode,
       imperfectumMode,
       modalVerbsMode,
@@ -250,7 +259,6 @@ export default function DutchLearningPlatform() {
     });
   }, [
     exerciseMode,
-    sessionScore,
     perfectTenseMode,
     imperfectumMode,
     modalVerbsMode,
@@ -294,14 +302,15 @@ export default function DutchLearningPlatform() {
 
   // Save session score with a delay to prevent rapid updates
   useEffect(() => {
-    if (hasStartedLearning && sessionScore.total > 0) {
+    const currentScore = sessionScores[exerciseMode];
+    if (hasStartedLearning && currentScore && currentScore.total > 0) {
       const timeoutId = setTimeout(() => {
         saveCurrentSession();
       }, 500); // 500ms delay
 
       return () => clearTimeout(timeoutId);
     }
-  }, [sessionScore, hasStartedLearning, saveCurrentSession]);
+  }, [sessionScores, exerciseMode, hasStartedLearning, saveCurrentSession]);
 
   const currentChapterWords = useMemo(() => {
     if (progress.currentChapter === 0) {
@@ -811,11 +820,18 @@ export default function DutchLearningPlatform() {
       exerciseQueue.moveToNext(currentWord.id, correct);
     }
 
-    const newScore = {
-      correct: sessionScore.correct + (correct ? 1 : 0),
-      total: sessionScore.total + 1,
+    const currentScore = sessionScores[exerciseMode] || {
+      correct: 0,
+      total: 0,
     };
-    setSessionScore(newScore);
+    const newScore = {
+      correct: currentScore.correct + (correct ? 1 : 0),
+      total: currentScore.total + 1,
+    };
+    setSessionScores((prev) => ({
+      ...prev,
+      [exerciseMode]: newScore,
+    }));
 
     const hasMoreExercises =
       exerciseMode === 'test1'
@@ -915,7 +931,10 @@ export default function DutchLearningPlatform() {
 
   const resetExercises = () => {
     setShowResults(false);
-    setSessionScore({ correct: 0, total: 0 });
+    setSessionScores((prev) => ({
+      ...prev,
+      [exerciseMode]: { correct: 0, total: 0 },
+    }));
     clearExerciseSession(); // Clear session when resetting
     if (exerciseMode === 'test1') {
       const exercises = createTestExercises();
@@ -1039,10 +1058,13 @@ export default function DutchLearningPlatform() {
     if (!isContinuingSession) {
       // Starting a fresh session
       resetExercises();
-      setSessionScore({ correct: 0, total: 0 });
+      setSessionScores((prev) => ({
+        ...prev,
+        [mode]: { correct: 0, total: 0 },
+      }));
     } else {
       // Continuing existing session - restore session score
-      setSessionScore(exerciseSession.sessionScore);
+      // For now, keep scores separate per mode - no restoration needed
     }
     setHasStartedLearning(true);
 
@@ -1099,9 +1121,7 @@ export default function DutchLearningPlatform() {
     const newSession = {
       exerciseMode: mode,
       currentIndex: isContinuingSession ? exerciseSession.currentIndex : 0,
-      sessionScore: isContinuingSession
-        ? exerciseSession.sessionScore
-        : { correct: 0, total: 0 },
+      sessionScore: sessionScores[mode] || { correct: 0, total: 0 },
       perfectTenseMode,
       imperfectumMode,
       modalVerbsMode,
@@ -1121,13 +1141,16 @@ export default function DutchLearningPlatform() {
 
     // Reset the session when toggling review mode
     setShowResults(false);
-    setSessionScore({ correct: 0, total: 0 });
+    setSessionScores((prev) => ({
+      ...prev,
+      [testType]: { correct: 0, total: 0 },
+    }));
 
     // Save the updated session
     saveExerciseSession({
       exerciseMode,
       currentIndex: 0,
-      sessionScore: { correct: 0, total: 0 },
+      sessionScore: sessionScores[testType] || { correct: 0, total: 0 },
       perfectTenseMode,
       imperfectumMode,
       modalVerbsMode,
@@ -1151,7 +1174,10 @@ export default function DutchLearningPlatform() {
 
     // Reset session state
     setShowResults(false);
-    setSessionScore({ correct: 0, total: 0 });
+    setSessionScores((prev) => ({
+      ...prev,
+      finaltest: { correct: 0, total: 0 },
+    }));
   };
 
   const getTestCompletionStatus = (testType: 'test1' | 'test2') => {
@@ -2662,16 +2688,19 @@ export default function DutchLearningPlatform() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="text-4xl font-bold text-primary">
-                        {sessionScore.total > 0
+                        {sessionScores[exerciseMode]?.total > 0
                           ? Math.round(
-                              (sessionScore.correct / sessionScore.total) * 100,
+                              (sessionScores[exerciseMode].correct /
+                                sessionScores[exerciseMode].total) *
+                                100,
                             )
                           : 0}
                         %
                       </div>
                       <p className="text-lg text-muted-foreground">
-                        You got {sessionScore.correct} out of{' '}
-                        {sessionScore.total} questions correct!
+                        You got {sessionScores[exerciseMode]?.correct || 0} out
+                        of {sessionScores[exerciseMode]?.total || 0} questions
+                        correct!
                       </p>
 
                       {/* Enhanced Test Statistics */}
