@@ -679,7 +679,7 @@ export function ConjunctionsExercise({
                             </p>
                           </div>
                           <p className="text-xs mt-1 text-muted-foreground">
-                            💡 This is a {conjunction.type} conjunction used for{' '}
+                            This is a {conjunction.type} conjunction used for{' '}
                             {conjunction.category} relationships.
                             {conjunction.wordOrder === 'verb-to-end' &&
                               ' Notice the verb goes to the end!'}
@@ -697,7 +697,7 @@ export function ConjunctionsExercise({
                             </span>
                           </p>
                           <p className="text-xs mt-1 text-muted-foreground">
-                            💡 Remember: "{conjunction.english}" = "
+                            Remember: "{conjunction.english}" = "
                             {conjunction.dutch}"
                           </p>
                         </div>
@@ -717,7 +717,6 @@ export function ConjunctionsExercise({
                             </span>
                           </p>
                           <p className="text-xs mt-1 text-muted-foreground">
-                            💡{' '}
                             {conjunction.type === 'coordinating'
                               ? 'Coordinating conjunctions connect equal elements with normal word order.'
                               : conjunction.type === 'subordinating'
@@ -735,7 +734,6 @@ export function ConjunctionsExercise({
                             </span>
                           </p>
                           <p className="text-xs mt-1 text-muted-foreground">
-                            💡{' '}
                             {conjunction.wordOrder === 'verb-to-end'
                               ? 'Subordinating conjunctions send the verb to the end of the clause.'
                               : conjunction.wordOrder === 'inverted'
@@ -753,7 +751,7 @@ export function ConjunctionsExercise({
                             </span>
                           </p>
                           <p className="text-xs mt-1 text-muted-foreground">
-                            💡 Use "{conjunction.dutch}" when you want to{' '}
+                            Use "{conjunction.dutch}" when you want to{' '}
                             {conjunction.usage.toLowerCase()}.
                           </p>
                         </div>

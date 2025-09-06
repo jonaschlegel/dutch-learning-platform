@@ -325,7 +325,7 @@ export function FinalTestProgressDashboard({
           <CardContent className="p-6 text-center">
             <Award className="h-12 w-12 text-green-600 mx-auto mb-3" />
             <h3 className="text-xl font-bold text-green-800 mb-2">
-              Congratulations! 🎉
+              Congratulations!
             </h3>
             <p className="text-green-700">
               You've completed all categories in the Final Test! Keep reviewing

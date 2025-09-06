@@ -44,6 +44,7 @@ import { useUserAvatar } from '@/hooks/use-user-avatar';
 import {
   BookOpen,
   Brain,
+  CheckCircle,
   Clock,
   GraduationCap,
   Play,
@@ -910,9 +911,10 @@ export default function DutchLearningPlatform() {
                 with "Articles" to get the de/het right, master "Perfect Tense"
                 to learn the perfectum, practice "Imperfectum" for past tense
                 (A1/A2), learn "Modal Verbs" (essential Dutch verbs like kunnen,
-                mogen, moeten, willen, zullen - available at any level), or
-                prepare for your test with "Test Prep"! You can also browse
-                vocabulary by chapter.
+                mogen, moeten, willen, zullen - available at any level), master
+                "Conjunctions", take the comprehensive "Final Test" covering all
+                categories, or prepare for your test with "Test Prep"! You can
+                also browse vocabulary by chapter.
               </p>
               <div className="space-y-4">
                 {/* First row - Primary actions */}
@@ -988,7 +990,17 @@ export default function DutchLearningPlatform() {
                 </div>
 
                 {/* Third row - Test options */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <Button
+                    size="default"
+                    variant="outline"
+                    onClick={() => startNewSession('finaltest')}
+                    className="border-purple-300 text-purple-700 hover:bg-purple-50 w-full"
+                    title="Comprehensive final test covering all vocabulary categories"
+                  >
+                    <GraduationCap className="h-5 w-5 mr-2" />
+                    Final Test
+                  </Button>
                   <Button
                     size="default"
                     variant="outline"
@@ -1253,7 +1265,7 @@ export default function DutchLearningPlatform() {
                         }
                         title="Comprehensive final test covering all vocabulary categories"
                       >
-                        🎯 Final Test
+                        Final Test
                       </Button>
                       <Button
                         variant={
@@ -1883,7 +1895,9 @@ export default function DutchLearningPlatform() {
                         <CardContent>
                           {progress.mistakeMode ? (
                             <div className="space-y-4">
-                              <div className="text-6xl">🎉</div>
+                              <div className="text-6xl">
+                                <CheckCircle className="h-16 w-16 text-green-500 mx-auto" />
+                              </div>
                               <p className="text-xl font-semibold text-foreground">
                                 Great job!
                               </p>
@@ -1989,7 +2003,7 @@ export default function DutchLearningPlatform() {
                             0 && (
                             <div className="bg-blue-50 p-4 rounded-lg">
                               <p className="text-sm text-blue-800 mb-2">
-                                💡 <strong>Tip:</strong> Practice your incorrect
+                                <strong>Tip:</strong> Practice your incorrect
                                 answers in Review Mode to improve your
                                 understanding!
                               </p>
