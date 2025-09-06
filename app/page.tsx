@@ -7,6 +7,8 @@ import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { ChapterSelector } from '@/components/ChapterSelector';
 import { ConjunctionsExercise } from '@/components/ConjunctionsExercise';
+import { FinalTestExercise } from '@/components/FinalTestExercise';
+import { FinalTestProgressDashboard } from '@/components/FinalTestProgressDashboard';
 import { ImperfectumExercise } from '@/components/ImperfectumExercise';
 import { ModalVerbsExercise } from '@/components/ModalVerbsExercise';
 import { PerfectTenseExercise } from '@/components/PerfectTenseExercise';
@@ -20,6 +22,10 @@ import {
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { conjunctions } from '@/data/conjunctions';
+import {
+  finalTestCategories,
+  finalTestVocabulary,
+} from '@/data/final-test-vocabulary';
 import { imperfectumVocabulary } from '@/data/imperfectum';
 import { modalVerbs } from '@/data/modal-verbs';
 import { perfectTenseVocabulary } from '@/data/perfect-tense';
@@ -27,6 +33,7 @@ import { testExercises2 } from '@/data/test-exercises';
 import { vocabulary } from '@/data/vocabulary';
 import { useConjunctionsQueue } from '@/hooks/use-conjunctions-queue';
 import { useExerciseQueue } from '@/hooks/use-exercise-queue';
+import { useFinalTestQueue } from '@/hooks/use-final-test-queue';
 import { useImperfectumQueue } from '@/hooks/use-imperfectum-queue';
 import { useModalVerbsQueue } from '@/hooks/use-modal-verbs-queue';
 import { usePerfectTenseQueue } from '@/hooks/use-perfect-tense-queue';
@@ -131,6 +138,17 @@ export default function DutchLearningPlatform() {
 
   const conjunctionsQueue = useConjunctionsQueue(conjunctionsQueueOptions);
 
+  const finalTestQueueOptions = useMemo(
+    () => ({
+      maxRecentItems: 10,
+      prioritizeIncorrect: true,
+      ensureCategoryCompletion: true,
+    }),
+    [],
+  );
+
+  const finalTestQueue = useFinalTestQueue(finalTestQueueOptions);
+
   // Use state from exerciseSession instead of local state
   const [exerciseMode, setExerciseMode] = useState<
     | 'vocabulary'
@@ -142,6 +160,7 @@ export default function DutchLearningPlatform() {
     | 'conjunctions'
     | 'test1'
     | 'test2'
+    | 'finaltest'
   >((exerciseSession.exerciseMode as any) || 'vocabulary');
   const [perfectTenseMode, setPerfectTenseMode] = useState<
     'participle' | 'auxiliary' | 'complete' | 'translate'
@@ -155,6 +174,12 @@ export default function DutchLearningPlatform() {
   const [conjunctionsMode, setConjunctionsMode] = useState<
     'complete' | 'translate' | 'identify' | 'wordOrder' | 'usage'
   >('complete');
+  const [finalTestMode, setFinalTestMode] = useState<
+    'translate' | 'reverse' | 'mixed' | 'conjugation' | 'article'
+  >('mixed');
+  const [finalTestCategory, setFinalTestCategory] =
+    useState<string>('All Categories');
+  const [finalTestReviewMode, setFinalTestReviewMode] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [sessionScore, setSessionScore] = useState(
     exerciseSession.sessionScore || { correct: 0, total: 0 },
@@ -178,6 +203,8 @@ export default function DutchLearningPlatform() {
         ? test1ExerciseQueue.getTestProgress()
         : exerciseMode === 'test2'
         ? test2ExerciseQueue.getTestProgress()
+        : exerciseMode === 'finaltest'
+        ? finalTestQueue.getProgress()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.getProgress()
         : exerciseMode === 'imperfectum'
@@ -472,6 +499,48 @@ export default function DutchLearningPlatform() {
         // Normal mode: always show all conjunctions
         conjunctionsQueue.initializeQueue({}, exerciseSession.currentIndex);
       }
+    } else if (exerciseMode === 'finaltest') {
+      // Final test vocabulary
+      const incorrectItemIds = Object.keys(memoizedIncorrectWords)
+        .map((id) => ({
+          [id]: {
+            count: memoizedIncorrectWords[id].count,
+            lastAttempt: memoizedIncorrectWords[id].lastAttempt,
+          },
+        }))
+        .reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+      if (finalTestReviewMode && Object.keys(incorrectItemIds).length > 0) {
+        // Review mode: only show incorrect items
+        const incorrectFinalTestItems = finalTestVocabulary.filter(
+          (item) => incorrectItemIds[item.id],
+        );
+        finalTestQueue.initializeFinalTestQueue(
+          incorrectFinalTestItems,
+          finalTestCategory === 'All Categories'
+            ? undefined
+            : finalTestCategory,
+          incorrectItemIds,
+          exerciseSession.currentIndex,
+        );
+      } else {
+        // Normal mode: all items from selected category
+        const categoryItems =
+          finalTestCategory === 'All Categories'
+            ? finalTestVocabulary
+            : finalTestVocabulary.filter(
+                (item) => item.category === finalTestCategory,
+              );
+
+        finalTestQueue.initializeFinalTestQueue(
+          categoryItems,
+          finalTestCategory === 'All Categories'
+            ? undefined
+            : finalTestCategory,
+          incorrectItemIds,
+          exerciseSession.currentIndex,
+        );
+      }
     } else {
       exerciseQueue.initializeQueue(
         availableWords,
@@ -493,7 +562,10 @@ export default function DutchLearningPlatform() {
     imperfectumQueue.initializeQueue,
     modalVerbsQueue.initializeQueue,
     conjunctionsQueue.initializeQueue,
+    finalTestQueue.initializeFinalTestQueue,
     getTestExerciseProgress,
+    finalTestCategory,
+    finalTestReviewMode,
   ]);
 
   const currentWord = exerciseQueue.getCurrentItem();
@@ -503,6 +575,7 @@ export default function DutchLearningPlatform() {
   const currentImperfectumWord = imperfectumQueue.getCurrentItem();
   const currentModalVerb = modalVerbsQueue.getCurrentItem();
   const currentConjunction = conjunctionsQueue.getCurrentItem();
+  const currentFinalTestItem = finalTestQueue.getCurrentItem();
 
   const handleExerciseComplete = (correct: boolean) => {
     if (exerciseMode === 'test1' && currentTest1Exercise) {
@@ -531,6 +604,9 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'conjunctions' && currentConjunction) {
       markWordCompleted(currentConjunction.id, correct ? 1 : 0);
       conjunctionsQueue.moveToNext(currentConjunction.id, correct);
+    } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
+      // For final test, we mark completion but don't use the standard vocabulary system
+      finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
       exerciseQueue.moveToNext(currentWord.id, correct);
@@ -547,6 +623,8 @@ export default function DutchLearningPlatform() {
         ? test1ExerciseQueue.hasMoreTestExercises()
         : exerciseMode === 'test2'
         ? test2ExerciseQueue.hasMoreTestExercises()
+        : exerciseMode === 'finaltest'
+        ? finalTestQueue.hasMoreItems()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.hasMoreItems()
         : exerciseMode === 'imperfectum'
@@ -563,7 +641,8 @@ export default function DutchLearningPlatform() {
         currentPerfectTenseWord?.id ||
         currentImperfectumWord?.id ||
         currentModalVerb?.id ||
-        currentConjunction?.id;
+        currentConjunction?.id ||
+        currentFinalTestItem?.id;
       if (currentId) {
         const remainingIncorrectWords = Object.keys(
           memoizedIncorrectWords,
@@ -652,7 +731,8 @@ export default function DutchLearningPlatform() {
       | 'modalverbs'
       | 'conjunctions'
       | 'test1'
-      | 'test2',
+      | 'test2'
+      | 'finaltest',
   ) => {
     // Check if we're continuing an existing session for this mode
     const isContinuingSession =
@@ -683,6 +763,24 @@ export default function DutchLearningPlatform() {
     if (mode === 'conjunctions') {
       // Initialize conjunctions immediately
       conjunctionsQueue.initializeQueue({}, 0);
+    }
+
+    // For final test, ensure immediate initialization
+    if (mode === 'finaltest') {
+      // Initialize final test immediately
+      const categoryItems =
+        finalTestCategory === 'All Categories'
+          ? finalTestVocabulary
+          : finalTestVocabulary.filter(
+              (item) => item.category === finalTestCategory,
+            );
+
+      finalTestQueue.initializeFinalTestQueue(
+        categoryItems,
+        finalTestCategory === 'All Categories' ? undefined : finalTestCategory,
+        {},
+        0,
+      );
     }
 
     // Save the session state
@@ -922,7 +1020,7 @@ export default function DutchLearningPlatform() {
             />
 
             <Tabs defaultValue="practice" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3 bg-muted">
+              <TabsList className="grid w-full grid-cols-4 bg-muted">
                 <TabsTrigger
                   value="practice"
                   className="flex items-center space-x-2 font-nunito"
@@ -936,6 +1034,13 @@ export default function DutchLearningPlatform() {
                 >
                   <BookOpen className="h-4 w-4" />
                   <span>Vocabulary</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="finaltest"
+                  className="flex items-center space-x-2 font-nunito"
+                >
+                  <GraduationCap className="h-4 w-4" />
+                  <span>Final Test</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="chapters"
@@ -1135,6 +1240,20 @@ export default function DutchLearningPlatform() {
                         title="Learn conjunctions (A1-A2 level) - not tied to any specific chapter"
                       >
                         Conjunctions
+                      </Button>
+                      <Button
+                        variant={
+                          exerciseMode === 'finaltest' ? 'default' : 'outline'
+                        }
+                        onClick={() => startNewSession('finaltest')}
+                        className={
+                          exerciseMode === 'finaltest'
+                            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
+                            : 'border-purple-300 text-purple-700 hover:bg-purple-50'
+                        }
+                        title="Comprehensive final test covering all vocabulary categories"
+                      >
+                        🎯 Final Test
                       </Button>
                       <Button
                         variant={
@@ -1453,16 +1572,130 @@ export default function DutchLearningPlatform() {
                       </div>
                     )}
 
+                    {exerciseMode === 'finaltest' && (
+                      <>
+                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
+                          <span className="text-sm text-muted-foreground self-center mr-2">
+                            Exercise Mode:
+                          </span>
+                          <Button
+                            variant={
+                              finalTestMode === 'translate'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('translate')}
+                            className="mb-1"
+                          >
+                            Dutch → English
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'reverse'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('reverse')}
+                            className="mb-1"
+                          >
+                            English → Dutch
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'mixed' ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('mixed')}
+                            className="mb-1"
+                          >
+                            Mixed
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'article'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('article')}
+                            className="mb-1"
+                          >
+                            Articles (de/het)
+                          </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'conjugation'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('conjugation')}
+                            className="mb-1"
+                          >
+                            Conjugation
+                          </Button>
+                        </div>
+
+                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
+                          <span className="text-sm text-muted-foreground self-center mr-2">
+                            Category:
+                          </span>
+                          <select
+                            value={finalTestCategory}
+                            onChange={(e) =>
+                              setFinalTestCategory(e.target.value)
+                            }
+                            className="px-3 py-1 border border-gray-300 rounded-md text-sm"
+                          >
+                            <option value="All Categories">
+                              All Categories
+                            </option>
+                            {finalTestCategories.map((category) => (
+                              <option key={category} value={category}>
+                                {category}
+                              </option>
+                            ))}
+                          </select>
+
+                          <Button
+                            variant={
+                              finalTestReviewMode ? 'default' : 'outline'
+                            }
+                            size="sm"
+                            onClick={() =>
+                              setFinalTestReviewMode(!finalTestReviewMode)
+                            }
+                            disabled={
+                              Object.keys(finalTestQueue.getIncorrectItems())
+                                .length === 0
+                            }
+                            className="mb-1"
+                          >
+                            Review Mode (
+                            {
+                              Object.keys(finalTestQueue.getIncorrectItems())
+                                .length
+                            }
+                            )
+                          </Button>
+                        </div>
+                      </>
+                    )}
+
                     {(exerciseMode !== 'test1' &&
                       exerciseMode !== 'test2' &&
                       exerciseMode !== 'perfect' &&
                       exerciseMode !== 'imperfectum' &&
                       exerciseMode !== 'modalverbs' &&
                       exerciseMode !== 'conjunctions' &&
+                      exerciseMode !== 'finaltest' &&
                       availableWords.length > 0 &&
                       currentWord) ||
                     (exerciseMode === 'test1' && currentTest1Exercise) ||
                     (exerciseMode === 'test2' && currentTest2Exercise) ||
+                    (exerciseMode === 'finaltest' && currentFinalTestItem) ||
                     (exerciseMode === 'perfect' && currentPerfectTenseWord) ||
                     (exerciseMode === 'imperfectum' &&
                       currentImperfectumWord) ||
@@ -1484,6 +1717,8 @@ export default function DutchLearningPlatform() {
                               ? modalVerbsQueue.getProgress().current + 1
                               : exerciseMode === 'conjunctions'
                               ? conjunctionsQueue.getProgress().current + 1
+                              : exerciseMode === 'finaltest'
+                              ? finalTestQueue.getProgress().current + 1
                               : exerciseQueue.getProgress().current + 1}{' '}
                             of{' '}
                             {exerciseMode === 'test1'
@@ -1498,17 +1733,25 @@ export default function DutchLearningPlatform() {
                               ? modalVerbsQueue.getProgress().total
                               : exerciseMode === 'conjunctions'
                               ? conjunctionsQueue.getProgress().total
+                              : exerciseMode === 'finaltest'
+                              ? finalTestQueue.getProgress().total
                               : exerciseQueue.getProgress().total}
                           </p>
                           {/* Review Mode Indicator */}
-                          {((exerciseMode === 'test1' &&
+                          {(((exerciseMode === 'test1' &&
                             testReviewMode.test1) ||
                             (exerciseMode === 'test2' &&
                               testReviewMode.test2)) && (
                             <Badge variant="secondary" className="mt-2">
                               Review Mode: Practicing Incorrect Answers
                             </Badge>
-                          )}
+                          )) ||
+                            (exerciseMode === 'finaltest' &&
+                              finalTestReviewMode && (
+                                <Badge variant="secondary" className="mt-2">
+                                  Review Mode: Practicing Mistakes
+                                </Badge>
+                              ))}
                           <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                             <div
                               className="bg-primary h-2 rounded-full transition-all duration-300"
@@ -1532,6 +1775,12 @@ export default function DutchLearningPlatform() {
                                     ? (modalVerbsQueue.getProgress().current /
                                         modalVerbsQueue.getProgress().total) *
                                       100
+                                    : exerciseMode === 'conjunctions'
+                                    ? (conjunctionsQueue.getProgress().current /
+                                        conjunctionsQueue.getProgress().total) *
+                                      100
+                                    : exerciseMode === 'finaltest'
+                                    ? finalTestQueue.getProgress().percentage
                                     : exerciseQueue.getProgress().percentage
                                 }%`,
                               }}
@@ -1591,6 +1840,22 @@ export default function DutchLearningPlatform() {
                               <CardContent>
                                 <p className="text-lg text-muted-foreground">
                                   Loading conjunctions exercises...
+                                </p>
+                              </CardContent>
+                            </Card>
+                          )
+                        ) : exerciseMode === 'finaltest' ? (
+                          currentFinalTestItem ? (
+                            <FinalTestExercise
+                              item={currentFinalTestItem}
+                              exerciseMode={finalTestMode}
+                              onComplete={handleExerciseComplete}
+                            />
+                          ) : (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <p className="text-lg text-muted-foreground">
+                                  Loading final test exercises...
                                 </p>
                               </CardContent>
                             </Card>
@@ -1824,6 +2089,87 @@ export default function DutchLearningPlatform() {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              <TabsContent value="finaltest" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2 font-nunito">
+                      <GraduationCap className="h-5 w-5" />
+                      <span>Final Test Dashboard</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <FinalTestProgressDashboard
+                      progress={finalTestQueue.getProgress()}
+                      incorrectItems={finalTestQueue.getIncorrectItems()}
+                      currentCategory={finalTestQueue.currentCategory}
+                      onResetProgress={() => {
+                        setFinalTestReviewMode(false);
+                        finalTestQueue.reset();
+                      }}
+                      onStartReview={() => {
+                        setFinalTestReviewMode(true);
+                        if (exerciseMode !== 'finaltest') {
+                          startNewSession('finaltest');
+                        }
+                      }}
+                      onCategorySelect={(category: string) => {
+                        finalTestQueue.switchCategory(
+                          finalTestVocabulary,
+                          category,
+                        );
+                        if (exerciseMode !== 'finaltest') {
+                          startNewSession('finaltest');
+                        }
+                      }}
+                    />
+                  </CardContent>
+                </Card>
+
+                {exerciseMode !== 'finaltest' && (
+                  <div className="space-y-4">
+                    <div className="text-center text-muted-foreground">
+                      <p>
+                        Ready to test your complete Dutch vocabulary knowledge?
+                      </p>
+                      <p className="text-sm mt-2">
+                        This comprehensive test covers all categories: irregular
+                        verbs, reflexive verbs, adjectives, colors, numbers, and
+                        more!
+                      </p>
+                    </div>
+                    <div className="flex justify-center">
+                      <Button
+                        onClick={() => startNewSession('finaltest')}
+                        className="w-full max-w-md font-nunito"
+                      >
+                        <GraduationCap className="w-4 h-4 mr-2" />
+                        Start Final Test
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {exerciseMode === 'finaltest' && (
+                  <Card>
+                    <CardContent className="pt-6">
+                      {currentFinalTestItem ? (
+                        <FinalTestExercise
+                          item={currentFinalTestItem}
+                          exerciseMode={finalTestMode}
+                          onComplete={handleExerciseComplete}
+                        />
+                      ) : (
+                        <div className="text-center py-8">
+                          <p className="text-lg text-muted-foreground">
+                            Loading final test exercises...
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
               </TabsContent>
 
               <TabsContent value="chapters" className="space-y-6">
