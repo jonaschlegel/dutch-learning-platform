@@ -244,6 +244,24 @@ export function useFinalTestQueue(options: UseFinalTestQueueOptions = {}) {
         }
       }
 
+      // Check if we've seen all items at least once
+      const hasSeenAllItems = prev.currentIndex >= prev.items.length - 1;
+      const hasIncorrectItems = Object.keys(newIncorrectItems).length > 0;
+
+      // If we've seen all items and there are incorrect ones, we should show review mode
+      // instead of continuing to next item
+      if (hasSeenAllItems && hasIncorrectItems) {
+        // Don't increment currentIndex - we'll handle review mode separately
+        return {
+          ...prev,
+          completedItems: newCompletedItems,
+          incorrectItems: newIncorrectItems,
+          recentlySeenItems: newRecentlySeenItems,
+          categoryProgress: newCategoryProgress,
+          allCategoriesCompleted: hasSeenAllItems && !hasIncorrectItems,
+        };
+      }
+
       // Check if all categories are completed
       const allCategoriesCompleted = Object.values(newCategoryProgress).every(
         (progress) => progress.completed >= progress.total,
@@ -256,7 +274,7 @@ export function useFinalTestQueue(options: UseFinalTestQueueOptions = {}) {
         incorrectItems: newIncorrectItems,
         recentlySeenItems: newRecentlySeenItems,
         categoryProgress: newCategoryProgress,
-        allCategoriesCompleted,
+        allCategoriesCompleted: hasSeenAllItems && !hasIncorrectItems,
       };
     });
   }, []);
@@ -290,6 +308,37 @@ export function useFinalTestQueue(options: UseFinalTestQueueOptions = {}) {
   const getIncorrectItems = useCallback(() => {
     return queue.incorrectItems;
   }, [queue.incorrectItems]);
+
+  const shouldShowReviewMode = useCallback(() => {
+    const hasSeenAllItems = queue.currentIndex >= queue.items.length;
+    const hasIncorrectItems = Object.keys(queue.incorrectItems).length > 0;
+    return hasSeenAllItems && hasIncorrectItems;
+  }, [queue.currentIndex, queue.items.length, queue.incorrectItems]);
+
+  const startReviewMode = useCallback(() => {
+    // Create a new queue with only incorrect items
+    const incorrectItemIds = Object.keys(queue.incorrectItems);
+    const incorrectItems = queue.items.filter((item) =>
+      incorrectItemIds.includes(item.id),
+    );
+
+    setQueue((prev) => ({
+      ...prev,
+      items: incorrectItems,
+      currentIndex: 0,
+      completedItems: new Set(), // Reset completed items for review
+      recentlySeenItems: new Set(),
+    }));
+  }, [queue.incorrectItems, queue.items]);
+
+  const isInReviewMode = useCallback(() => {
+    // Check if current queue only contains items that were previously incorrect
+    const incorrectItemIds = Object.keys(queue.incorrectItems);
+    const allItemsAreIncorrect = queue.items.every((item) =>
+      incorrectItemIds.includes(item.id),
+    );
+    return allItemsAreIncorrect && queue.items.length < queue.items.length;
+  }, [queue.incorrectItems, queue.items]);
 
   const reshuffleRemaining = useCallback(
     (
@@ -363,6 +412,9 @@ export function useFinalTestQueue(options: UseFinalTestQueueOptions = {}) {
     getCategoryProgress,
     getIncorrectItemIds,
     getIncorrectItems,
+    shouldShowReviewMode,
+    startReviewMode,
+    isInReviewMode,
     reshuffleRemaining,
     reset,
     switchCategory,

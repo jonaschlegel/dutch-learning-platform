@@ -677,8 +677,25 @@ export default function DutchLearningPlatform() {
       markWordCompleted(currentConjunction.id, correct ? 1 : 0);
       conjunctionsQueue.moveToNext(currentConjunction.id, correct);
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
-      // For final test, we mark completion but don't use the standard vocabulary system
+      // For final test, handle completion with review mode logic
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
+
+      // Check if we should show review mode after going through all items
+      if (finalTestQueue.shouldShowReviewMode()) {
+        // Show completion message and review option
+        setTimeout(() => {
+          const incorrectCount = Object.keys(
+            finalTestQueue.getIncorrectItems(),
+          ).length;
+          if (incorrectCount > 0) {
+            setShowResults(true);
+            toast({
+              title: 'Session Complete!',
+              description: `You have ${incorrectCount} words to review. Click "Review Mistakes" to practice them again.`,
+            });
+          }
+        }, 100);
+      }
     } else if (exerciseMode === 'finaltest' && currentExamExercise) {
       // Handle exam exercises
       setCurrentExamExerciseIndex((prev) => prev + 1);
@@ -744,7 +761,8 @@ export default function DutchLearningPlatform() {
             return currentExamExerciseIndex < filteredExercises.length - 1;
           })()
         : exerciseMode === 'finaltest'
-        ? finalTestQueue.hasMoreItems()
+        ? finalTestQueue.hasMoreItems() &&
+          !finalTestQueue.shouldShowReviewMode()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.hasMoreItems()
         : exerciseMode === 'imperfectum'
@@ -962,6 +980,23 @@ export default function DutchLearningPlatform() {
       testReviewMode: newTestReviewMode,
       hasStartedLearning,
     });
+  };
+
+  const toggleFinalTestReviewMode = () => {
+    const newReviewMode = !finalTestReviewMode;
+    setFinalTestReviewMode(newReviewMode);
+
+    if (newReviewMode && finalTestQueue.shouldShowReviewMode()) {
+      // Start review mode with incorrect items
+      finalTestQueue.startReviewMode();
+    } else {
+      // Restart normal mode
+      startNewSession('finaltest');
+    }
+
+    // Reset session state
+    setShowResults(false);
+    setSessionScore({ correct: 0, total: 0 });
   };
 
   const getTestCompletionStatus = (testType: 'test1' | 'test2') => {
@@ -2441,6 +2476,52 @@ export default function DutchLearningPlatform() {
                           exerciseMode={finalTestMode}
                           onComplete={handleExerciseComplete}
                         />
+                      ) : !finalTestQueue.hasMoreItems() ||
+                        finalTestQueue.shouldShowReviewMode() ? (
+                        <div className="text-center py-8 space-y-4">
+                          <div className="bg-blue-50 p-6 rounded-lg border-2 border-blue-200">
+                            <h3 className="text-xl font-bold text-blue-800 mb-2">
+                              🎉 Well Done!
+                            </h3>
+                            <p className="text-blue-700 mb-4">
+                              You've completed all exercises in this session!
+                              You got{' '}
+                              {
+                                Object.keys(finalTestQueue.getIncorrectItems())
+                                  .length
+                              }{' '}
+                              exercises incorrect.
+                            </p>
+                            {Object.keys(finalTestQueue.getIncorrectItems())
+                              .length > 0 ? (
+                              <div className="space-y-2">
+                                <p className="text-blue-700">
+                                  Would you like to review your incorrect
+                                  answers?
+                                </p>
+                                <Button
+                                  onClick={() => {
+                                    finalTestQueue.startReviewMode();
+                                    setFinalTestReviewMode(true);
+                                  }}
+                                  className="bg-blue-600 text-white hover:bg-blue-700"
+                                >
+                                  Start Review Mode (
+                                  {
+                                    Object.keys(
+                                      finalTestQueue.getIncorrectItems(),
+                                    ).length
+                                  }{' '}
+                                  exercises)
+                                </Button>
+                              </div>
+                            ) : (
+                              <p className="text-blue-700 font-medium">
+                                Perfect score! You got everything right! 🌟
+                              </p>
+                            )}
+                          </div>
+                        </div>
                       ) : (
                         <div className="text-center py-8">
                           <p className="text-lg text-muted-foreground">

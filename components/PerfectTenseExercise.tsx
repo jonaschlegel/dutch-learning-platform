@@ -347,6 +347,13 @@ export function PerfectTenseExercise({
                             ? `Ik ${
                                 word.auxiliary === 'hebben' ? 'heb' : 'ben'
                               } ${word.pastParticiple}`
+                            : mode === 'translate'
+                            ? `Ik ${
+                                word.auxiliary === 'hebben' ? 'heb' : 'ben'
+                              } ${word.pastParticiple}` +
+                              (word.exampleSentence
+                                ? ` (${word.exampleSentence})`
+                                : '')
                             : `Ik ${
                                 word.auxiliary === 'hebben' ? 'heb' : 'ben'
                               } ${word.pastParticiple}`}
