@@ -208,13 +208,13 @@ export default function DutchLearningPlatform() {
     exerciseSession.testReviewMode || { test1: false, test2: false },
   );
 
-  // Session completion tracking
-  const [sessionCompleted, setSessionCompleted] = useState({
-    perfect: false,
-    imperfectum: false,
-    modalverbs: false,
-    conjunctions: false,
-  });
+  // Session completion tracking - temporarily disabled to fix switching issues
+  // const [sessionCompleted, setSessionCompleted] = useState({
+  //   perfect: false,
+  //   imperfectum: false,
+  //   modalverbs: false,
+  //   conjunctions: false,
+  // });
 
   // Function to save current exercise session state (simplified to prevent infinite loops)
   const saveCurrentSession = useCallback(() => {
@@ -277,6 +277,7 @@ export default function DutchLearningPlatform() {
   }, [progress.currentChapter]);
 
   // Save session state when relevant values change (simplified to prevent infinite loops)
+  // Removed sessionScore from dependencies to prevent rapid state changes
   useEffect(() => {
     if (hasStartedLearning) {
       saveCurrentSession();
@@ -288,9 +289,19 @@ export default function DutchLearningPlatform() {
     modalVerbsMode,
     selectedCategory,
     hasStartedLearning,
-    sessionScore,
     testReviewMode,
   ]);
+
+  // Save session score with a delay to prevent rapid updates
+  useEffect(() => {
+    if (hasStartedLearning && sessionScore.total > 0) {
+      const timeoutId = setTimeout(() => {
+        saveCurrentSession();
+      }, 500); // 500ms delay
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [sessionScore, hasStartedLearning, saveCurrentSession]);
 
   const currentChapterWords = useMemo(() => {
     if (progress.currentChapter === 0) {
@@ -743,42 +754,15 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'perfect' && currentPerfectTenseWord) {
       markWordCompleted(currentPerfectTenseWord.id, correct ? 1 : 0);
       perfectTenseQueue.moveToNext(currentPerfectTenseWord.id, correct);
-
-      // Check if we've completed a full cycle
-      const progress = perfectTenseQueue.getProgress();
-      if (progress.current >= progress.total && !sessionCompleted.perfect) {
-        setSessionCompleted((prev) => ({ ...prev, perfect: true }));
-      }
     } else if (exerciseMode === 'imperfectum' && currentImperfectumWord) {
       markWordCompleted(currentImperfectumWord.id, correct ? 1 : 0);
       imperfectumQueue.moveToNext(currentImperfectumWord.id, correct);
-
-      // Check if we've completed a full cycle
-      const progress = imperfectumQueue.getProgress();
-      if (progress.current >= progress.total && !sessionCompleted.imperfectum) {
-        setSessionCompleted((prev) => ({ ...prev, imperfectum: true }));
-      }
     } else if (exerciseMode === 'modalverbs' && currentModalVerb) {
       markWordCompleted(currentModalVerb.id, correct ? 1 : 0);
       modalVerbsQueue.moveToNext(currentModalVerb.id, correct);
-
-      // Check if we've completed a full cycle
-      const progress = modalVerbsQueue.getProgress();
-      if (progress.current >= progress.total && !sessionCompleted.modalverbs) {
-        setSessionCompleted((prev) => ({ ...prev, modalverbs: true }));
-      }
     } else if (exerciseMode === 'conjunctions' && currentConjunction) {
       markWordCompleted(currentConjunction.id, correct ? 1 : 0);
       conjunctionsQueue.moveToNext(currentConjunction.id, correct);
-
-      // Check if we've completed a full cycle
-      const progress = conjunctionsQueue.getProgress();
-      if (
-        progress.current >= progress.total &&
-        !sessionCompleted.conjunctions
-      ) {
-        setSessionCompleted((prev) => ({ ...prev, conjunctions: true }));
-      }
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
       // For final test, handle completion with review mode logic
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
@@ -1056,22 +1040,10 @@ export default function DutchLearningPlatform() {
       // Starting a fresh session
       resetExercises();
       setSessionScore({ correct: 0, total: 0 });
-
-      // Reset session completion flags for the current mode
-      if (mode === 'perfect') {
-        setSessionCompleted((prev) => ({ ...prev, perfect: false }));
-      } else if (mode === 'imperfectum') {
-        setSessionCompleted((prev) => ({ ...prev, imperfectum: false }));
-      } else if (mode === 'modalverbs') {
-        setSessionCompleted((prev) => ({ ...prev, modalverbs: false }));
-      } else if (mode === 'conjunctions') {
-        setSessionCompleted((prev) => ({ ...prev, conjunctions: false }));
-      }
     } else {
       // Continuing existing session - restore session score
       setSessionScore(exerciseSession.sessionScore);
     }
-
     setHasStartedLearning(true);
 
     // For modal verbs, ensure immediate initialization
@@ -2137,14 +2109,14 @@ export default function DutchLearningPlatform() {
                                 <option value="All Categories">
                                   All Categories
                                 </option>
-                                {finalTestCategories.map((category) => {
+                                {finalTestCategories.map((category, index) => {
                                   const isRelevant = isCategoryRelevantForMode(
                                     category,
                                     finalTestMode,
                                   );
                                   return (
                                     <option
-                                      key={category}
+                                      key={`${category}-${index}`}
                                       value={category}
                                       disabled={!isRelevant}
                                       style={{
@@ -2354,8 +2326,7 @@ export default function DutchLearningPlatform() {
                             mode={perfectTenseMode}
                             onComplete={handleExerciseComplete}
                           />
-                        ) : exerciseMode === 'perfect' &&
-                          sessionCompleted.perfect ? (
+                        ) : exerciseMode === 'perfect' && false ? (
                           <Card className="text-center py-8">
                             <CardContent>
                               <div className="space-y-4">
@@ -2373,10 +2344,7 @@ export default function DutchLearningPlatform() {
                                       onClick={() => {
                                         perfectTenseQueue.resetQueue();
                                         perfectTenseQueue.initializeQueue({});
-                                        setSessionCompleted((prev) => ({
-                                          ...prev,
-                                          perfect: false,
-                                        }));
+                                        startNewSession('perfect');
                                       }}
                                       className="bg-blue-600 text-white hover:bg-blue-700 mr-2"
                                     >
@@ -2403,8 +2371,7 @@ export default function DutchLearningPlatform() {
                             mode={imperfectumMode}
                             onComplete={handleExerciseComplete}
                           />
-                        ) : exerciseMode === 'imperfectum' &&
-                          sessionCompleted.imperfectum ? (
+                        ) : exerciseMode === 'imperfectum' && false ? (
                           <Card className="text-center py-8">
                             <CardContent>
                               <div className="space-y-4">
@@ -2422,10 +2389,7 @@ export default function DutchLearningPlatform() {
                                       onClick={() => {
                                         imperfectumQueue.resetQueue();
                                         imperfectumQueue.initializeQueue({});
-                                        setSessionCompleted((prev) => ({
-                                          ...prev,
-                                          imperfectum: false,
-                                        }));
+                                        startNewSession('imperfectum');
                                       }}
                                       className="bg-purple-600 text-white hover:bg-purple-700 mr-2"
                                     >
@@ -2452,7 +2416,7 @@ export default function DutchLearningPlatform() {
                               mode={modalVerbsMode}
                               onComplete={handleExerciseComplete}
                             />
-                          ) : sessionCompleted.modalverbs ? (
+                          ) : false ? (
                             <Card className="text-center py-8">
                               <CardContent>
                                 <div className="space-y-4">
@@ -2470,10 +2434,7 @@ export default function DutchLearningPlatform() {
                                         onClick={() => {
                                           modalVerbsQueue.resetQueue();
                                           modalVerbsQueue.initializeQueue({});
-                                          setSessionCompleted((prev) => ({
-                                            ...prev,
-                                            modalverbs: false,
-                                          }));
+                                          startNewSession('modalverbs');
                                         }}
                                         className="bg-green-600 text-white hover:bg-green-700 mr-2"
                                       >
@@ -2509,7 +2470,7 @@ export default function DutchLearningPlatform() {
                               mode={conjunctionsMode}
                               onComplete={handleExerciseComplete}
                             />
-                          ) : sessionCompleted.conjunctions ? (
+                          ) : false ? (
                             <Card className="text-center py-8">
                               <CardContent>
                                 <div className="space-y-4">
@@ -2527,10 +2488,7 @@ export default function DutchLearningPlatform() {
                                         onClick={() => {
                                           conjunctionsQueue.resetQueue();
                                           conjunctionsQueue.initializeQueue({});
-                                          setSessionCompleted((prev) => ({
-                                            ...prev,
-                                            conjunctions: false,
-                                          }));
+                                          startNewSession('conjunctions');
                                         }}
                                         className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
                                       >

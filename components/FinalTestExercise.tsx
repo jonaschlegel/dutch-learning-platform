@@ -133,7 +133,52 @@ export function FinalTestExercise({
       case 'mixed':
         // Random between translate and reverse
         const randomMode = Math.random() < 0.5 ? 'translate' : 'reverse';
-        return checkAnswer(); // Recursive call with the same mode for consistency
+
+        if (randomMode === 'translate') {
+          // Dutch to English
+          if (Array.isArray(item.english)) {
+            correctAnswers = item.english.map((e) => e.toLowerCase().trim());
+            correct = correctAnswers.some(
+              (answer) =>
+                userAnswerLower === answer ||
+                userAnswerLower === answer.replace(/^(the|a|an)\s+/, '') ||
+                answer.replace(/^(the|a|an)\s+/, '') === userAnswerLower,
+            );
+          } else {
+            const englishAnswer = item.english.toLowerCase().trim();
+            correctAnswers = [englishAnswer];
+            correct =
+              userAnswerLower === englishAnswer ||
+              userAnswerLower === englishAnswer.replace(/^(the|a|an)\s+/, '') ||
+              englishAnswer.replace(/^(the|a|an)\s+/, '') === userAnswerLower;
+          }
+        } else {
+          // English to Dutch (reverse)
+          if (Array.isArray(item.dutch)) {
+            correctAnswers = item.dutch.map((d) => d.toLowerCase().trim());
+            correct = correctAnswers.some((answer) => {
+              const withoutArticle = answer.replace(/^(de|het)\s+/, '');
+              return (
+                userAnswerLower === answer ||
+                userAnswerLower === withoutArticle ||
+                (item.article &&
+                  userAnswerLower === `${item.article} ${withoutArticle}`)
+              );
+            });
+          } else {
+            const dutchAnswer = item.dutch.toLowerCase().trim();
+            correctAnswers = [dutchAnswer];
+            const withoutArticle = dutchAnswer.replace(/^(de|het)\s+/, '');
+            correct =
+              userAnswerLower === dutchAnswer ||
+              userAnswerLower === withoutArticle ||
+              !!(
+                item.article &&
+                userAnswerLower === `${item.article} ${withoutArticle}`
+              );
+          }
+        }
+        break;
     }
 
     setIsCorrect(correct);
