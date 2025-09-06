@@ -91,6 +91,12 @@ export function ExamExerciseCard({
           }
         }
         break;
+
+      case 'writing-prompt':
+        // For writing exercises, we consider it "correct" if user provided substantial content
+        userResponse = userAnswer.trim();
+        correct = userResponse.length >= 50; // At least 50 characters for a meaningful response
+        break;
     }
 
     setIsCorrect(correct);
@@ -237,6 +243,48 @@ export function ExamExerciseCard({
                   {exercise.englishTranslation}
                 </p>
               )}
+            </div>
+          </div>
+        );
+
+      case 'writing-prompt':
+        return (
+          <div className="space-y-4">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground mb-2">
+                {exercise.instruction}
+              </p>
+              <div className="text-lg font-medium text-foreground mb-4">
+                {exercise.question}
+              </div>
+              {exercise.englishTranslation && (
+                <p className="text-sm text-muted-foreground italic mb-4">
+                  {exercise.englishTranslation}
+                </p>
+              )}
+              {exercise.wordCount && (
+                <p className="text-xs text-muted-foreground mb-4">
+                  Target word count: approximately {exercise.wordCount} words
+                </p>
+              )}
+              <textarea
+                value={userAnswer}
+                onChange={(e) => setUserAnswer(e.target.value)}
+                placeholder="Write your answer here..."
+                className="w-full h-48 p-3 border border-input rounded-md resize-none text-sm"
+                disabled={showFeedback}
+                autoFocus
+              />
+              <div className="text-xs text-muted-foreground mt-2">
+                Current word count:{' '}
+                {
+                  userAnswer
+                    .trim()
+                    .split(/\s+/)
+                    .filter((word) => word.length > 0).length
+                }{' '}
+                words
+              </div>
             </div>
           </div>
         );

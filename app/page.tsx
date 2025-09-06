@@ -188,6 +188,7 @@ export default function DutchLearningPlatform() {
     | 'exam-separable'
     | 'exam-conjunctions'
     | 'exam-multiple-choice'
+    | 'exam-writing'
     | 'exam-mixed'
   >('mixed');
   const [finalTestCategory, setFinalTestCategory] =
@@ -637,6 +638,8 @@ export default function DutchLearningPlatform() {
           );
         case 'exam-multiple-choice':
           return allExamExercises.filter((ex) => ex.type === 'multiple-choice');
+        case 'exam-writing':
+          return allExamExercises.filter((ex) => ex.type === 'writing-prompt');
         case 'exam-mixed':
           return allExamExercises;
         default:
@@ -702,6 +705,7 @@ export default function DutchLearningPlatform() {
             'exam-separable',
             'exam-conjunctions',
             'exam-multiple-choice',
+            'exam-writing',
             'exam-mixed',
           ].includes(finalTestMode)
         ? (() => {
@@ -726,6 +730,10 @@ export default function DutchLearningPlatform() {
                 case 'exam-multiple-choice':
                   return allExamExercises.filter(
                     (ex) => ex.type === 'multiple-choice',
+                  );
+                case 'exam-writing':
+                  return allExamExercises.filter(
+                    (ex) => ex.type === 'writing-prompt',
                   );
                 case 'exam-mixed':
                   return allExamExercises;
@@ -1871,6 +1879,19 @@ export default function DutchLearningPlatform() {
                           >
                             Mixed Exam
                           </Button>
+                          <Button
+                            variant={
+                              finalTestMode === 'exam-writing'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            size="sm"
+                            onClick={() => setFinalTestMode('exam-writing')}
+                            className="mb-1"
+                            title="Writing exercises - compose texts on various topics"
+                          >
+                            Writing
+                          </Button>
                         </div>
 
                         <div className="flex justify-center space-x-2 mb-4 flex-wrap">
@@ -2086,6 +2107,7 @@ export default function DutchLearningPlatform() {
                             'exam-separable',
                             'exam-conjunctions',
                             'exam-multiple-choice',
+                            'exam-writing',
                             'exam-mixed',
                           ].includes(finalTestMode) ? (
                             currentExamExercise ? (

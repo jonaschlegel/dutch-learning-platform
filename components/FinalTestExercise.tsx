@@ -40,6 +40,7 @@ interface FinalTestExerciseProps {
     | 'exam-separable'
     | 'exam-conjunctions'
     | 'exam-multiple-choice'
+    | 'exam-writing'
     | 'exam-mixed';
   showHints?: boolean;
 }
