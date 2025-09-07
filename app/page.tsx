@@ -888,7 +888,8 @@ export default function DutchLearningPlatform() {
         setCurrentExamExerciseIndex(nextIndex);
       }
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
-      // For final test, handle completion with review mode logic
+      // For final test vocabulary, handle completion with both queue and global progress tracking
+      markWordCompleted(currentFinalTestItem.id, correct ? 1 : 0);
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
 
       // Check if we should show review mode after going through all items
@@ -1242,6 +1243,23 @@ export default function DutchLearningPlatform() {
       // Restart normal mode
       startNewSession('finaltest');
     }
+
+    // Reset session state
+    setShowResults(false);
+    setSessionScores((prev) => ({
+      ...prev,
+      finaltest: { correct: 0, total: 0 },
+    }));
+  };
+
+  const toggleFinalExamReviewMode = () => {
+    const newReviewMode = !finalExamReviewMode;
+    setFinalExamReviewMode(newReviewMode);
+
+    // Reset the exam exercise session when toggling review mode
+    setCurrentExamExerciseIndex(0);
+    setCompletedExamExercises(new Set());
+    setExamExerciseSessionCompleted(false);
 
     // Reset session state
     setShowResults(false);
@@ -2262,18 +2280,42 @@ export default function DutchLearningPlatform() {
                               setFinalTestReviewMode(!finalTestReviewMode)
                             }
                             disabled={
-                              Object.keys(finalTestQueue.getIncorrectItems())
-                                .length === 0
+                              Object.keys(memoizedIncorrectWords).length === 0
                             }
                             className="mb-1"
+                            title="Review vocabulary mistakes from final test"
                           >
-                            Review Mode (
-                            {
-                              Object.keys(finalTestQueue.getIncorrectItems())
-                                .length
-                            }
-                            )
+                            Vocabulary Review (
+                            {Object.keys(memoizedIncorrectWords).length})
                           </Button>
+
+                          {finalTestMode.startsWith('exam-') && (
+                            <Button
+                              variant={
+                                finalExamReviewMode ? 'default' : 'outline'
+                              }
+                              size="sm"
+                              onClick={() => toggleFinalExamReviewMode()}
+                              disabled={
+                                !progress.finalExamProgress
+                                  ?.incorrectExercises ||
+                                Object.keys(
+                                  progress.finalExamProgress.incorrectExercises,
+                                ).length === 0
+                              }
+                              className="mb-1"
+                              title="Review exam exercise mistakes"
+                            >
+                              Exam Review (
+                              {progress.finalExamProgress?.incorrectExercises
+                                ? Object.keys(
+                                    progress.finalExamProgress
+                                      .incorrectExercises,
+                                  ).length
+                                : 0}
+                              )
+                            </Button>
+                          )}
                         </div>
                       </>
                     )}
