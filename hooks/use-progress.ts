@@ -59,7 +59,11 @@ export function useProgress() {
       const parsed = JSON.parse(savedProgress);
       setProgress({
         ...parsed,
-        completedWords: new Set(parsed.completedWords),
+        completedWords: new Set(
+          Array.isArray(parsed.completedWords)
+            ? parsed.completedWords
+            : Object.values(parsed.completedWords || {}),
+        ),
         incorrectWords: parsed.incorrectWords || {},
         mistakeMode: parsed.mistakeMode || false,
         testExerciseProgress: parsed.testExerciseProgress
@@ -67,7 +71,14 @@ export function useProgress() {
               test1: {
                 ...parsed.testExerciseProgress.test1,
                 completedExercises: new Set(
-                  parsed.testExerciseProgress.test1.completedExercises || [],
+                  Array.isArray(
+                    parsed.testExerciseProgress.test1.completedExercises,
+                  )
+                    ? parsed.testExerciseProgress.test1.completedExercises
+                    : Object.values(
+                        parsed.testExerciseProgress.test1.completedExercises ||
+                          {},
+                      ),
                 ),
                 incorrectExercises:
                   parsed.testExerciseProgress.test1.incorrectExercises || {},
@@ -76,7 +87,14 @@ export function useProgress() {
               test2: {
                 ...parsed.testExerciseProgress.test2,
                 completedExercises: new Set(
-                  parsed.testExerciseProgress.test2.completedExercises || [],
+                  Array.isArray(
+                    parsed.testExerciseProgress.test2.completedExercises,
+                  )
+                    ? parsed.testExerciseProgress.test2.completedExercises
+                    : Object.values(
+                        parsed.testExerciseProgress.test2.completedExercises ||
+                          {},
+                      ),
                 ),
                 incorrectExercises:
                   parsed.testExerciseProgress.test2.incorrectExercises || {},
@@ -99,7 +117,11 @@ export function useProgress() {
           ? {
               ...parsed.finalExamProgress,
               completedExercises: new Set(
-                parsed.finalExamProgress.completedExercises || [],
+                Array.isArray(parsed.finalExamProgress.completedExercises)
+                  ? parsed.finalExamProgress.completedExercises
+                  : Object.values(
+                      parsed.finalExamProgress.completedExercises || {},
+                    ),
               ),
               incorrectExercises:
                 parsed.finalExamProgress.incorrectExercises || {},

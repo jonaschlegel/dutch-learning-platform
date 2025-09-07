@@ -6,7 +6,10 @@ import { Badge } from '@/components/Badge';
 import { Button } from '@/components/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/Card';
 import { ChapterSelector } from '@/components/ChapterSelector';
+import { CollapsibleExerciseSelector } from '@/components/CollapsibleExerciseSelector';
+import { CollapsibleTabs } from '@/components/CollapsibleTabs';
 import { ConjunctionsExercise } from '@/components/ConjunctionsExercise';
+import { EnhancedProgressDashboard } from '@/components/EnhancedProgressDashboard';
 import { ExamExerciseCard } from '@/components/ExamExerciseCard';
 import { FinalTestExercise } from '@/components/FinalTestExercise';
 import { FinalTestProgressDashboard } from '@/components/FinalTestProgressDashboard';
@@ -15,6 +18,7 @@ import { ModalVerbsExercise } from '@/components/ModalVerbsExercise';
 import { PerfectTenseExercise } from '@/components/PerfectTenseExercise';
 import { PluralExercise } from '@/components/PluralExercise';
 import { ProgressDashboard } from '@/components/ProgressDashboard';
+import { SimpleModeSelector } from '@/components/SimpleModeSelector';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import {
   createTestExercises,
@@ -38,6 +42,7 @@ import { perfectTenseVocabulary } from '@/data/perfect-tense';
 import { testExercises2 } from '@/data/test-exercises';
 import { vocabulary } from '@/data/vocabulary';
 import { useConjunctionsQueue } from '@/hooks/use-conjunctions-queue';
+import { useConsolidatedExerciseState } from '@/hooks/use-consolidated-exercise-state';
 import { useExerciseQueue } from '@/hooks/use-exercise-queue';
 import { useFinalTestQueue } from '@/hooks/use-final-test-queue';
 import { useImperfectumQueue } from '@/hooks/use-imperfectum-queue';
@@ -47,6 +52,13 @@ import { useProgress } from '@/hooks/use-progress';
 import { useTestExerciseQueue } from '@/hooks/use-test-exercise-queue';
 import { useToast } from '@/hooks/use-toast';
 import { useUserAvatar } from '@/hooks/use-user-avatar';
+import { exerciseHelpers } from '@/utils/exercise-helpers';
+import { calculateDashboardStats } from '@/utils/progress-dashboard';
+import {
+  progressUtils,
+  sessionHelpers,
+  useAutoSaveSession,
+} from '@/utils/session-management';
 import {
   BookOpen,
   Brain,
@@ -158,73 +170,57 @@ export default function DutchLearningPlatform() {
 
   const finalTestQueue = useFinalTestQueue(finalTestQueueOptions);
 
-  // Use state from exerciseSession instead of local state
-  const [exerciseMode, setExerciseMode] = useState<
-    | 'vocabulary'
-    | 'articles'
-    | 'plural'
-    | 'perfect'
-    | 'imperfectum'
-    | 'modalverbs'
-    | 'conjunctions'
-    | 'test1'
-    | 'test2'
-    | 'finaltest'
-  >((exerciseSession.exerciseMode as any) || 'vocabulary');
-  const [perfectTenseMode, setPerfectTenseMode] = useState<
-    'participle' | 'auxiliary' | 'complete' | 'translate'
-  >((exerciseSession.perfectTenseMode as any) || 'complete');
-  const [imperfectumMode, setImperfectumMode] = useState<
-    'conjugation' | 'complete' | 'translate'
-  >((exerciseSession.imperfectumMode as any) || 'conjugation');
-  const [modalVerbsMode, setModalVerbsMode] = useState<
-    'conjugation' | 'usage' | 'translate' | 'negative' | 'question'
-  >((exerciseSession.modalVerbsMode as any) || 'conjugation');
-  const [conjunctionsMode, setConjunctionsMode] = useState<
-    'complete' | 'translate' | 'identify' | 'wordOrder' | 'usage'
-  >('complete');
-  const [finalTestMode, setFinalTestMode] = useState<
-    | 'translate'
-    | 'reverse'
-    | 'mixed'
-    | 'conjugation'
-    | 'article'
-    | 'exam-perfect'
-    | 'exam-imperfect'
-    | 'exam-separable'
-    | 'exam-conjunctions'
-    | 'exam-multiple-choice'
-    | 'exam-writing'
-    | 'exam-mixed'
-  >('mixed');
-  const [finalTestCategory, setFinalTestCategory] =
-    useState<string>('All Categories');
-  const [finalTestReviewMode, setFinalTestReviewMode] = useState(false);
-  const [finalExamReviewMode, setFinalExamReviewMode] = useState(false);
-  const [finalTestSessionCompleted, setFinalTestSessionCompleted] =
-    useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [sessionScores, setSessionScores] = useState<{
-    [key: string]: { correct: number; total: number };
-  }>({
-    test1: { correct: 0, total: 0 },
-    test2: { correct: 0, total: 0 },
-    perfect: { correct: 0, total: 0 },
-    imperfectum: { correct: 0, total: 0 },
-    modalverbs: { correct: 0, total: 0 },
-    conjunctions: { correct: 0, total: 0 },
-    finaltest: { correct: 0, total: 0 },
-    default: { correct: 0, total: 0 },
-  });
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(
-    exerciseSession.selectedCategory || null,
-  );
-  const [hasStartedLearning, setHasStartedLearning] = useState(
-    exerciseSession.hasStartedLearning || false,
-  );
-  const [testReviewMode, setTestReviewMode] = useState(
-    exerciseSession.testReviewMode || { test1: false, test2: false },
-  );
+  // Consolidated exercise state management
+  const {
+    state: exerciseState,
+    actions: exerciseActions,
+    computed,
+  } = useConsolidatedExerciseState(exerciseSession);
+
+  // Extract commonly used values for backward compatibility
+  const exerciseMode = exerciseState.mode;
+  const hasStartedLearning = exerciseState.hasStartedLearning;
+  const showResults = exerciseState.showResults;
+  const selectedCategory = exerciseState.selectedCategory;
+  const perfectTenseMode = exerciseState.perfectTenseMode;
+  const imperfectumMode = exerciseState.imperfectumMode;
+  const modalVerbsMode = exerciseState.modalVerbsMode;
+  const conjunctionsMode = exerciseState.conjunctionsMode;
+  const finalTestMode = exerciseState.finalTestMode;
+  const finalTestCategory = exerciseState.finalTestCategory;
+  const finalTestReviewMode = exerciseState.finalTestReviewMode;
+  const finalExamReviewMode = exerciseState.finalExamReviewMode;
+  const finalTestSessionCompleted = exerciseState.finalTestSessionCompleted;
+  const sessionScores = exerciseState.sessionScores;
+  const testReviewMode = exerciseState.testReviewMode;
+  const useModernExercises = exerciseState.useModernExercises;
+
+  // Backward compatible setters
+  const setExerciseMode = exerciseActions.setMode;
+  const setHasStartedLearning = exerciseActions.setHasStartedLearning;
+  const setShowResults = exerciseActions.setShowResults;
+  const setSelectedCategory = exerciseActions.setSelectedCategory;
+  const setPerfectTenseMode = exerciseActions.setPerfectTenseMode;
+  const setImperfectumMode = exerciseActions.setImperfectumMode;
+  const setModalVerbsMode = exerciseActions.setModalVerbsMode;
+  const setConjunctionsMode = exerciseActions.setConjunctionsMode;
+  const setFinalTestMode = exerciseActions.setFinalTestMode;
+  const setFinalTestCategory = exerciseActions.setFinalTestCategory;
+  const setFinalTestReviewMode = exerciseActions.setFinalTestReviewMode;
+  const setFinalExamReviewMode = exerciseActions.setFinalExamReviewMode;
+  const setFinalTestSessionCompleted =
+    exerciseActions.setFinalTestSessionCompleted;
+  const setTestReviewMode = exerciseActions.setTestReviewMode;
+  const setUseModernExercises = exerciseActions.setUseModernExercises;
+  // Session scores are now managed through exerciseActions.updateSessionScore and exerciseActions.resetSessionScore
+
+  // Auto-save session when state changes
+  useAutoSaveSession(exerciseState, saveExerciseSession, 0, true);
+
+  // Calculate enhanced dashboard statistics
+  const dashboardStats = useMemo(() => {
+    return calculateDashboardStats(exerciseState);
+  }, [exerciseState.sessionScores, exerciseState.mode]);
 
   // Session completion tracking - temporarily disabled to fix switching issues
   // const [sessionCompleted, setSessionCompleted] = useState({
@@ -233,6 +229,22 @@ export default function DutchLearningPlatform() {
   //   modalverbs: false,
   //   conjunctions: false,
   // });
+
+  // Centralized UI state determination
+  const getUIState = useCallback(() => {
+    if (!hasStartedLearning) {
+      return 'welcome';
+    }
+
+    if (
+      exerciseHelpers.requiresChapter(exerciseMode) &&
+      progress.currentChapter === 0
+    ) {
+      return 'chapter-selection';
+    }
+
+    return 'exercise';
+  }, [hasStartedLearning, exerciseMode, progress.currentChapter]);
 
   // Function to save current exercise session state (simplified to prevent infinite loops)
   const saveCurrentSession = useCallback(() => {
@@ -793,10 +805,7 @@ export default function DutchLearningPlatform() {
     setFinalTestSessionCompleted(false);
     // Reset session scores when switching exam modes
     if (finalTestMode.startsWith('exam-')) {
-      setSessionScores((prev) => ({
-        ...prev,
-        finaltest: { correct: 0, total: 0 },
-      }));
+      exerciseActions.resetSessionScore('finaltest');
     }
   }, [finalTestMode, finalTestReviewMode]);
 
@@ -810,6 +819,9 @@ export default function DutchLearningPlatform() {
   }, [finalTestMode, finalTestCategory]);
 
   const handleExerciseComplete = (correct: boolean) => {
+    // Update session score using consolidated state management
+    exerciseActions.updateSessionScore(exerciseMode, correct);
+
     if (exerciseMode === 'test1' && currentTest1Exercise) {
       markTestExerciseCompleted(
         'test1',
@@ -949,18 +961,8 @@ export default function DutchLearningPlatform() {
       exerciseQueue.moveToNext(currentWord.id, correct);
     }
 
-    const currentScore = sessionScores[exerciseMode] || {
-      correct: 0,
-      total: 0,
-    };
-    const newScore = {
-      correct: currentScore.correct + (correct ? 1 : 0),
-      total: currentScore.total + 1,
-    };
-    setSessionScores((prev) => ({
-      ...prev,
-      [exerciseMode]: newScore,
-    }));
+    // Update session score using consolidated action
+    exerciseActions.updateSessionScore(exerciseMode, correct);
 
     const hasMoreExercises =
       exerciseMode === 'test1'
@@ -1024,10 +1026,7 @@ export default function DutchLearningPlatform() {
 
   const resetExercises = () => {
     setShowResults(false);
-    setSessionScores((prev) => ({
-      ...prev,
-      [exerciseMode]: { correct: 0, total: 0 },
-    }));
+    exerciseActions.resetSessionScore(exerciseMode);
     clearExerciseSession(); // Clear session when resetting
 
     // Reset completion states
@@ -1157,13 +1156,22 @@ export default function DutchLearningPlatform() {
 
     setExerciseMode(mode);
 
+    // Show helpful guidance for chapter-based exercises
+    if (
+      exerciseHelpers.requiresChapter(mode) &&
+      progress.currentChapter === 0
+    ) {
+      toast({
+        title: `${exerciseHelpers.getExerciseConfig(mode).name} Selected`,
+        description: 'Please select a chapter first to start practicing.',
+        duration: 4000,
+      });
+    }
+
     if (!isContinuingSession) {
       // Starting a fresh session
       resetExercises();
-      setSessionScores((prev) => ({
-        ...prev,
-        [mode]: { correct: 0, total: 0 },
-      }));
+      exerciseActions.resetSessionScore(mode);
     } else {
       // Continuing existing session - restore session score
       // For now, keep scores separate per mode - no restoration needed
@@ -1252,10 +1260,7 @@ export default function DutchLearningPlatform() {
 
     // Reset the session when toggling review mode
     setShowResults(false);
-    setSessionScores((prev) => ({
-      ...prev,
-      [testType]: { correct: 0, total: 0 },
-    }));
+    exerciseActions.resetSessionScore(testType);
 
     // Save the updated session
     saveExerciseSession({
@@ -1285,10 +1290,7 @@ export default function DutchLearningPlatform() {
 
     // Reset session state
     setShowResults(false);
-    setSessionScores((prev) => ({
-      ...prev,
-      finaltest: { correct: 0, total: 0 },
-    }));
+    exerciseActions.resetSessionScore('finaltest');
   };
 
   const toggleFinalExamReviewMode = () => {
@@ -1302,10 +1304,7 @@ export default function DutchLearningPlatform() {
 
     // Reset session state
     setShowResults(false);
-    setSessionScores((prev) => ({
-      ...prev,
-      finaltest: { correct: 0, total: 0 },
-    }));
+    exerciseActions.resetSessionScore('finaltest');
   };
 
   const handleExamModeChange = (mode: string) => {
@@ -1515,44 +1514,57 @@ export default function DutchLearningPlatform() {
           </Card>
         ) : (
           <>
-            <ProgressDashboard
-              progress={progress}
-              onResetProgress={resetProgress}
-              onToggleMistakeMode={toggleMistakeMode}
+            <EnhancedProgressDashboard
+              stats={dashboardStats}
+              onExerciseSelect={(mode) => {
+                // Handle exercise selection
+                const validModes = [
+                  'test1',
+                  'test2',
+                  'vocabulary',
+                  'articles',
+                  'plural',
+                  'perfect',
+                  'imperfectum',
+                  'modalverbs',
+                  'conjunctions',
+                  'finaltest',
+                ];
+                if (validModes.includes(mode)) {
+                  setExerciseMode(mode as any);
+                  startNewSession(mode as any);
+                }
+              }}
+              currentMode={exerciseMode}
             />
 
-            <Tabs defaultValue="practice" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 bg-muted">
-                <TabsTrigger
-                  value="practice"
-                  className="flex items-center space-x-2 font-nunito"
-                >
-                  <Brain className="h-4 w-4" />
-                  <span>Practice</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="vocabulary"
-                  className="flex items-center space-x-2 font-nunito"
-                >
-                  <BookOpen className="h-4 w-4" />
-                  <span>Vocabulary</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="finaltest"
-                  className="flex items-center space-x-2 font-nunito"
-                >
-                  <GraduationCap className="h-4 w-4" />
-                  <span>Final Test</span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="chapters"
-                  className="flex items-center space-x-2 font-nunito"
-                >
-                  <Target className="h-4 w-4" />
-                  <span>Chapters</span>
-                </TabsTrigger>
-              </TabsList>
-
+            <CollapsibleTabs
+              defaultValue="practice"
+              defaultExpanded={false}
+              tabsData={[
+                {
+                  value: 'practice',
+                  label: 'Practice',
+                  icon: <Brain className="h-4 w-4" />,
+                },
+                {
+                  value: 'vocabulary',
+                  label: 'Vocabulary',
+                  icon: <BookOpen className="h-4 w-4" />,
+                },
+                {
+                  value: 'finaltest',
+                  label: 'Final Test',
+                  icon: <GraduationCap className="h-4 w-4" />,
+                },
+                {
+                  value: 'chapters',
+                  label: 'Chapters',
+                  icon: <Target className="h-4 w-4" />,
+                },
+              ]}
+              className="space-y-6"
+            >
               <TabsContent value="practice" className="space-y-6">
                 {progress.mistakeMode && (
                   <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
@@ -1609,755 +1621,46 @@ export default function DutchLearningPlatform() {
                 )}
                 {!showResults ? (
                   <div className="space-y-6">
-                    {progress.currentChapter !== 0 &&
-                      availableCategories.length > 0 && (
-                        <div className="flex flex-wrap justify-center gap-2 mb-4">
-                          <Button
-                            variant={
-                              selectedCategory === null ? 'default' : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setSelectedCategory(null)}
-                            className={
-                              selectedCategory === null
-                                ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                                : ''
-                            }
-                          >
-                            All Categories
-                          </Button>
-                          {availableCategories.map((category) => (
-                            <Button
-                              key={category}
-                              variant={
-                                selectedCategory === category
-                                  ? 'default'
-                                  : 'outline'
-                              }
-                              size="sm"
-                              onClick={() => setSelectedCategory(category)}
-                              className={`capitalize ${
-                                selectedCategory === category
-                                  ? 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
-                                  : ''
-                              }`}
-                            >
-                              {category}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
-                    <div className="flex justify-center space-x-4 flex-wrap gap-y-2">
-                      <Button
-                        variant={
-                          exerciseMode === 'vocabulary' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('vocabulary')}
-                        className={
-                          exerciseMode === 'vocabulary'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Vocabulary Practice
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'articles' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('articles')}
-                        className={
-                          exerciseMode === 'articles'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Article Practice (de/het)
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'plural' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('plural')}
-                        className={
-                          exerciseMode === 'plural'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Plural Practice
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'perfect' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('perfect')}
-                        className={
-                          exerciseMode === 'perfect'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Perfect Tense
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'imperfectum' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('imperfectum')}
-                        className={
-                          exerciseMode === 'imperfectum'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Imperfectum
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'modalverbs' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('modalverbs')}
-                        className={
-                          exerciseMode === 'modalverbs'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                        title="Modal verbs are always available - not tied to any specific chapter"
-                      >
-                        Modal Verbs
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'conjunctions'
-                            ? 'default'
-                            : 'outline'
-                        }
-                        onClick={() => startNewSession('conjunctions')}
-                        className={
-                          exerciseMode === 'conjunctions'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                        title="Learn conjunctions (A1-A2 level) - not tied to any specific chapter"
-                      >
-                        Conjunctions
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'finaltest' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('finaltest')}
-                        className={
-                          exerciseMode === 'finaltest'
-                            ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
-                            : 'border-purple-300 text-purple-700 hover:bg-purple-50'
-                        }
-                        title="Comprehensive final test covering all vocabulary categories"
-                      >
-                        Final Test
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'test1' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('test1')}
-                        className={
-                          exerciseMode === 'test1'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Test 1 (Basic)
-                      </Button>
-                      <Button
-                        variant={
-                          exerciseMode === 'test2' ? 'default' : 'outline'
-                        }
-                        onClick={() => startNewSession('test2')}
-                        className={
-                          exerciseMode === 'test2'
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            : ''
-                        }
-                      >
-                        Test 2 (Advanced)
-                      </Button>
-                    </div>
-
-                    {/* Test Review Mode Controls */}
-                    {(exerciseMode === 'test1' || exerciseMode === 'test2') && (
-                      <div className="flex justify-center space-x-4 mb-4">
-                        {exerciseMode === 'test1' && (
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline">
-                              Test 1 Incorrect:{' '}
-                              {
-                                Object.keys(
-                                  getTestExerciseProgress('test1')
-                                    .incorrectExercises,
-                                ).length
-                              }
-                            </Badge>
-                            {Object.keys(
-                              getTestExerciseProgress('test1')
-                                .incorrectExercises,
-                            ).length > 0 && (
-                              <Button
-                                size="sm"
-                                variant={
-                                  testReviewMode.test1 ? 'default' : 'outline'
-                                }
-                                onClick={() => toggleTestReviewMode('test1')}
-                              >
-                                {testReviewMode.test1
-                                  ? 'Exit Review'
-                                  : 'Review Mode'}
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                        {exerciseMode === 'test2' && (
-                          <div className="flex items-center space-x-2">
-                            <Badge variant="outline">
-                              Test 2 Incorrect:{' '}
-                              {
-                                Object.keys(
-                                  getTestExerciseProgress('test2')
-                                    .incorrectExercises,
-                                ).length
-                              }
-                            </Badge>
-                            {Object.keys(
-                              getTestExerciseProgress('test2')
-                                .incorrectExercises,
-                            ).length > 0 && (
-                              <Button
-                                size="sm"
-                                variant={
-                                  testReviewMode.test2 ? 'default' : 'outline'
-                                }
-                                onClick={() => toggleTestReviewMode('test2')}
-                              >
-                                {testReviewMode.test2
-                                  ? 'Exit Review'
-                                  : 'Review Mode'}
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {exerciseMode === 'perfect' && (
-                      <div className="flex justify-center space-x-2 mb-4">
-                        <span className="text-sm text-muted-foreground self-center mr-2">
-                          Perfect Tense Mode:
-                        </span>
-                        <Button
-                          variant={
-                            perfectTenseMode === 'participle'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setPerfectTenseMode('participle')}
-                        >
-                          Past Participle
-                        </Button>
-                        <Button
-                          variant={
-                            perfectTenseMode === 'auxiliary'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setPerfectTenseMode('auxiliary')}
-                        >
-                          Auxiliary Verb
-                        </Button>
-                        <Button
-                          variant={
-                            perfectTenseMode === 'complete'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setPerfectTenseMode('complete')}
-                        >
-                          Complete Form
-                        </Button>
-                        <Button
-                          variant={
-                            perfectTenseMode === 'translate'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setPerfectTenseMode('translate')}
-                        >
-                          Translation
-                        </Button>
-                      </div>
-                    )}
-
-                    {exerciseMode === 'imperfectum' && (
-                      <div className="flex justify-center space-x-2 mb-4">
-                        <span className="text-sm text-muted-foreground self-center mr-2">
-                          Imperfectum Mode:
-                        </span>
-                        <Button
-                          variant={
-                            imperfectumMode === 'conjugation'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setImperfectumMode('conjugation')}
-                        >
-                          Conjugation
-                        </Button>
-                        <Button
-                          variant={
-                            imperfectumMode === 'complete'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setImperfectumMode('complete')}
-                        >
-                          Complete Sentence
-                        </Button>
-                        <Button
-                          variant={
-                            imperfectumMode === 'translate'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setImperfectumMode('translate')}
-                        >
-                          Translation
-                        </Button>
-                      </div>
-                    )}
-
-                    {exerciseMode === 'modalverbs' && (
-                      <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                        <span className="text-sm text-muted-foreground self-center mr-2">
-                          Modal Verbs Mode:
-                        </span>
-                        <Button
-                          variant={
-                            modalVerbsMode === 'conjugation'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setModalVerbsMode('conjugation')}
-                          className="mb-1"
-                        >
-                          Conjugation
-                        </Button>
-                        <Button
-                          variant={
-                            modalVerbsMode === 'usage' ? 'default' : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setModalVerbsMode('usage')}
-                          className="mb-1"
-                        >
-                          Usage
-                        </Button>
-                        <Button
-                          variant={
-                            modalVerbsMode === 'translate'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setModalVerbsMode('translate')}
-                          className="mb-1"
-                        >
-                          Translation
-                        </Button>
-                        <Button
-                          variant={
-                            modalVerbsMode === 'negative'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setModalVerbsMode('negative')}
-                          className="mb-1"
-                        >
-                          Negative Form
-                        </Button>
-                        <Button
-                          variant={
-                            modalVerbsMode === 'question'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setModalVerbsMode('question')}
-                          className="mb-1"
-                        >
-                          Question Form
-                        </Button>
-                      </div>
-                    )}
-
-                    {exerciseMode === 'conjunctions' && (
-                      <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                        <span className="text-sm text-muted-foreground self-center mr-2">
-                          Conjunctions Mode:
-                        </span>
-                        <Button
-                          variant={
-                            conjunctionsMode === 'complete'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setConjunctionsMode('complete')}
-                          className="mb-1"
-                        >
-                          Complete
-                        </Button>
-                        <Button
-                          variant={
-                            conjunctionsMode === 'translate'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setConjunctionsMode('translate')}
-                          className="mb-1"
-                        >
-                          Translate
-                        </Button>
-                        <Button
-                          variant={
-                            conjunctionsMode === 'identify'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setConjunctionsMode('identify')}
-                          className="mb-1"
-                        >
-                          Identify
-                        </Button>
-                        <Button
-                          variant={
-                            conjunctionsMode === 'wordOrder'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setConjunctionsMode('wordOrder')}
-                          className="mb-1"
-                        >
-                          Word Order
-                        </Button>
-                        <Button
-                          variant={
-                            conjunctionsMode === 'usage' ? 'default' : 'outline'
-                          }
-                          size="sm"
-                          onClick={() => setConjunctionsMode('usage')}
-                          className="mb-1"
-                        >
-                          Usage
-                        </Button>
-                      </div>
-                    )}
-
-                    {exerciseMode === 'finaltest' && (
-                      <>
-                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                          <span className="text-sm text-muted-foreground self-center mr-2">
-                            Exercise Mode:
-                          </span>
-                          <Button
-                            variant={
-                              finalTestMode === 'translate'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setFinalTestMode('translate')}
-                            className="mb-1"
-                            title="Translate from Dutch to English - includes all vocabulary"
-                          >
-                            Dutch → English
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'reverse'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setFinalTestMode('reverse')}
-                            className="mb-1"
-                            title="Translate from English to Dutch - includes all vocabulary"
-                          >
-                            English → Dutch
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'mixed' ? 'default' : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setFinalTestMode('mixed')}
-                            className="mb-1"
-                            title="Random mix of translation directions - includes all vocabulary"
-                          >
-                            Mixed
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'article'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setFinalTestMode('article')}
-                            className="mb-1"
-                            title="Practice only with nouns that have articles (de/het)"
-                          >
-                            Articles (de/het)
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'conjugation'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => setFinalTestMode('conjugation')}
-                            className="mb-1"
-                            title="Practice only with verbs that have conjugation forms"
-                          >
-                            Conjugation
-                          </Button>
-                        </div>
-
-                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                          <span className="text-sm text-muted-foreground self-center mr-2">
-                            Exam Exercises:
-                          </span>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-perfect'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => handleExamModeChange('exam-perfect')}
-                            className="mb-1"
-                            title="Perfect tense construction exercises"
-                          >
-                            Perfect Tense
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-imperfect'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() =>
-                              handleExamModeChange('exam-imperfect')
-                            }
-                            className="mb-1"
-                            title="Imperfect tense fill-in exercises"
-                          >
-                            Imperfect Tense
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-separable'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() =>
-                              handleExamModeChange('exam-separable')
-                            }
-                            className="mb-1"
-                            title="Separable verbs exercises"
-                          >
-                            Separable Verbs
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-conjunctions'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() =>
-                              handleExamModeChange('exam-conjunctions')
-                            }
-                            className="mb-1"
-                            title="Conjunction combination exercises"
-                          >
-                            Conjunctions
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-multiple-choice'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() =>
-                              handleExamModeChange('exam-multiple-choice')
-                            }
-                            className="mb-1"
-                            title="Multiple choice grammar exercises"
-                          >
-                            Multiple Choice
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-mixed'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => handleExamModeChange('exam-mixed')}
-                            className="mb-1"
-                            title="Mixed exam exercises from all categories"
-                          >
-                            Mixed Exam
-                          </Button>
-                          <Button
-                            variant={
-                              finalTestMode === 'exam-writing'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            size="sm"
-                            onClick={() => handleExamModeChange('exam-writing')}
-                            className="mb-1"
-                            title="Writing exercises - compose texts on various topics"
-                          >
-                            Writing
-                          </Button>
-                        </div>
-
-                        <div className="flex justify-center space-x-2 mb-4 flex-wrap">
-                          <div className="flex flex-col items-center">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <span className="text-sm text-muted-foreground">
-                                Category:
-                              </span>
-                              <select
-                                value={finalTestCategory}
-                                onChange={(e) => {
-                                  const selectedCategory = e.target.value;
-                                  // Only allow selection if category is relevant for current mode
-                                  if (
-                                    isCategoryRelevantForMode(
-                                      selectedCategory,
-                                      finalTestMode,
-                                    )
-                                  ) {
-                                    setFinalTestCategory(selectedCategory);
-                                  }
-                                }}
-                                className="px-3 py-1 border border-gray-300 rounded-md text-sm"
-                              >
-                                <option value="All Categories">
-                                  All Categories
-                                </option>
-                                {finalTestCategories.map((category, index) => {
-                                  const isRelevant = isCategoryRelevantForMode(
-                                    category,
-                                    finalTestMode,
-                                  );
-                                  return (
-                                    <option
-                                      key={`${category}-${index}`}
-                                      value={category}
-                                      disabled={!isRelevant}
-                                      style={{
-                                        color: isRelevant ? 'inherit' : '#999',
-                                        backgroundColor: isRelevant
-                                          ? 'inherit'
-                                          : '#f5f5f5',
-                                      }}
-                                    >
-                                      {category}{' '}
-                                      {!isRelevant
-                                        ? finalTestMode.startsWith('exam-')
-                                          ? '(uses exam categories)'
-                                          : '(not applicable)'
-                                        : ''}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                            </div>
-                            {finalTestMode.startsWith('exam-') && (
-                              <p className="text-xs text-muted-foreground text-center max-w-xs">
-                                Exam exercises use their own category system
-                              </p>
-                            )}
-                          </div>
-
-                          <Button
-                            variant={
-                              finalTestReviewMode ? 'default' : 'outline'
-                            }
-                            size="sm"
-                            onClick={() =>
-                              setFinalTestReviewMode(!finalTestReviewMode)
-                            }
-                            disabled={
-                              Object.keys(memoizedIncorrectWords).length === 0
-                            }
-                            className="mb-1"
-                            title="Review vocabulary mistakes from final test"
-                          >
-                            Vocabulary Review (
-                            {Object.keys(memoizedIncorrectWords).length})
-                          </Button>
-
-                          {finalTestMode.startsWith('exam-') && (
-                            <Button
-                              variant={
-                                finalExamReviewMode ? 'default' : 'outline'
-                              }
-                              size="sm"
-                              onClick={() => toggleFinalExamReviewMode()}
-                              disabled={
-                                !progress.finalExamProgress
-                                  ?.incorrectExercises ||
-                                Object.keys(
-                                  progress.finalExamProgress.incorrectExercises,
-                                ).length === 0
-                              }
-                              className="mb-1"
-                              title="Review exam exercise mistakes"
-                            >
-                              Exam Review (
-                              {progress.finalExamProgress?.incorrectExercises
-                                ? Object.keys(
-                                    progress.finalExamProgress
-                                      .incorrectExercises,
-                                  ).length
-                                : 0}
-                              )
-                            </Button>
-                          )}
-                        </div>
-                      </>
-                    )}
+                    {/* Collapsible Exercise Selection */}
+                    <CollapsibleExerciseSelector
+                      currentMode={exerciseMode}
+                      onModeSelect={(mode) => startNewSession(mode as any)}
+                      canStartMode={(mode) =>
+                        exerciseHelpers.canStartExercise(
+                          mode,
+                          progress.currentChapter,
+                        )
+                      }
+                      exerciseMode={exerciseMode}
+                      testReviewMode={testReviewMode}
+                      onToggleTestReviewMode={toggleTestReviewMode}
+                      getTestExerciseProgress={getTestExerciseProgress}
+                      perfectTenseMode={perfectTenseMode}
+                      onSetPerfectTenseMode={setPerfectTenseMode}
+                      imperfectumMode={imperfectumMode}
+                      onSetImperfectumMode={setImperfectumMode}
+                      modalVerbsMode={modalVerbsMode}
+                      onSetModalVerbsMode={setModalVerbsMode}
+                      conjunctionsMode={conjunctionsMode}
+                      onSetConjunctionsMode={setConjunctionsMode}
+                      selectedCategory={selectedCategory}
+                      onSetSelectedCategory={setSelectedCategory}
+                      availableCategories={availableCategories}
+                      finalTestMode={finalTestMode}
+                      onSetFinalTestMode={setFinalTestMode}
+                      finalTestCategory={finalTestCategory}
+                      onSetFinalTestCategory={setFinalTestCategory}
+                      finalTestCategories={finalTestCategories}
+                      finalTestReviewMode={finalTestReviewMode}
+                      onSetFinalTestReviewMode={setFinalTestReviewMode}
+                      finalExamReviewMode={finalExamReviewMode}
+                      onToggleFinalExamReviewMode={toggleFinalExamReviewMode}
+                      handleExamModeChange={handleExamModeChange}
+                      isCategoryRelevantForMode={isCategoryRelevantForMode}
+                      memoizedIncorrectWords={memoizedIncorrectWords}
+                      progress={progress}
+                      defaultExpanded={false}
+                    />
 
                     {(exerciseMode !== 'test1' &&
                       exerciseMode !== 'test2' &&
@@ -2803,13 +2106,9 @@ export default function DutchLearningPlatform() {
                                                 false,
                                               );
                                               // Reset session scores for exam exercises
-                                              setSessionScores((prev) => ({
-                                                ...prev,
-                                                finaltest: {
-                                                  correct: 0,
-                                                  total: 0,
-                                                },
-                                              }));
+                                              exerciseActions.resetSessionScore(
+                                                'finaltest',
+                                              );
                                             }}
                                             className="bg-green-600 text-white hover:bg-green-700 mr-2"
                                           >
@@ -2891,10 +2190,9 @@ export default function DutchLearningPlatform() {
                                       <Button
                                         onClick={() => {
                                           setFinalTestSessionCompleted(false);
-                                          setSessionScores((prev) => ({
-                                            ...prev,
-                                            finaltest: { correct: 0, total: 0 },
-                                          }));
+                                          exerciseActions.resetSessionScore(
+                                            'finaltest',
+                                          );
                                           // This will trigger the useEffect to reinitialize the queue
                                         }}
                                         className="bg-green-600 text-white hover:bg-green-700 mr-2"
@@ -3317,7 +2615,7 @@ export default function DutchLearningPlatform() {
                   totalWords={vocabulary.length}
                 />
               </TabsContent>
-            </Tabs>
+            </CollapsibleTabs>
           </>
         )}
       </div>
