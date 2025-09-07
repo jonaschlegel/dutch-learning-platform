@@ -201,6 +201,8 @@ export default function DutchLearningPlatform() {
     useState<string>('All Categories');
   const [finalTestReviewMode, setFinalTestReviewMode] = useState(false);
   const [finalExamReviewMode, setFinalExamReviewMode] = useState(false);
+  const [finalTestSessionCompleted, setFinalTestSessionCompleted] =
+    useState(false);
   const [showResults, setShowResults] = useState(false);
   const [sessionScores, setSessionScores] = useState<{
     [key: string]: { correct: number; total: number };
@@ -765,11 +767,30 @@ export default function DutchLearningPlatform() {
     };
   };
 
+  // Safe completion screen data
+  const finalTestCompletionData = useMemo(() => {
+    try {
+      const progress = finalTestQueue.getProgress();
+      const incorrectItems = finalTestQueue.getIncorrectItems();
+      return {
+        totalExercises: progress?.total || 0,
+        incorrectCount: incorrectItems ? Object.keys(incorrectItems).length : 0,
+      };
+    } catch (error) {
+      console.warn('Error getting final test completion data:', error);
+      return {
+        totalExercises: 0,
+        incorrectCount: 0,
+      };
+    }
+  }, [finalTestQueue, finalTestSessionCompleted]);
+
   // Reset exam exercise session when mode changes
   useEffect(() => {
     setCurrentExamExerciseIndex(0);
     setCompletedExamExercises(new Set());
     setExamExerciseSessionCompleted(false);
+    setFinalTestSessionCompleted(false);
     // Reset session scores when switching exam modes
     if (finalTestMode.startsWith('exam-')) {
       setSessionScores((prev) => ({
@@ -777,7 +798,7 @@ export default function DutchLearningPlatform() {
         finaltest: { correct: 0, total: 0 },
       }));
     }
-  }, [finalTestMode]);
+  }, [finalTestMode, finalTestReviewMode]);
 
   // Auto-switch to "All Categories" when current category becomes irrelevant for the mode
   useEffect(() => {
@@ -892,21 +913,36 @@ export default function DutchLearningPlatform() {
       markWordCompleted(currentFinalTestItem.id, correct ? 1 : 0);
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
 
-      // Check if we should show review mode after going through all items
-      if (finalTestQueue.shouldShowReviewMode()) {
-        // Show completion message and review option
-        setTimeout(() => {
-          const incorrectCount = Object.keys(
-            finalTestQueue.getIncorrectItems(),
-          ).length;
-          if (incorrectCount > 0) {
-            setShowResults(true);
+      // Check if we've finished all items (either for review or completion)
+      if (!finalTestQueue.hasMoreItems()) {
+        setFinalTestSessionCompleted(true);
+
+        // Check if we should show review mode after going through all items
+        if (finalTestQueue.shouldShowReviewMode()) {
+          // Show completion message and review option
+          setTimeout(() => {
+            const incorrectCount = Object.keys(
+              finalTestQueue.getIncorrectItems(),
+            ).length;
+            if (incorrectCount > 0) {
+              setShowResults(true);
+              toast({
+                title: 'Session Complete!',
+                description: `You have ${incorrectCount} words to review. Click "Review Mistakes" to practice them again.`,
+              });
+            }
+          }, 100);
+        } else {
+          // Perfect completion - no incorrect items
+          setTimeout(() => {
             toast({
-              title: 'Session Complete!',
-              description: `You have ${incorrectCount} words to review. Click "Review Mistakes" to practice them again.`,
+              title: 'Perfect Score!',
+              description: `You've completed all ${
+                finalTestQueue.getProgress().total
+              } exercises with no mistakes. Excellent work!`,
             });
-          }
-        }, 100);
+          }, 100);
+        }
       }
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
@@ -993,6 +1029,9 @@ export default function DutchLearningPlatform() {
       [exerciseMode]: { correct: 0, total: 0 },
     }));
     clearExerciseSession(); // Clear session when resetting
+
+    // Reset completion states
+    setFinalTestSessionCompleted(false);
 
     // Reset exam exercise state for finaltest modes with exam- prefix
     if (exerciseMode === 'finaltest' && finalTestMode.startsWith('exam-')) {
@@ -2452,7 +2491,30 @@ export default function DutchLearningPlatform() {
                                         conjunctionsQueue.getProgress().total) *
                                       100
                                     : exerciseMode === 'finaltest'
-                                    ? finalTestQueue.getProgress().percentage
+                                    ? (() => {
+                                        // Check if we're in exam mode
+                                        if (
+                                          [
+                                            'exam-perfect',
+                                            'exam-imperfect',
+                                            'exam-separable',
+                                            'exam-conjunctions',
+                                            'exam-multiple-choice',
+                                            'exam-writing',
+                                            'exam-mixed',
+                                          ].includes(finalTestMode)
+                                        ) {
+                                          const examProgress =
+                                            getExamExerciseProgress();
+                                          return examProgress.total > 0
+                                            ? (examProgress.current /
+                                                examProgress.total) *
+                                                100
+                                            : 0;
+                                        }
+                                        return finalTestQueue.getProgress()
+                                          .percentage;
+                                      })()
                                     : exerciseQueue.getProgress().percentage
                                 }%`,
                               }}
@@ -2808,6 +2870,67 @@ export default function DutchLearningPlatform() {
                                 </Card>
                               )}
                             </>
+                          ) : finalTestSessionCompleted ? (
+                            <Card className="text-center py-8">
+                              <CardContent>
+                                <div className="space-y-4">
+                                  <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+                                    <h3 className="text-xl font-bold text-green-800 mb-2">
+                                      🎉 Final Test Complete!
+                                    </h3>
+                                    <p className="text-green-700 mb-4">
+                                      You've completed all{' '}
+                                      {finalTestCompletionData.totalExercises}{' '}
+                                      exercises in {finalTestMode} mode
+                                      {finalTestCategory !== 'All Categories'
+                                        ? ` for ${finalTestCategory}`
+                                        : ''}
+                                      !
+                                    </p>
+                                    <div className="space-y-2">
+                                      <Button
+                                        onClick={() => {
+                                          setFinalTestSessionCompleted(false);
+                                          setSessionScores((prev) => ({
+                                            ...prev,
+                                            finaltest: { correct: 0, total: 0 },
+                                          }));
+                                          // This will trigger the useEffect to reinitialize the queue
+                                        }}
+                                        className="bg-green-600 text-white hover:bg-green-700 mr-2"
+                                      >
+                                        Practice Again
+                                      </Button>
+                                      {finalTestCompletionData.incorrectCount >
+                                        0 && (
+                                        <Button
+                                          onClick={() => {
+                                            setFinalTestReviewMode(true);
+                                            setFinalTestSessionCompleted(false);
+                                          }}
+                                          className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
+                                        >
+                                          Review Mistakes (
+                                          {
+                                            finalTestCompletionData.incorrectCount
+                                          }
+                                          )
+                                        </Button>
+                                      )}
+                                      <Button
+                                        variant="outline"
+                                        onClick={() =>
+                                          setFinalTestMode('mixed')
+                                        }
+                                        className="text-green-700 border-green-300 hover:bg-green-50"
+                                      >
+                                        Try Different Mode
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
                           ) : currentFinalTestItem ? (
                             <FinalTestExercise
                               item={currentFinalTestItem}
