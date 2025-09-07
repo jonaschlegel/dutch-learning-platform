@@ -60,12 +60,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     category: 'Perfect Tense',
     level: 'A2',
     instruction: 'Construct a perfect tense sentence using the given elements.',
-    question: '(Wim – zijn band – repareren)',
-    englishTranslation: '(Wim – his tire – repair)',
-    correctAnswer: 'Wim heeft zijn band gerepareerd.',
+    question: '(Wim – zijn fiets – wassen)',
+    englishTranslation: '(Wim – his bike – wash)',
+    correctAnswer: 'Wim heeft zijn fiets gewassen.',
     explanation:
-      'Correct answer: "Wim heeft zijn band gerepareerd." Use "heeft" with regular -eren verbs and past participle "gerepareerd".',
-    hints: ['Use "heeft" as auxiliary verb', 'Past participle: gerepareerd'],
+      'Correct answer: "Wim heeft zijn fiets gewassen." Use "heeft" with transitive verbs and past participle "gewassen".',
+    hints: ['Use "heeft" as auxiliary verb', 'Past participle: gewassen'],
     points: 2,
   },
   {
@@ -88,12 +88,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     category: 'Perfect Tense',
     level: 'A2',
     instruction: 'Construct a perfect tense sentence using the given elements.',
-    question: '(Karin – voor haar examen – zakken)',
-    englishTranslation: '(Karin – for her exam – fail)',
-    correctAnswer: 'Karin is voor haar examen gezakt.',
+    question: '(Karin – hard – studeren)',
+    englishTranslation: '(Karin – hard – study)',
+    correctAnswer: 'Karin heeft hard gestudeerd.',
     explanation:
-      'Correct answer: "Karin is voor haar examen gezakt." Use "is" with verbs expressing a change of state',
-    hints: ['Use "is" as auxiliary verb', 'Past participle: gezakt'],
+      'Correct answer: "Karin heeft hard gestudeerd." Use "heeft" with transitive verbs',
+    hints: ['Use "heeft" as auxiliary verb', 'Past participle: gestudeerd'],
     points: 2,
   },
   {
@@ -326,12 +326,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     category: 'Perfect Tense',
     level: 'A2',
     instruction: 'Construct a perfect tense sentence using the given elements.',
-    question: '(De student – voor het examen – slagen)',
-    englishTranslation: '(The student – for the exam – pass)',
-    correctAnswer: 'De student is voor het examen geslaagd.',
+    question: '(De student – goed – leren)',
+    englishTranslation: '(The student – well – learn)',
+    correctAnswer: 'De student heeft goed geleerd.',
     explanation:
-      'Correct answer: "De student is voor het examen geslaagd." Use "is" with verbs expressing a change of state',
-    hints: ['Use "is" as auxiliary verb', 'Past participle: geslaagd'],
+      'Correct answer: "De student heeft goed geleerd." Use "heeft" with transitive verbs',
+    hints: ['Use "heeft" as auxiliary verb', 'Past participle: geleerd'],
     points: 2,
   },
   {
@@ -354,11 +354,11 @@ export const perfectTenseExercises: ExamExercise[] = [
     category: 'Perfect Tense',
     level: 'A2',
     instruction: 'Construct a perfect tense sentence using the given elements.',
-    question: '(Het meisje – haar speelgoed – opruimen)',
-    englishTranslation: '(The girl – her toys – clean up)',
-    correctAnswer: 'Het meisje heeft haar speelgoed opgeruimd.',
+    question: '(Het meisje – haar boeken – opruimen)',
+    englishTranslation: '(The girl – her books – clean up)',
+    correctAnswer: 'Het meisje heeft haar boeken opgeruimd.',
     explanation:
-      'Correct answer: "Het meisje heeft haar speelgoed opgeruimd." Use "heeft" with transitive verbs',
+      'Correct answer: "Het meisje heeft haar boeken opgeruimd." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: opgeruimd'],
     points: 2,
   },
@@ -1578,13 +1578,13 @@ export const separableVerbsExercises: ExamExercise[] = [
     instruction:
       'Complete the sentence with the correct form of the separable verb.',
     question:
-      '(kennismaken – presens) Ik .......... met de nieuwe buurman ..........',
+      '(praten – presens) Ik .......... met de nieuwe buurman ..........',
     englishTranslation:
-      '(to get acquainted – present) I .......... with the new neighbor ..........',
-    correctAnswer: 'Ik maak kennis met de nieuwe buurman.',
+      '(to talk – present) I .......... with the new neighbor ..........',
+    correctAnswer: 'Ik praat met de nieuwe buurman.',
     explanation:
-      'Correct answer: "Ik maak kennis met de nieuwe buurman." Present tense separable verb: maak...kennis',
-    hints: ['Separate the prefix in present tense', 'maak + kennis'],
+      'Correct answer: "Ik praat met de nieuwe buurman." Regular verb - not separable',
+    hints: ['Regular verb', 'Not separable'],
     points: 2,
   },
   {
@@ -1611,13 +1611,13 @@ export const separableVerbsExercises: ExamExercise[] = [
     level: 'A2',
     instruction:
       'Complete the sentence with the correct form of the separable verb.',
-    question: '(samenwonen – perfectum) We .......... twee jaar ..........',
+    question: '(wonen – perfectum) We .......... hier twee jaar ..........',
     englishTranslation:
-      '(to live together – perfect) We .......... for two years ..........',
-    correctAnswer: 'We hebben twee jaar samengewoond.',
+      '(to live – perfect) We .......... here for two years ..........',
+    correctAnswer: 'We hebben hier twee jaar gewoond.',
     explanation:
-      'Correct answer: "We hebben twee jaar samengewoond." Perfect tense: hebben + samengewoond',
-    hints: ['Perfect: hebben + samengewoond', 'Prefix stays attached'],
+      'Correct answer: "We hebben hier twee jaar gewoond." Perfect tense: hebben + gewoond',
+    hints: ['Perfect: hebben + gewoond', 'Regular past participle'],
     points: 2,
   },
   {
@@ -1628,12 +1628,12 @@ export const separableVerbsExercises: ExamExercise[] = [
     instruction:
       'Complete the sentence with the correct form of the separable verb.',
     question:
-      '(solliciteren – imperfectum) Zij .......... voor een nieuwe baan ..........',
+      '(zoeken – imperfectum) Zij .......... naar een nieuwe baan ..........',
     englishTranslation:
-      '(to apply for a job – imperfect) She .......... for a new job ..........',
-    correctAnswer: 'Zij solliciteerde voor een nieuwe baan.',
+      '(to look for – imperfect) She .......... for a new job ..........',
+    correctAnswer: 'Zij zocht naar een nieuwe baan.',
     explanation:
-      'Correct answer: "Zij solliciteerde voor een nieuwe baan." Regular verb - not separable',
+      'Correct answer: "Zij zocht naar een nieuwe baan." Regular verb - not separable',
     hints: ['Regular verb', 'Not separable'],
     points: 2,
   },
@@ -1644,14 +1644,13 @@ export const separableVerbsExercises: ExamExercise[] = [
     level: 'A2',
     instruction:
       'Complete the sentence with the correct form of the separable verb.',
-    question:
-      '(tegenkomen – perfectum) Ik .......... mijn oude docent ..........',
+    question: '(zien – perfectum) Ik .......... mijn oude leraar ..........',
     englishTranslation:
-      '(to encounter – perfect) I .......... my old teacher ..........',
-    correctAnswer: 'Ik ben mijn oude docent tegengekomen.',
+      '(to see – perfect) I .......... my old teacher ..........',
+    correctAnswer: 'Ik heb mijn oude leraar gezien.',
     explanation:
-      'Correct answer: "Ik ben mijn oude docent tegengekomen." Perfect tense: ben + tegengekomen',
-    hints: ['Perfect: ben + tegengekomen', 'Motion-related verb uses "zijn"'],
+      'Correct answer: "Ik heb mijn oude leraar gezien." Perfect tense: heb + gezien',
+    hints: ['Perfect: heb + gezien', 'Regular transitive verb uses "hebben"'],
     points: 2,
   },
   {
@@ -1662,12 +1661,12 @@ export const separableVerbsExercises: ExamExercise[] = [
     instruction:
       'Complete the sentence with the correct form of the separable verb.',
     question:
-      '(reserveren – presens) De familie .......... een tafel .......... in het restaurant.',
+      '(bestellen – presens) De familie .......... het eten .......... in het restaurant.',
     englishTranslation:
-      '(to reserve – present) The family .......... a table .......... in the restaurant.',
-    correctAnswer: 'De familie reserveert een tafel in het restaurant.',
+      '(to order – present) The family .......... the food .......... in the restaurant.',
+    correctAnswer: 'De familie bestelt het eten in het restaurant.',
     explanation:
-      'Correct answer: "De familie reserveert een tafel in het restaurant." Regular verb - not separable',
+      'Correct answer: "De familie bestelt het eten in het restaurant." Regular verb - not separable',
     hints: ['Regular verb', 'Not separable'],
     points: 2,
   },
@@ -1701,13 +1700,12 @@ export const conjunctionExercises: ExamExercise[] = [
     category: 'Conjunctions',
     level: 'A2',
     instruction: 'Combine the two sentences using the given conjunction.',
-    question: 'Ik moet vanmiddag naar de tandarts. Ik heb een gaatje. (omdat)',
+    question: 'Ik moet vanmiddag naar de dokter. Ik ben ziek. (omdat)',
     englishTranslation:
-      'I have to go to the dentist this afternoon. I have a cavity. (because)',
-    correctAnswer:
-      'Ik moet vanmiddag naar de tandarts, omdat ik een gaatje heb.',
+      'I have to go to the doctor this afternoon. I am sick. (because)',
+    correctAnswer: 'Ik moet vanmiddag naar de dokter, omdat ik ziek ben.',
     explanation:
-      'Correct answer: "Ik moet vanmiddag naar de tandarts, omdat ik een gaatje heb." "Omdat" sends the verb to the end of the subordinate clause',
+      'Correct answer: "Ik moet vanmiddag naar de dokter, omdat ik ziek ben." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
     points: 2,
   },
@@ -1734,12 +1732,11 @@ export const conjunctionExercises: ExamExercise[] = [
     category: 'Conjunctions',
     level: 'A2',
     instruction: 'Combine the two sentences using the given conjunction.',
-    question: 'Ik ga mijn rijbewijs halen. Ik ben achttien. (zodra)',
-    englishTranslation:
-      "I'm going to get my driver's license. I am eighteen. (as soon as)",
-    correctAnswer: 'Ik ga mijn rijbewijs halen zodra ik achttien ben.',
+    question: 'Ik ga autorijden. Ik ben achttien. (zodra)',
+    englishTranslation: "I'm going to drive a car. I am eighteen. (as soon as)",
+    correctAnswer: 'Ik ga autorijden zodra ik achttien ben.',
     explanation:
-      'Correct answer: "Ik ga mijn rijbewijs halen zodra ik achttien ben." "Zodra" sends the verb to the end of the subordinate clause',
+      'Correct answer: "Ik ga autorijden zodra ik achttien ben." "Zodra" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "zodra"'],
     points: 2,
   },
@@ -1750,13 +1747,13 @@ export const conjunctionExercises: ExamExercise[] = [
     level: 'A2',
     instruction: 'Combine the two sentences using the given conjunction.',
     question:
-      'Ik heb een goed cijfer gehaald. Ik hoef geen herexamen te doen. (dus)',
+      'Ik heb een goed cijfer gehaald. Ik hoef geen extra toets te doen. (dus)',
     englishTranslation:
-      "I got a good grade. I don't need to retake the exam. (so)",
+      "I got a good grade. I don't need to do an extra test. (so)",
     correctAnswer:
-      'Ik heb een goed cijfer gehaald, dus ik hoef geen herexamen te doen.',
+      'Ik heb een goed cijfer gehaald, dus ik hoef geen extra toets te doen.',
     explanation:
-      'Correct answer: "Ik heb een goed cijfer gehaald, dus ik hoef geen herexamen te doen." "Dus" is a coordinating conjunction - normal word order',
+      'Correct answer: "Ik heb een goed cijfer gehaald, dus ik hoef geen extra toets te doen." "Dus" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "dus"'],
     points: 2,
   },
@@ -1810,13 +1807,13 @@ export const conjunctionExercises: ExamExercise[] = [
     level: 'A2',
     instruction: 'Combine the two sentences using the given conjunction.',
     question:
-      'Ik heb een goed cijfer gehaald. Ik hoef geen herexamen te doen. (zodat)',
+      'Ik heb een goed cijfer gehaald. Ik hoef geen extra toets te doen. (zodat)',
     englishTranslation:
-      "I got a good grade. I don't need to retake the exam. (so that)",
+      "I got a good grade. I don't need to do an extra test. (so that)",
     correctAnswer:
-      'Ik heb een goed cijfer gehaald zodat ik geen herexamen hoef te doen.',
+      'Ik heb een goed cijfer gehaald zodat ik geen extra toets hoef te doen.',
     explanation:
-      'Correct answer: "Ik heb een goed cijfer gehaald zodat ik geen herexamen hoef te doen." "Zodat" sends the verb to the end of the subordinate clause',
+      'Correct answer: "Ik heb een goed cijfer gehaald zodat ik geen extra toets hoef te doen." "Zodat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "zodat"'],
     points: 2,
   },
@@ -2053,11 +2050,12 @@ export const conjunctionExercises: ExamExercise[] = [
     category: 'Conjunctions',
     level: 'A2',
     instruction: 'Combine the two sentences using the given conjunction.',
-    question: 'Ik studeer hard. Ik wil slagen voor het examen. (zodat)',
-    englishTranslation: 'I study hard. I want to pass the exam. (so that)',
-    correctAnswer: 'Ik studeer hard zodat ik slaag voor het examen.',
+    question: 'Ik studeer hard. Ik wil goed doen voor het examen. (zodat)',
+    englishTranslation:
+      'I study hard. I want to do well on the exam. (so that)',
+    correctAnswer: 'Ik studeer hard zodat ik goed doe voor het examen.',
     explanation:
-      'Correct answer: "Ik studeer hard zodat ik slaag voor het examen." Use "zodat" to express purpose or goal',
+      'Correct answer: "Ik studeer hard zodat ik goed doe voor het examen." Use "zodat" to express purpose or goal',
     hints: ['Shows purpose or intention', 'Verb to end after "zodat"'],
     points: 2,
   },
@@ -3408,7 +3406,7 @@ export const writingExercises: ExamExercise[] = [
     correctAnswer: 'Open-ended writing exercise',
     wordCount: 100,
     sampleAnswer:
-      'Afgelopen zomer heb ik een prachtige vakantie gehad in Nederland. Ik heb Amsterdam bezocht en veel musea gezien, zoals het Rijksmuseum en het Van Gogh Museum. De grachten waren heel mooi en ik heb een rondvaart gemaakt. Daarna ben ik naar de kust gegaan en heb ik Scheveningen bezocht. Het strand was geweldig en het weer was perfect voor zwemmen. Ik heb ook traditioneel Nederlands eten geproefd, zoals stroopwafels en bitterballen. De mensen waren erg vriendelijk en veel mensen spraken goed Engels. Nederland is een prachtig land om te bezoeken. Ik wil zeker terugkomen!',
+      'Afgelopen zomer heb ik een prachtige vakantie gehad in Nederland. Ik heb Amsterdam bezocht en veel musea gezien, zoals het Rijksmuseum en het Van Gogh Museum. De stad was heel mooi en ik heb veel gewandeld. Daarna ben ik naar de kust gegaan en heb ik Scheveningen bezocht. Het strand was geweldig en het weer was perfect voor zwemmen. Ik heb ook traditioneel Nederlands eten geproefd, zoals kaas en brood. De mensen waren erg vriendelijk en veel mensen spraken goed Engels. Nederland is een prachtig land om te bezoeken. Ik wil zeker terugkomen!',
     explanation:
       'Write about places visited, activities, food, people, and overall experience',
     hints: [
