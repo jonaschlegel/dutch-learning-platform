@@ -131,14 +131,42 @@ export function ExamExerciseCard({
         if (Array.isArray(exercise.correctAnswer)) {
           correct = exercise.correctAnswer.some((answer) => {
             const answerLower = answer.toLowerCase().trim();
-            return reconstructedSentence.toLowerCase().trim() === answerLower;
+            const reconstructedLower = reconstructedSentence
+              .toLowerCase()
+              .trim();
+
+            // For separable verbs, extract the sentence part (after the instruction)
+            // The instruction part is in format: (verb – tense – form)
+            const instructionMatch =
+              reconstructedLower.match(/^\([^)]+\)\s*(.*)$/);
+            const sentencePart = instructionMatch
+              ? instructionMatch[1]
+              : reconstructedLower;
+
+            // Remove punctuation for comparison
+            const cleanAnswer = answerLower.replace(/[?.!]/g, '');
+            const cleanSentence = sentencePart.replace(/[?.!]/g, '');
+
+            return cleanSentence === cleanAnswer;
           });
         } else {
           const correctAnswerLower = exercise.correctAnswer
             .toLowerCase()
             .trim();
-          correct =
-            reconstructedSentence.toLowerCase().trim() === correctAnswerLower;
+          const reconstructedLower = reconstructedSentence.toLowerCase().trim();
+
+          // Extract the sentence part (after the instruction)
+          const instructionMatch =
+            reconstructedLower.match(/^\([^)]+\)\s*(.*)$/);
+          const sentencePart = instructionMatch
+            ? instructionMatch[1]
+            : reconstructedLower;
+
+          // Remove punctuation for comparison
+          const cleanAnswer = correctAnswerLower.replace(/[?.!]/g, '');
+          const cleanSentence = sentencePart.replace(/[?.!]/g, '');
+
+          correct = cleanSentence === cleanAnswer;
         }
         break;
 
