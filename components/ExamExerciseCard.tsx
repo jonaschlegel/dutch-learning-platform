@@ -24,7 +24,7 @@ import {
   Volume2,
   XCircle,
 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ExamExerciseCardProps {
   exercise: ExamExercise;
@@ -38,6 +38,7 @@ export function ExamExerciseCard({
   showHints = true,
 }: ExamExerciseCardProps) {
   const [userAnswer, setUserAnswer] = useState('');
+  const [userAnswers, setUserAnswers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -45,6 +46,34 @@ export function ExamExerciseCard({
   const [showAnswer, setShowAnswer] = useState(false);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Initialize userAnswers array for separable verbs
+  useEffect(() => {
+    if (exercise.type === 'separable-verbs') {
+      const blanksCount = (
+        exercise.question.match(/\.\.\.\.\.\.\.\.\.\./g) || []
+      ).length;
+      setUserAnswers(new Array(blanksCount).fill(''));
+    }
+  }, [exercise.type, exercise.question]);
+
+  // Helper function to reconstruct separable verb sentences
+  const reconstructSeparableVerbSentence = (
+    question: string,
+    answers: string[],
+  ): string => {
+    const parts = question.split('..........');
+    let result = '';
+
+    for (let i = 0; i < parts.length; i++) {
+      result += parts[i];
+      if (i < answers.length && answers[i]) {
+        result += answers[i];
+      }
+    }
+
+    return result.trim();
+  };
 
   const checkAnswer = () => {
     let correct = false;
@@ -65,7 +94,6 @@ export function ExamExerciseCard({
 
       case 'perfect-construction':
       case 'imperfect-fill':
-      case 'separable-verbs':
       case 'conjunctions-combine':
         userResponse = userAnswer.toLowerCase().trim();
         if (Array.isArray(exercise.correctAnswer)) {
@@ -92,6 +120,28 @@ export function ExamExerciseCard({
         }
         break;
 
+      case 'separable-verbs':
+        // For separable verbs, reconstruct the full sentence and compare
+        const reconstructedSentence = reconstructSeparableVerbSentence(
+          exercise.question,
+          userAnswers,
+        );
+        userResponse = reconstructedSentence;
+
+        if (Array.isArray(exercise.correctAnswer)) {
+          correct = exercise.correctAnswer.some((answer) => {
+            const answerLower = answer.toLowerCase().trim();
+            return reconstructedSentence.toLowerCase().trim() === answerLower;
+          });
+        } else {
+          const correctAnswerLower = exercise.correctAnswer
+            .toLowerCase()
+            .trim();
+          correct =
+            reconstructedSentence.toLowerCase().trim() === correctAnswerLower;
+        }
+        break;
+
       case 'writing-prompt':
         // For writing exercises, we consider it "correct" if user provided substantial content
         userResponse = userAnswer.trim();
@@ -110,6 +160,7 @@ export function ExamExerciseCard({
 
   const resetExercise = () => {
     setUserAnswer('');
+    setUserAnswers([]);
     setSelectedOption('');
     setShowFeedback(false);
     setIsCorrect(false);
@@ -122,7 +173,16 @@ export function ExamExerciseCard({
     if (e.key === 'Enter' && !showFeedback) {
       if (exercise.type === 'multiple-choice' && selectedOption) {
         checkAnswer();
-      } else if (exercise.type !== 'multiple-choice' && userAnswer.trim()) {
+      } else if (
+        exercise.type === 'separable-verbs' &&
+        userAnswers.some((answer) => answer.trim())
+      ) {
+        checkAnswer();
+      } else if (
+        exercise.type !== 'multiple-choice' &&
+        exercise.type !== 'separable-verbs' &&
+        userAnswer.trim()
+      ) {
         checkAnswer();
       }
     } else if (e.key === 'Enter' && showFeedback) {
@@ -209,7 +269,6 @@ export function ExamExerciseCard({
         );
 
       case 'imperfect-fill':
-      case 'separable-verbs':
         return (
           <div className="space-y-4">
             <div className="text-center">
@@ -237,6 +296,48 @@ export function ExamExerciseCard({
                       )}
                     </span>
                   ))}
+              </div>
+              {exercise.englishTranslation && (
+                <p className="text-sm text-muted-foreground italic">
+                  {exercise.englishTranslation}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'separable-verbs':
+        const separableParts = exercise.question.split('..........');
+
+        return (
+          <div className="space-y-4">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground mb-2">
+                {exercise.instruction}
+              </p>
+              <div className="text-lg font-medium text-foreground mb-2">
+                {separableParts.map((part, index) => (
+                  <span key={index}>
+                    {part}
+                    {index < separableParts.length - 1 && (
+                      <span className="mx-2">
+                        <Input
+                          value={userAnswers[index] || ''}
+                          onChange={(e) => {
+                            const newAnswers = [...userAnswers];
+                            newAnswers[index] = e.target.value;
+                            setUserAnswers(newAnswers);
+                          }}
+                          onKeyDown={handleKeyDown}
+                          placeholder="..."
+                          className="inline-block w-32 mx-1 text-center"
+                          disabled={showFeedback}
+                          autoFocus={index === 0}
+                        />
+                      </span>
+                    )}
+                  </span>
+                ))}
               </div>
               {exercise.englishTranslation && (
                 <p className="text-sm text-muted-foreground italic">
@@ -434,6 +535,8 @@ export function ExamExerciseCard({
               disabled={
                 exercise.type === 'multiple-choice'
                   ? !selectedOption
+                  : exercise.type === 'separable-verbs'
+                  ? !userAnswers.some((answer) => answer.trim())
                   : !userAnswer.trim()
               }
               className="px-8"
