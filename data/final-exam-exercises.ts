@@ -34,7 +34,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Peter – een boterham – eten)',
     englishTranslation: '(Peter – a sandwich – eat)',
-    correctAnswer: 'Peter heeft een boterham gegeten.',
+    correctAnswer: [
+      'Peter heeft een boterham gegeten',
+      'Peter heeft een boterham gegeten.',
+      'Peter heeft een boterham opgegeten',
+      'Peter heeft een boterham opgegeten.',
+    ],
     explanation:
       'Correct answer: "Peter heeft een boterham gegeten." Use "heeft" with regular verbs + past participle "gegeten".',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gegeten'],
@@ -48,7 +53,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Esther – een vraag aan de dokter – stellen)',
     englishTranslation: '(Esther – a question to the doctor – ask)',
-    correctAnswer: 'Esther heeft een vraag aan de dokter gesteld.',
+    correctAnswer: [
+      'Esther heeft een vraag aan de dokter gesteld',
+      'Esther heeft een vraag aan de dokter gesteld.',
+      'Esther heeft aan de dokter een vraag gesteld',
+      'Esther heeft aan de dokter een vraag gesteld.',
+    ],
     explanation:
       'Correct answer: "Esther heeft een vraag aan de dokter gesteld." Use "heeft" with transitive verbs and past participle "gesteld".',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gesteld'],
@@ -62,7 +72,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Wim – zijn fiets – wassen)',
     englishTranslation: '(Wim – his bike – wash)',
-    correctAnswer: 'Wim heeft zijn fiets gewassen.',
+    correctAnswer: [
+      'Wim heeft zijn fiets gewassen',
+      'Wim heeft zijn fiets gewassen.',
+      'Wim heeft zijn fiets schoongemaakt',
+      'Wim heeft zijn fiets schoongemaakt.',
+    ],
     explanation:
       'Correct answer: "Wim heeft zijn fiets gewassen." Use "heeft" with transitive verbs and past participle "gewassen".',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gewassen'],
@@ -76,7 +91,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Marjolijn – naar de markt – zijn)',
     englishTranslation: '(Marjolijn – to the market – be)',
-    correctAnswer: 'Marjolijn is naar de markt geweest.',
+    correctAnswer: [
+      'Marjolijn is naar de markt geweest',
+      'Marjolijn is naar de markt geweest.',
+      'Marjolijn is op de markt geweest',
+      'Marjolijn is op de markt geweest.',
+    ],
     explanation:
       'Correct answer: "Marjolijn is naar de markt geweest." Use "is" with motion verbs and "zijn"',
     hints: ['Use "is" as auxiliary verb', 'Past participle: geweest'],
@@ -90,7 +110,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Karin – hard – studeren)',
     englishTranslation: '(Karin – hard – study)',
-    correctAnswer: 'Karin heeft hard gestudeerd.',
+    correctAnswer: [
+      'Karin heeft hard gestudeerd',
+      'Karin heeft hard gestudeerd.',
+      'Karin heeft heel hard gestudeerd',
+      'Karin heeft heel hard gestudeerd.',
+    ],
     explanation:
       'Correct answer: "Karin heeft hard gestudeerd." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gestudeerd'],
@@ -104,7 +129,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Maria – haar huiswerk – maken)',
     englishTranslation: '(Maria – her homework – do)',
-    correctAnswer: 'Maria heeft haar huiswerk gemaakt.',
+    correctAnswer: [
+      'Maria heeft haar huiswerk gemaakt',
+      'Maria heeft haar huiswerk gemaakt.',
+      'Maria heeft haar huiswerk gedaan',
+      'Maria heeft haar huiswerk gedaan.',
+    ],
     explanation:
       'Correct answer: "Maria heeft haar huiswerk gemaakt." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gemaakt'],
@@ -118,7 +148,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De kinderen – in het park – spelen)',
     englishTranslation: '(The children – in the park – play)',
-    correctAnswer: 'De kinderen hebben in het park gespeeld.',
+    correctAnswer: [
+      'De kinderen hebben in het park gespeeld',
+      'De kinderen hebben in het park gespeeld.',
+      'De kinderen hebben buiten gespeeld',
+      'De kinderen hebben buiten gespeeld.',
+    ],
     explanation:
       'Correct answer: "De kinderen hebben in het park gespeeld." Use "hebben" with most verbs',
     hints: ['Use "hebben" as auxiliary verb', 'Past participle: gespeeld'],
@@ -132,7 +167,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Jan – naar Amsterdam – reizen)',
     englishTranslation: '(Jan – to Amsterdam – travel)',
-    correctAnswer: 'Jan is naar Amsterdam gereisd.',
+    correctAnswer: [
+      'Jan is naar Amsterdam gereisd.',
+      'Jan is naar Amsterdam gereisd',
+    ],
     explanation:
       'Correct answer: "Jan is naar Amsterdam gereisd." Use "is" with motion verbs',
     hints: ['Use "is" as auxiliary verb', 'Past participle: gereisd'],
@@ -146,7 +184,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Wij – een nieuwe auto – kopen)',
     englishTranslation: '(We – a new car – buy)',
-    correctAnswer: 'Wij hebben een nieuwe auto gekocht.',
+    correctAnswer: [
+      'Wij hebben een nieuwe auto gekocht.',
+      'Wij hebben een nieuwe auto gekocht',
+    ],
     explanation:
       'Correct answer: "Wij hebben een nieuwe auto gekocht." Use "hebben" with transitive verbs',
     hints: ['Use "hebben" as auxiliary verb', 'Past participle: gekocht'],
@@ -160,7 +201,12 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Lisa – vroeg – opstaan)',
     englishTranslation: '(Lisa – early – get up)',
-    correctAnswer: 'Lisa is vroeg opgestaan.',
+    correctAnswer: [
+      'Lisa is vroeg opgestaan',
+      'Lisa is vroeg opgestaan.',
+      'Lisa is heel vroeg opgestaan',
+      'Lisa is heel vroeg opgestaan.',
+    ],
     explanation:
       'Correct answer: "Lisa is vroeg opgestaan." Use "is" with motion/state change verbs',
     hints: ['Use "is" as auxiliary verb', 'Past participle: opgestaan'],
@@ -174,7 +220,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Sophie – een brief – schrijven)',
     englishTranslation: '(Sophie – a letter – write)',
-    correctAnswer: 'Sophie heeft een brief geschreven.',
+    correctAnswer: [
+      'Sophie heeft een brief geschreven.',
+      'Sophie heeft een brief geschreven',
+    ],
     explanation:
       'Correct answer: "Sophie heeft een brief geschreven." Use "heeft" with regular verbs + past participle',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: geschreven'],
@@ -188,7 +237,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De trein – te laat – aankomen)',
     englishTranslation: '(The train – late – arrive)',
-    correctAnswer: 'De trein is te laat aangekomen.',
+    correctAnswer: [
+      'De trein is te laat aangekomen.',
+      'De trein is te laat aangekomen',
+    ],
     explanation:
       'Correct answer: "De trein is te laat aangekomen." Use "is" with motion verbs',
     hints: ['Use "is" as auxiliary verb', 'Past participle: aangekomen'],
@@ -202,7 +254,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Mijn broer – zijn sleutels – verliezen)',
     englishTranslation: '(My brother – his keys – lose)',
-    correctAnswer: 'Mijn broer heeft zijn sleutels verloren.',
+    correctAnswer: [
+      'Mijn broer heeft zijn sleutels verloren.',
+      'Mijn broer heeft zijn sleutels verloren',
+    ],
     explanation:
       'Correct answer: "Mijn broer heeft zijn sleutels verloren." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: verloren'],
@@ -216,7 +271,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(We – naar de bioscoop – gaan)',
     englishTranslation: '(We – to the cinema – go)',
-    correctAnswer: 'We zijn naar de bioscoop gegaan.',
+    correctAnswer: [
+      'We zijn naar de bioscoop gegaan.',
+      'We zijn naar de bioscoop gegaan',
+    ],
     explanation:
       'Correct answer: "We zijn naar de bioscoop gegaan." Use "zijn" with motion verbs',
     hints: ['Use "zijn" as auxiliary verb', 'Past participle: gegaan'],
@@ -230,7 +288,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Het kind – de hele nacht – huilen)',
     englishTranslation: '(The child – all night – cry)',
-    correctAnswer: 'Het kind heeft de hele nacht gehuild.',
+    correctAnswer: [
+      'Het kind heeft de hele nacht gehuild.',
+      'Het kind heeft de hele nacht gehuild',
+    ],
     explanation:
       'Correct answer: "Het kind heeft de hele nacht gehuild." Use "heeft" with regular verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gehuild'],
@@ -244,7 +305,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Anna – haar fiets – verkopen)',
     englishTranslation: '(Anna – her bike – sell)',
-    correctAnswer: 'Anna heeft haar fiets verkocht.',
+    correctAnswer: [
+      'Anna heeft haar fiets verkocht.',
+      'Anna heeft haar fiets verkocht',
+    ],
     explanation:
       'Correct answer: "Anna heeft haar fiets verkocht." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: verkocht'],
@@ -258,7 +322,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De kat – op de tafel – springen)',
     englishTranslation: '(The cat – on the table – jump)',
-    correctAnswer: 'De kat is op de tafel gesprongen.',
+    correctAnswer: [
+      'De kat is op de tafel gesprongen.',
+      'De kat is op de tafel gesprongen',
+    ],
     explanation:
       'Correct answer: "De kat is op de tafel gesprongen." Use "is" with motion verbs',
     hints: ['Use "is" as auxiliary verb', 'Past participle: gesprongen'],
@@ -272,7 +339,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Jullie – een cadeau – krijgen)',
     englishTranslation: '(You – a present – receive)',
-    correctAnswer: 'Jullie hebben een cadeau gekregen.',
+    correctAnswer: [
+      'Jullie hebben een cadeau gekregen.',
+      'Jullie hebben een cadeau gekregen',
+    ],
     explanation:
       'Correct answer: "Jullie hebben een cadeau gekregen." Use "hebben" with transitive verbs',
     hints: ['Use "hebben" as auxiliary verb', 'Past participle: gekregen'],
@@ -286,7 +356,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Ik – mijn tanden – poetsen)',
     englishTranslation: '(I – my teeth – brush)',
-    correctAnswer: 'Ik heb mijn tanden gepoetst.',
+    correctAnswer: [
+      'Ik heb mijn tanden gepoetst.',
+      'Ik heb mijn tanden gepoetst',
+    ],
     explanation:
       'Correct answer: "Ik heb mijn tanden gepoetst." Use "heb" with transitive verbs',
     hints: ['Use "heb" as auxiliary verb', 'Past participle: gepoetst'],
@@ -300,7 +373,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De dokter – het medicijn – voorschrijven)',
     englishTranslation: '(The doctor – the medicine – prescribe)',
-    correctAnswer: 'De dokter heeft het medicijn voorgeschreven.',
+    correctAnswer: [
+      'De dokter heeft het medicijn voorgeschreven.',
+      'De dokter heeft het medicijn voorgeschreven',
+    ],
     explanation:
       'Correct answer: "De dokter heeft het medicijn voorgeschreven." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: voorgeschreven'],
@@ -314,7 +390,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Mijn ouders – naar Spanje – verhuizen)',
     englishTranslation: '(My parents – to Spain – move)',
-    correctAnswer: 'Mijn ouders zijn naar Spanje verhuisd.',
+    correctAnswer: [
+      'Mijn ouders zijn naar Spanje verhuisd.',
+      'Mijn ouders zijn naar Spanje verhuisd',
+    ],
     explanation:
       'Correct answer: "Mijn ouders zijn naar Spanje verhuisd." Use "zijn" with motion/change verbs',
     hints: ['Use "zijn" as auxiliary verb', 'Past participle: verhuisd'],
@@ -328,7 +407,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De student – goed – leren)',
     englishTranslation: '(The student – well – learn)',
-    correctAnswer: 'De student heeft goed geleerd.',
+    correctAnswer: [
+      'De student heeft goed geleerd.',
+      'De student heeft goed geleerd',
+    ],
     explanation:
       'Correct answer: "De student heeft goed geleerd." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: geleerd'],
@@ -342,7 +424,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Lisa – haar haar – knippen)',
     englishTranslation: '(Lisa – her hair – cut)',
-    correctAnswer: 'Lisa heeft haar haar geknipt.',
+    correctAnswer: [
+      'Lisa heeft haar haar geknipt.',
+      'Lisa heeft haar haar geknipt',
+    ],
     explanation:
       'Correct answer: "Lisa heeft haar haar geknipt." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: geknipt'],
@@ -356,7 +441,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Het meisje – haar boeken – opruimen)',
     englishTranslation: '(The girl – her books – clean up)',
-    correctAnswer: 'Het meisje heeft haar boeken opgeruimd.',
+    correctAnswer: [
+      'Het meisje heeft haar boeken opgeruimd.',
+      'Het meisje heeft haar boeken opgeruimd',
+    ],
     explanation:
       'Correct answer: "Het meisje heeft haar boeken opgeruimd." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: opgeruimd'],
@@ -370,7 +458,7 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De auto – kapot – gaan)',
     englishTranslation: '(The car – broken – go)',
-    correctAnswer: 'De auto is kapot gegaan.',
+    correctAnswer: ['De auto is kapot gegaan.', 'De auto is kapot gegaan'],
     explanation:
       'Correct answer: "De auto is kapot gegaan." Use "is" with motion/state change verbs',
     hints: ['Use "is" as auxiliary verb', 'Past participle: gegaan'],
@@ -384,7 +472,7 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Ik – mijn boek – lezen)',
     englishTranslation: '(I – my book – read)',
-    correctAnswer: 'Ik heb mijn boek gelezen.',
+    correctAnswer: ['Ik heb mijn boek gelezen.', 'Ik heb mijn boek gelezen'],
     explanation:
       'Correct answer: "Ik heb mijn boek gelezen." Use "heb" with transitive verbs',
     hints: ['Use "heb" as auxiliary verb', 'Past participle: gelezen'],
@@ -398,7 +486,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De dokter – het recept – schrijven)',
     englishTranslation: '(The doctor – the prescription – write)',
-    correctAnswer: 'De dokter heeft het recept geschreven.',
+    correctAnswer: [
+      'De dokter heeft het recept geschreven.',
+      'De dokter heeft het recept geschreven',
+    ],
     explanation:
       'Correct answer: "De dokter heeft het recept geschreven." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: geschreven'],
@@ -412,7 +503,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Mijn ouders – naar het buitenland – reizen)',
     englishTranslation: '(My parents – to abroad – travel)',
-    correctAnswer: 'Mijn ouders zijn naar het buitenland gereisd.',
+    correctAnswer: [
+      'Mijn ouders zijn naar het buitenland gereisd.',
+      'Mijn ouders zijn naar het buitenland gereisd',
+    ],
     explanation:
       'Correct answer: "Mijn ouders zijn naar het buitenland gereisd." Use "zijn" with motion verbs',
     hints: ['Use "zijn" as auxiliary verb', 'Past participle: gereisd'],
@@ -426,7 +520,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(De student – hard – studeren)',
     englishTranslation: '(The student – hard – study)',
-    correctAnswer: 'De student heeft hard gestudeerd.',
+    correctAnswer: [
+      'De student heeft hard gestudeerd.',
+      'De student heeft hard gestudeerd',
+    ],
     explanation:
       'Correct answer: "De student heeft hard gestudeerd." Use "heeft" with regular verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gestudeerd'],
@@ -440,7 +537,10 @@ export const perfectTenseExercises: ExamExercise[] = [
     instruction: 'Construct a perfect tense sentence using the given elements.',
     question: '(Lisa – een nieuwe jas – kopen)',
     englishTranslation: '(Lisa – a new jacket – buy)',
-    correctAnswer: 'Lisa heeft een nieuwe jas gekocht.',
+    correctAnswer: [
+      'Lisa heeft een nieuwe jas gekocht.',
+      'Lisa heeft een nieuwe jas gekocht',
+    ],
     explanation:
       'Correct answer: "Lisa heeft een nieuwe jas gekocht." Use "heeft" with transitive verbs',
     hints: ['Use "heeft" as auxiliary verb', 'Past participle: gekocht'],
@@ -460,7 +560,7 @@ export const imperfectExercises: ExamExercise[] = [
       'Gisteren .......... ik op internet twee kaartjes voor de voorstelling. (kopen)',
     englishTranslation:
       'Yesterday I .......... two tickets for the show on the internet. (to buy)',
-    correctAnswer: 'kocht',
+    correctAnswer: ['kocht', 'kocht.'],
     explanation: 'Correct answer: "kocht" Imperfect of "kopen" is "kocht"',
     hints: ['Strong verb: kopen - kocht', 'First person singular'],
     points: 1,
@@ -475,7 +575,7 @@ export const imperfectExercises: ExamExercise[] = [
       'Ik .......... de docent of we de toets een week konden uitstellen. (vragen)',
     englishTranslation:
       'I .......... the teacher if we could postpone the test by a week. (to ask)',
-    correctAnswer: 'vroeg',
+    correctAnswer: ['vroeg', 'vroeg.'],
     explanation: 'Correct answer: "vroeg" Imperfect of "vragen" is "vroeg"',
     hints: ['Strong verb: vragen - vroeg', 'First person singular'],
     points: 1,
@@ -488,7 +588,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Ik .......... niet wat hij zei. (begrijpen)',
     englishTranslation: 'I .......... not what he said. (to understand)',
-    correctAnswer: 'begreep',
+    correctAnswer: ['begreep', 'begreep.'],
     explanation:
       'Correct answer: "begreep" Imperfect of "begrijpen" is "begreep"',
     hints: ['Strong verb: begrijpen - begreep', 'First person singular'],
@@ -504,7 +604,7 @@ export const imperfectExercises: ExamExercise[] = [
       'Ik zag mijn vriendin en .......... haar op straat maar ze hoorde me niet. (roepen)',
     englishTranslation:
       "I saw my friend and .......... her on the street but she didn't hear me. (to call)",
-    correctAnswer: 'riep',
+    correctAnswer: ['riep', 'riep.'],
     explanation: 'Correct answer: "riep" Imperfect of "roepen" is "riep"',
     hints: ['Strong verb: roepen - riep', 'First person singular'],
     points: 1,
@@ -519,7 +619,7 @@ export const imperfectExercises: ExamExercise[] = [
       'Ik .......... ziek, omdat ik iets verkeerds had gegeten. (worden)',
     englishTranslation:
       'I .......... sick, because I had eaten something wrong. (to become)',
-    correctAnswer: 'werd',
+    correctAnswer: ['werd', 'werd.'],
     explanation: 'Correct answer: "werd" Imperfect of "worden" is "werd"',
     hints: ['Strong verb: worden - werd', 'First person singular'],
     points: 1,
@@ -532,7 +632,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Elke dag .......... ik naar school. (lopen)',
     englishTranslation: 'Every day I .......... to school. (walk)',
-    correctAnswer: 'liep',
+    correctAnswer: ['liep', 'liep.'],
     explanation: 'Correct answer: "liep" Imperfect of "lopen" is "liep"',
     hints: ['Strong verb: lopen - liep', 'First person singular'],
     points: 1,
@@ -545,7 +645,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Hij .......... altijd veel boeken. (lezen)',
     englishTranslation: 'He always .......... many books. (read)',
-    correctAnswer: 'las',
+    correctAnswer: ['las', 'las.'],
     explanation: 'Correct answer: "las" Imperfect of "lezen" is "las"',
     hints: ['Strong verb: lezen - las', 'Third person singular'],
     points: 1,
@@ -558,7 +658,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Vroeger .......... we vaak naar oma. (gaan)',
     englishTranslation: 'In the past we often .......... to grandma. (go)',
-    correctAnswer: 'gingen',
+    correctAnswer: ['gingen', 'gingen.'],
     explanation: 'Correct answer: "gingen" Imperfect of "gaan" is "gingen"',
     hints: ['Strong verb: gaan - gingen', 'First person plural'],
     points: 1,
@@ -571,7 +671,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Mijn vader .......... hard voor zijn werk. (werken)',
     englishTranslation: 'My father .......... hard for his job. (work)',
-    correctAnswer: 'werkte',
+    correctAnswer: ['werkte', 'werkte.'],
     explanation: 'Correct answer: "werkte" Imperfect of "werken" is "werkte"',
     hints: ['Weak verb: werken - werkte', 'Third person singular'],
     points: 1,
@@ -585,7 +685,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'De leraar .......... de les heel duidelijk. (uitleggen)',
     englishTranslation:
       'The teacher .......... the lesson very clearly. (explain)',
-    correctAnswer: 'legde uit',
+    correctAnswer: ['legde uit', 'legde uit.'],
     explanation:
       'Correct answer: "legde uit" Separable verb: "uitleggen" becomes "legde uit"',
     hints: ['Separable verb: uit + leggen', 'Third person singular'],
@@ -599,7 +699,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Ik .......... altijd fruit voor het ontbijt. (eten)',
     englishTranslation: 'I always .......... fruit for breakfast. (eat)',
-    correctAnswer: 'at',
+    correctAnswer: ['at', 'at.'],
     explanation:
       'Correct answer: "at" Irregular verb "eten" → "at" in imperfect',
     hints: ['Irregular form of "eten"', 'First person singular'],
@@ -613,7 +713,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Zij .......... vaak te laat naar school. (komen)',
     englishTranslation: 'She often .......... late to school. (come)',
-    correctAnswer: 'kwam',
+    correctAnswer: ['kwam', 'kwam.'],
     explanation:
       'Correct answer: "kwam" Irregular verb "komen" → "kwam" in imperfect',
     hints: ['Irregular form of "komen"', 'Third person singular'],
@@ -627,7 +727,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'We .......... elke dag naar muziek. (luisteren)',
     englishTranslation: 'We .......... to music every day. (listen)',
-    correctAnswer: 'luisterden',
+    correctAnswer: ['luisterden', 'luisterden.'],
     explanation: 'Correct answer: "luisterden" Regular verb: stem + den',
     hints: ['Regular verb', 'Add -den to stem'],
     points: 2,
@@ -640,7 +740,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Hij .......... altijd zijn sleutels. (vergeten)',
     englishTranslation: 'He always .......... his keys. (forget)',
-    correctAnswer: 'vergat',
+    correctAnswer: ['vergat', 'vergat.'],
     explanation:
       'Correct answer: "vergat" Irregular verb "vergeten" → "vergat" in imperfect',
     hints: ['Irregular form of "vergeten"', 'Third person singular'],
@@ -654,7 +754,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Jullie .......... veel boeken in de bibliotheek. (lezen)',
     englishTranslation: 'You .......... many books in the library. (read)',
-    correctAnswer: 'lazen',
+    correctAnswer: ['lazen', 'lazen.'],
     explanation:
       'Correct answer: "lazen" Irregular verb "lezen" → "lazen" in imperfect',
     hints: ['Irregular form of "lezen"', 'Second person plural'],
@@ -668,7 +768,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Mijn moeder .......... vroeger als verpleegster. (werken)',
     englishTranslation: 'My mother .......... as a nurse before. (work)',
-    correctAnswer: 'werkte',
+    correctAnswer: ['werkte', 'werkte.'],
     explanation: 'Correct answer: "werkte" Regular verb: stem + te',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -681,7 +781,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'De kinderen .......... in de tuin. (spelen)',
     englishTranslation: 'The children .......... in the garden. (play)',
-    correctAnswer: 'speelden',
+    correctAnswer: ['speelden', 'speelden.'],
     explanation: 'Correct answer: "speelden" Regular verb: stem + den',
     hints: ['Regular verb', 'Add -den to stem'],
     points: 2,
@@ -694,7 +794,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Ik .......... niet wat er gebeurde. (begrijpen)',
     englishTranslation: 'I .......... not what happened. (understand)',
-    correctAnswer: 'begreep',
+    correctAnswer: ['begreep', 'begreep.'],
     explanation:
       'Correct answer: "begreep" Irregular verb "begrijpen" → "begreep" in imperfect',
     hints: ['Irregular form of "begrijpen"', 'First person singular'],
@@ -708,7 +808,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Zij .......... elke ochtend vroeg op. (staan)',
     englishTranslation: 'She .......... up early every morning. (stand)',
-    correctAnswer: 'stond',
+    correctAnswer: ['stond', 'stond.'],
     explanation:
       'Correct answer: "stond" Irregular verb "staan" → "stond" in imperfect',
     hints: ['Irregular form of "staan"', 'Third person singular'],
@@ -722,7 +822,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'We .......... elke zomer naar Frankrijk. (reizen)',
     englishTranslation: 'We .......... to France every summer. (travel)',
-    correctAnswer: 'reisden',
+    correctAnswer: ['reisden', 'reisden.'],
     explanation: 'Correct answer: "reisden" Regular verb: stem + den',
     hints: ['Regular verb', 'Add -den to stem'],
     points: 2,
@@ -735,7 +835,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'De hond .......... altijd bij de deur. (wachten)',
     englishTranslation: 'The dog always .......... by the door. (wait)',
-    correctAnswer: 'wachtte',
+    correctAnswer: ['wachtte', 'wachtte.'],
     explanation: 'Correct answer: "wachtte" Regular verb: stem + te',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -748,7 +848,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Jullie .......... vaak naar de markt. (gaan)',
     englishTranslation: 'You often .......... to the market. (go)',
-    correctAnswer: 'gingen',
+    correctAnswer: ['gingen', 'gingen.'],
     explanation:
       'Correct answer: "gingen" Irregular verb "gaan" → "gingen" in imperfect',
     hints: ['Irregular form of "gaan"', 'Second person plural'],
@@ -763,7 +863,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'Mijn vader .......... altijd de krant na het eten. (lezen)',
     englishTranslation:
       'My father always .......... the newspaper after dinner. (read)',
-    correctAnswer: 'las',
+    correctAnswer: ['las', 'las.'],
     explanation:
       'Correct answer: "las" Irregular verb "lezen" → "las" in imperfect',
     hints: ['Irregular form of "lezen"', 'Third person singular'],
@@ -777,7 +877,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Ik .......... mijn huiswerk altijd op tijd af. (maken)',
     englishTranslation: 'I always .......... my homework on time. (finish)',
-    correctAnswer: 'maakte',
+    correctAnswer: ['maakte', 'maakte.'],
     explanation: 'Correct answer: "maakte" Regular verb: stem + te',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -790,7 +890,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the imperfect form of the verb.',
     question: 'Zij .......... elke avond in het park. (wandelen)',
     englishTranslation: 'She .......... in the park every evening. (walk)',
-    correctAnswer: 'wandelde',
+    correctAnswer: ['wandelde', 'wandelde.'],
     explanation: 'Correct answer: "wandelde" Regular verb: stem + de',
     hints: ['Regular verb', 'Add -de to stem'],
     points: 2,
@@ -804,7 +904,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'Vroeger .......... ik elke ochtend om 7 uur. (opstaan)',
     englishTranslation:
       "In the past I .......... every morning at 7 o'clock. (get up)",
-    correctAnswer: 'stond op',
+    correctAnswer: ['stond op', 'stond op.'],
     explanation:
       'Correct answer: "stond op" Separable verb: opstaan becomes stond...op in imperfect',
     hints: ['Separable verb: op + staan', 'Irregular verb: staan - stond'],
@@ -819,7 +919,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'Mijn oma .......... altijd heerlijke taart. (maken)',
     englishTranslation:
       'My grandmother always .......... delicious cake. (make)',
-    correctAnswer: 'maakte',
+    correctAnswer: ['maakte', 'maakte.'],
     explanation: 'Correct answer: "maakte" Regular verb: maken - maakte',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -832,7 +932,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Als kind .......... hij vaak ziek. (zijn)',
     englishTranslation: 'As a child he .......... often sick. (be)',
-    correctAnswer: 'was',
+    correctAnswer: ['was', 'was.'],
     explanation:
       'Correct answer: "was" Irregular verb "zijn" → "was" in imperfect',
     hints: ['Irregular form of "zijn"', 'Third person singular'],
@@ -846,7 +946,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'We .......... elke zomer naar het strand. (gaan)',
     englishTranslation: 'We .......... to the beach every summer. (go)',
-    correctAnswer: 'gingen',
+    correctAnswer: ['gingen', 'gingen.'],
     explanation:
       'Correct answer: "gingen" Irregular verb "gaan" → "gingen" in imperfect',
     hints: ['Irregular form of "gaan"', 'First person plural'],
@@ -860,7 +960,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Zij .......... nooit haar huiswerk op tijd. (maken)',
     englishTranslation: 'She never .......... her homework on time. (do)',
-    correctAnswer: 'maakte',
+    correctAnswer: ['maakte', 'maakte.'],
     explanation: 'Correct answer: "maakte" Regular verb: maken - maakte',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -873,7 +973,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Ik .......... de hele dag naar muziek. (luisteren)',
     englishTranslation: 'I .......... to music all day. (listen)',
-    correctAnswer: 'luisterde',
+    correctAnswer: ['luisterde', 'luisterde.'],
     explanation:
       'Correct answer: "luisterde" Regular verb: luisteren - luisterde',
     hints: ['Regular verb', 'Add -de to stem'],
@@ -887,7 +987,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'De kinderen .......... buiten in de tuin. (spelen)',
     englishTranslation: 'The children .......... outside in the garden. (play)',
-    correctAnswer: 'speelden',
+    correctAnswer: ['speelden', 'speelden.'],
     explanation: 'Correct answer: "speelden" Regular verb: spelen - speelden',
     hints: ['Regular verb', 'Add -den to stem'],
     points: 2,
@@ -900,7 +1000,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Hij .......... elke ochtend koffie. (drinken)',
     englishTranslation: 'He .......... coffee every morning. (drink)',
-    correctAnswer: 'dronk',
+    correctAnswer: ['dronk', 'dronk.'],
     explanation:
       'Correct answer: "dronk" Irregular verb "drinken" → "dronk" in imperfect',
     hints: ['Irregular form of "drinken"', 'Third person singular'],
@@ -914,7 +1014,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Vroeger .......... we geen auto. (hebben)',
     englishTranslation: 'In the past we .......... no car. (have)',
-    correctAnswer: 'hadden',
+    correctAnswer: ['hadden', 'hadden.'],
     explanation:
       'Correct answer: "hadden" Irregular verb "hebben" → "hadden" in imperfect',
     hints: ['Irregular form of "hebben"', 'First person plural'],
@@ -929,7 +1029,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'Mijn vader .......... altijd de krant na het ontbijt. (lezen)',
     englishTranslation:
       'My father always .......... the newspaper after breakfast. (read)',
-    correctAnswer: 'las',
+    correctAnswer: ['las', 'las.'],
     explanation:
       'Correct answer: "las" Irregular verb "lezen" → "las" in imperfect',
     hints: ['Irregular form of "lezen"', 'Third person singular'],
@@ -943,7 +1043,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Het .......... gisteren de hele dag. (regenen)',
     englishTranslation: 'It .......... all day yesterday. (rain)',
-    correctAnswer: 'regende',
+    correctAnswer: ['regende', 'regende.'],
     explanation: 'Correct answer: "regende" Regular verb: regenen - regende',
     hints: ['Regular verb', 'Add -de to stem'],
     points: 2,
@@ -956,7 +1056,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Zij .......... vroeger in het ziekenhuis. (werken)',
     englishTranslation: 'She .......... in the hospital in the past. (work)',
-    correctAnswer: 'werkte',
+    correctAnswer: ['werkte', 'werkte.'],
     explanation: 'Correct answer: "werkte" Regular verb: werken - werkte',
     hints: ['Regular verb', 'Add -te to stem'],
     points: 2,
@@ -969,7 +1069,7 @@ export const imperfectExercises: ExamExercise[] = [
     instruction: 'Fill in the correct imperfect tense form.',
     question: 'Wij .......... elk weekend naar oma. (gaan)',
     englishTranslation: 'We .......... to grandma every weekend. (go)',
-    correctAnswer: 'gingen',
+    correctAnswer: ['gingen', 'gingen.'],
     explanation:
       'Correct answer: "gingen" Irregular verb "gaan" → "gingen" in imperfect',
     hints: ['Irregular form of "gaan"', 'First person plural'],
@@ -984,7 +1084,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'De docent .......... altijd interessante verhalen. (vertellen)',
     englishTranslation:
       'The teacher always .......... interesting stories. (tell)',
-    correctAnswer: 'vertelde',
+    correctAnswer: ['vertelde', 'vertelde.'],
     explanation:
       'Correct answer: "vertelde" Regular verb: vertellen - vertelde',
     hints: ['Regular verb', 'Add -de to stem'],
@@ -999,7 +1099,7 @@ export const imperfectExercises: ExamExercise[] = [
     question: 'Ik .......... mijn sleutels en kon niet binnen. (vergeten)',
     englishTranslation:
       "I .......... my keys and couldn't get inside. (forget)",
-    correctAnswer: 'vergat',
+    correctAnswer: ['vergat', 'vergat.'],
     explanation:
       'Correct answer: "vergat" Irregular verb "vergeten" → "vergat" in imperfect',
     hints: ['Irregular form of "vergeten"', 'First person singular'],
@@ -1020,7 +1120,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(oversteken – presens) De oude vrouw .......... de straat ..........',
     englishTranslation:
       '(to cross – present) The old woman .......... the street ..........',
-    correctAnswer: 'De oude vrouw steekt de straat over.',
+    correctAnswer: [
+      'De oude vrouw steekt de straat over.',
+      'De oude vrouw steekt de straat over',
+    ],
     explanation:
       'Correct answer: "De oude vrouw steekt de straat over." Present tense separable verb: steekt...over',
     hints: ['Separate the prefix in present tense', 'steekt + over'],
@@ -1037,7 +1140,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(meenemen – imperfectum) Kees .......... zijn mobiele telefoon ..........',
     englishTranslation:
       '(to take along – imperfect) Kees .......... his mobile phone ..........',
-    correctAnswer: 'Kees nam zijn mobiele telefoon mee.',
+    correctAnswer: [
+      'Kees nam zijn mobiele telefoon mee.',
+      'Kees nam zijn mobiele telefoon mee',
+    ],
     explanation:
       'Correct answer: "Kees nam zijn mobiele telefoon mee." Imperfect tense separable verb: nam...mee',
     hints: ['Separate the prefix in simple tenses', 'nam + mee'],
@@ -1053,7 +1159,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(aankomen – perfectum) De trein .......... om 10.15 ..........',
     englishTranslation:
       '(to arrive – perfect) The train .......... at 10:15 ..........',
-    correctAnswer: 'De trein is om 10.15 aangekomen.',
+    correctAnswer: [
+      'De trein is om 10.15 aangekomen.',
+      'De trein is om 10.15 aangekomen',
+    ],
     explanation:
       'Correct answer: "De trein is om 10.15 aangekomen." Perfect tense: prefix stays with past participle',
     hints: ['Perfect tense: is + aangekomen', 'Prefix stays attached'],
@@ -1069,7 +1178,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(afrekenen – presens – vraag) Kunnen we even ..........?',
     englishTranslation:
       '(to pay – present – question) Can we .......... for a moment?',
-    correctAnswer: 'Kunnen we even afrekenen?',
+    correctAnswer: ['Kunnen we even afrekenen?', 'Kunnen we even afrekenen?.'],
     explanation:
       'Correct answer: "Kunnen we even afrekenen?" In modal verb construction, separable verb stays together',
     hints: ['With modal verbs, keep verb together', 'kunnen + afrekenen'],
@@ -1086,7 +1195,7 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(uitdoen – presens – vraag) .......... jij het licht ..........?',
     englishTranslation:
       '(to turn off – present – question) .......... you the light ..........?',
-    correctAnswer: 'Doe jij het licht uit?',
+    correctAnswer: ['Doe jij het licht uit?', 'Doe jij het licht uit?.'],
     explanation:
       'Correct answer: "Doe jij het licht uit?" Question form: verb first, prefix at end',
     hints: ['Question: Doe...uit', 'Verb inversion in questions'],
@@ -1102,7 +1211,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(klaarmaken – perfectum) Ik .......... het eten ..........',
     englishTranslation:
       '(to prepare – perfect) I .......... the food ..........',
-    correctAnswer: 'Ik heb het eten klaargemaakt.',
+    correctAnswer: [
+      'Ik heb het eten klaargemaakt.',
+      'Ik heb het eten klaargemaakt',
+    ],
     explanation:
       'Correct answer: "Ik heb het eten klaargemaakt." Perfect tense: heb + klaargemaakt',
     hints: [
@@ -1121,7 +1233,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(opruimen – presens) Ik .......... mijn kamer ..........',
     englishTranslation:
       '(to clean up – present) I .......... my room ..........',
-    correctAnswer: 'Ik ruim mijn kamer op.',
+    correctAnswer: ['Ik ruim mijn kamer op.', 'Ik ruim mijn kamer op'],
     explanation:
       'Correct answer: "Ik ruim mijn kamer op." Present tense: ruim...op',
     hints: ['Present: ruim + op', 'Separate in simple tenses'],
@@ -1138,7 +1250,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(uitnodigen – perfectum) We .......... al onze vrienden ..........',
     englishTranslation:
       '(to invite – perfect) We .......... all our friends ..........',
-    correctAnswer: 'We hebben al onze vrienden uitgenodigd.',
+    correctAnswer: [
+      'We hebben al onze vrienden uitgenodigd.',
+      'We hebben al onze vrienden uitgenodigd',
+    ],
     explanation:
       'Correct answer: "We hebben al onze vrienden uitgenodigd." Perfect tense: hebben + uitgenodigd',
     hints: [
@@ -1157,7 +1272,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(wegbrengen – imperfectum) Hij .......... de vuilnis ..........',
     englishTranslation:
       '(to take away – imperfect) He .......... the garbage ..........',
-    correctAnswer: 'Hij bracht de vuilnis weg.',
+    correctAnswer: ['Hij bracht de vuilnis weg.', 'Hij bracht de vuilnis weg'],
     explanation:
       'Correct answer: "Hij bracht de vuilnis weg." Imperfect: bracht...weg',
     hints: ['Imperfect: bracht + weg', 'Separate in simple tenses'],
@@ -1174,7 +1289,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(terugkomen – perfectum – vraag) .......... jullie al ..........?',
     englishTranslation:
       '(to come back – perfect – question) .......... you already ..........?',
-    correctAnswer: 'Zijn jullie al teruggekomen?',
+    correctAnswer: [
+      'Zijn jullie al teruggekomen?',
+      'Zijn jullie al teruggekomen?.',
+    ],
     explanation:
       'Correct answer: "Zijn jullie al teruggekomen?" Perfect tense question: zijn + teruggekomen',
     hints: ['Perfect question: zijn + teruggekomen', 'Motion verb uses "zijn"'],
@@ -1191,7 +1309,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(opbellen – presens) Ik .......... mijn vrienden morgen ..........',
     englishTranslation:
       '(to call – present) I .......... my friends tomorrow ..........',
-    correctAnswer: 'Ik bel mijn vrienden morgen op.',
+    correctAnswer: [
+      'Ik bel mijn vrienden morgen op.',
+      'Ik bel mijn vrienden morgen op',
+    ],
     explanation:
       'Correct answer: "Ik bel mijn vrienden morgen op." Present tense separable verb: bel...op',
     hints: ['Separate the prefix in present tense', 'bel + op'],
@@ -1207,7 +1328,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(aanzetten – presens) Zij .......... de muziek ..........',
     englishTranslation:
       '(to turn on – present) She .......... the music ..........',
-    correctAnswer: 'Zij zet de muziek aan.',
+    correctAnswer: ['Zij zet de muziek aan.', 'Zij zet de muziek aan'],
     explanation:
       'Correct answer: "Zij zet de muziek aan." Present tense separable verb: zet...aan',
     hints: ['Separate the prefix in present tense', 'zet + aan'],
@@ -1223,7 +1344,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(afbetalen – presens) We .......... de rekening ..........',
     englishTranslation:
       '(to pay off – present) We .......... the bill ..........',
-    correctAnswer: 'We betalen de rekening af.',
+    correctAnswer: ['We betalen de rekening af.', 'We betalen de rekening af'],
     explanation:
       'Correct answer: "We betalen de rekening af." Present tense separable verb: betalen...af',
     hints: ['Separate the prefix in present tense', 'betalen + af'],
@@ -1238,7 +1359,7 @@ export const separableVerbsExercises: ExamExercise[] = [
       'Complete the sentence with the correct form of the separable verb.',
     question: '(opendoen – presens) Hij .......... de deur ..........',
     englishTranslation: '(to open – present) He .......... the door ..........',
-    correctAnswer: 'Hij doet de deur open.',
+    correctAnswer: ['Hij doet de deur open.', 'Hij doet de deur open'],
     explanation:
       'Correct answer: "Hij doet de deur open." Present tense separable verb: doet...open',
     hints: ['Separate the prefix in present tense', 'doet + open'],
@@ -1255,7 +1376,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(leegmaken – presens) Jullie .......... de vuilnisbak ..........',
     englishTranslation:
       '(to empty – present) You .......... the trash can ..........',
-    correctAnswer: 'Jullie maken de vuilnisbak leeg.',
+    correctAnswer: [
+      'Jullie maken de vuilnisbak leeg.',
+      'Jullie maken de vuilnisbak leeg',
+    ],
     explanation:
       'Correct answer: "Jullie maken de vuilnisbak leeg." Present tense separable verb: maken...leeg',
     hints: ['Separate the prefix in present tense', 'maken + leeg'],
@@ -1271,7 +1395,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(uitlezen – presens) Ik .......... het boek ..........',
     englishTranslation:
       '(to finish reading – present) I .......... the book ..........',
-    correctAnswer: 'Ik lees het boek uit.',
+    correctAnswer: ['Ik lees het boek uit.', 'Ik lees het boek uit'],
     explanation:
       'Correct answer: "Ik lees het boek uit." Present tense separable verb: lees...uit',
     hints: ['Separate the prefix in present tense', 'lees + uit'],
@@ -1287,7 +1411,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(uittrekken – presens) Zij .......... haar schoenen ..........',
     englishTranslation:
       '(to take off – present) She .......... her shoes ..........',
-    correctAnswer: 'Zij trekt haar schoenen uit.',
+    correctAnswer: [
+      'Zij trekt haar schoenen uit.',
+      'Zij trekt haar schoenen uit',
+    ],
     explanation:
       'Correct answer: "Zij trekt haar schoenen uit." Present tense separable verb: trekt...uit',
     hints: ['Separate the prefix in present tense', 'trekt + uit'],
@@ -1303,7 +1430,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(uitzetten – presens) We .......... de televisie ..........',
     englishTranslation:
       '(to turn off – present) We .......... the television ..........',
-    correctAnswer: 'We zetten de televisie uit.',
+    correctAnswer: [
+      'We zetten de televisie uit.',
+      'We zetten de televisie uit',
+    ],
     explanation:
       'Correct answer: "We zetten de televisie uit." Present tense separable verb: zetten...uit',
     hints: ['Separate the prefix in present tense', 'zetten + uit'],
@@ -1319,7 +1449,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(aantrekken – presens) Hij .......... zijn jas ..........',
     englishTranslation:
       '(to put on – present) He .......... his coat ..........',
-    correctAnswer: 'Hij trekt zijn jas aan.',
+    correctAnswer: ['Hij trekt zijn jas aan.', 'Hij trekt zijn jas aan'],
     explanation:
       'Correct answer: "Hij trekt zijn jas aan." Present tense separable verb: trekt...aan',
     hints: ['Separate the prefix in present tense', 'trekt + aan'],
@@ -1335,7 +1465,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(wakker worden – presens) Ik .......... om zes uur ..........',
     englishTranslation:
       "(to wake up – present) I .......... at six o'clock ..........",
-    correctAnswer: 'Ik word om zes uur wakker.',
+    correctAnswer: ['Ik word om zes uur wakker.', 'Ik word om zes uur wakker'],
     explanation:
       'Correct answer: "Ik word om zes uur wakker." Present tense separable verb: word...wakker',
     hints: ['Separate the prefix in present tense', 'word + wakker'],
@@ -1351,7 +1481,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(ophangen – presens) Zij .......... de was ..........',
     englishTranslation:
       '(to hang up – present) She .......... the laundry ..........',
-    correctAnswer: 'Zij hangt de was op.',
+    correctAnswer: ['Zij hangt de was op.', 'Zij hangt de was op'],
     explanation:
       'Correct answer: "Zij hangt de was op." Present tense separable verb: hangt...op',
     hints: ['Separate the prefix in present tense', 'hangt + op'],
@@ -1367,7 +1497,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(opruimen – presens) We .......... de kamer ..........',
     englishTranslation:
       '(to clean up – present) We .......... the room ..........',
-    correctAnswer: 'We ruimen de kamer op.',
+    correctAnswer: ['We ruimen de kamer op.', 'We ruimen de kamer op'],
     explanation:
       'Correct answer: "We ruimen de kamer op." Present tense separable verb: ruimen...op',
     hints: ['Separate the prefix in present tense', 'ruimen + op'],
@@ -1383,7 +1513,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(dichtdoen – presens) Hij .......... het raam ..........',
     englishTranslation:
       '(to close – present) He .......... the window ..........',
-    correctAnswer: 'Hij doet het raam dicht.',
+    correctAnswer: ['Hij doet het raam dicht.', 'Hij doet het raam dicht'],
     explanation:
       'Correct answer: "Hij doet het raam dicht." Present tense separable verb: doet...dicht',
     hints: ['Separate the prefix in present tense', 'doet + dicht'],
@@ -1400,7 +1530,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(inkopen – presens) Jullie .......... de boodschappen ..........',
     englishTranslation:
       '(to shop – present) You .......... the groceries ..........',
-    correctAnswer: 'Jullie kopen de boodschappen in.',
+    correctAnswer: [
+      'Jullie kopen de boodschappen in.',
+      'Jullie kopen de boodschappen in',
+    ],
     explanation:
       'Correct answer: "Jullie kopen de boodschappen in." Present tense separable verb: kopen...in',
     hints: ['Separate the prefix in present tense', 'kopen + in'],
@@ -1416,7 +1549,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(ophalen – presens) Ik .......... mijn broer ..........',
     englishTranslation:
       '(to pick up – present) I .......... my brother ..........',
-    correctAnswer: 'Ik haal mijn broer op.',
+    correctAnswer: ['Ik haal mijn broer op.', 'Ik haal mijn broer op'],
     explanation:
       'Correct answer: "Ik haal mijn broer op." Present tense separable verb: haal...op',
     hints: ['Separate the prefix in present tense', 'haal + op'],
@@ -1432,7 +1565,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(instappen – presens) Alle mensen .......... de bus ..........',
     englishTranslation:
       '(to get on – present) All people .......... the bus ..........',
-    correctAnswer: 'Alle mensen stappen de bus in.',
+    correctAnswer: [
+      'Alle mensen stappen de bus in.',
+      'Alle mensen stappen de bus in',
+    ],
     explanation:
       'Correct answer: "Alle mensen stappen de bus in." Present tense separable verb: stappen...in',
     hints: ['Separate the prefix in present tense', 'stappen + in'],
@@ -1448,7 +1584,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(ophalen – perfectum) Ik .......... mijn vriend ..........',
     englishTranslation:
       '(to pick up – perfect) I .......... my friend ..........',
-    correctAnswer: 'Ik heb mijn vriend opgehaald.',
+    correctAnswer: [
+      'Ik heb mijn vriend opgehaald.',
+      'Ik heb mijn vriend opgehaald',
+    ],
     explanation:
       'Correct answer: "Ik heb mijn vriend opgehaald." Perfect tense: heb + opgehaald',
     hints: ['Perfect: heb + opgehaald', 'Prefix stays with past participle'],
@@ -1464,7 +1603,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(uitstappen – presens – vraag) .......... je hier ..........?',
     englishTranslation:
       '(to get out – present – question) .......... you here ..........?',
-    correctAnswer: 'Stap je hier uit?',
+    correctAnswer: ['Stap je hier uit?', 'Stap je hier uit?.'],
     explanation:
       'Correct answer: "Stap je hier uit?" Question form: verb first, prefix at end',
     hints: ['Question: Stap...uit', 'Verb inversion in questions'],
@@ -1480,7 +1619,7 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(meenemen – imperfectum) Hij .......... zijn tas ..........',
     englishTranslation:
       '(to take along – imperfect) He .......... his bag ..........',
-    correctAnswer: 'Hij nam zijn tas mee.',
+    correctAnswer: ['Hij nam zijn tas mee.', 'Hij nam zijn tas mee'],
     explanation:
       'Correct answer: "Hij nam zijn tas mee." Imperfect tense separable verb: nam...mee',
     hints: ['Separate the prefix in simple tenses', 'nam + mee'],
@@ -1496,7 +1635,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(weggooien – presens) Ik .......... de oude kranten ..........',
     englishTranslation:
       '(to throw away – present) I .......... the old newspapers ..........',
-    correctAnswer: 'Ik gooi de oude kranten weg.',
+    correctAnswer: [
+      'Ik gooi de oude kranten weg.',
+      'Ik gooi de oude kranten weg',
+    ],
     explanation:
       'Correct answer: "Ik gooi de oude kranten weg." Present tense separable verb: gooi...weg',
     hints: ['Separate the prefix in present tense', 'gooi + weg'],
@@ -1513,7 +1655,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(afrekenen – perfectum – vraag) .......... jullie al ..........?',
     englishTranslation:
       '(to pay the bill – perfect – question) .......... you already ..........?',
-    correctAnswer: 'Hebben jullie al afgerekend?',
+    correctAnswer: [
+      'Hebben jullie al afgerekend?',
+      'Hebben jullie al afgerekend?.',
+    ],
     explanation:
       'Correct answer: "Hebben jullie al afgerekend?" Perfect tense question: hebben + afgerekend',
     hints: ['Perfect question: hebben + afgerekend', 'Prefix stays attached'],
@@ -1530,7 +1675,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(uitnodigen – presens) Wij .......... onze familie .......... voor het feest.',
     englishTranslation:
       '(to invite – present) We .......... our family .......... for the party.',
-    correctAnswer: 'Wij nodigen onze familie uit voor het feest.',
+    correctAnswer: [
+      'Wij nodigen onze familie uit voor het feest.',
+      'Wij nodigen onze familie uit voor het feest',
+    ],
     explanation:
       'Correct answer: "Wij nodigen onze familie uit voor het feest." Present tense separable verb: nodigen...uit',
     hints: ['Separate the prefix in present tense', 'nodigen + uit'],
@@ -1547,7 +1695,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(bestellen – imperfectum) Mijn moeder .......... het eten ..........',
     englishTranslation:
       '(to order – imperfect) My mother .......... the food ..........',
-    correctAnswer: 'Mijn moeder bestelde het eten.',
+    correctAnswer: [
+      'Mijn moeder bestelde het eten.',
+      'Mijn moeder bestelde het eten',
+    ],
     explanation:
       'Correct answer: "Mijn moeder bestelde het eten." Regular verb - not separable in this context',
     hints: ['Regular verb', 'Not separable'],
@@ -1564,7 +1715,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(terugkomen – perfectum) De man .......... van zijn reis ..........',
     englishTranslation:
       '(to come back – perfect) The man .......... from his trip ..........',
-    correctAnswer: 'De man is van zijn reis teruggekomen.',
+    correctAnswer: [
+      'De man is van zijn reis teruggekomen.',
+      'De man is van zijn reis teruggekomen',
+    ],
     explanation:
       'Correct answer: "De man is van zijn reis teruggekomen." Perfect tense: is + teruggekomen',
     hints: ['Perfect: is + teruggekomen', 'Motion verb uses "zijn"'],
@@ -1581,7 +1735,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(praten – presens) Ik .......... met de nieuwe buurman ..........',
     englishTranslation:
       '(to talk – present) I .......... with the new neighbor ..........',
-    correctAnswer: 'Ik praat met de nieuwe buurman.',
+    correctAnswer: [
+      'Ik praat met de nieuwe buurman.',
+      'Ik praat met de nieuwe buurman',
+    ],
     explanation:
       'Correct answer: "Ik praat met de nieuwe buurman." Regular verb - not separable',
     hints: ['Regular verb', 'Not separable'],
@@ -1598,7 +1755,7 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(invullen – presens – vraag) .......... jij het formulier ..........?',
     englishTranslation:
       '(to fill in – present – question) .......... you the form ..........?',
-    correctAnswer: 'Vul jij het formulier in?',
+    correctAnswer: ['Vul jij het formulier in?', 'Vul jij het formulier in?.'],
     explanation:
       'Correct answer: "Vul jij het formulier in?" Question form: verb first, prefix at end',
     hints: ['Question: Vul...in', 'Verb inversion in questions'],
@@ -1614,7 +1771,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(wonen – perfectum) We .......... hier twee jaar ..........',
     englishTranslation:
       '(to live – perfect) We .......... here for two years ..........',
-    correctAnswer: 'We hebben hier twee jaar gewoond.',
+    correctAnswer: [
+      'We hebben hier twee jaar gewoond.',
+      'We hebben hier twee jaar gewoond',
+    ],
     explanation:
       'Correct answer: "We hebben hier twee jaar gewoond." Perfect tense: hebben + gewoond',
     hints: ['Perfect: hebben + gewoond', 'Regular past participle'],
@@ -1631,7 +1791,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(zoeken – imperfectum) Zij .......... naar een nieuwe baan ..........',
     englishTranslation:
       '(to look for – imperfect) She .......... for a new job ..........',
-    correctAnswer: 'Zij zocht naar een nieuwe baan.',
+    correctAnswer: [
+      'Zij zocht naar een nieuwe baan.',
+      'Zij zocht naar een nieuwe baan',
+    ],
     explanation:
       'Correct answer: "Zij zocht naar een nieuwe baan." Regular verb - not separable',
     hints: ['Regular verb', 'Not separable'],
@@ -1647,7 +1810,10 @@ export const separableVerbsExercises: ExamExercise[] = [
     question: '(zien – perfectum) Ik .......... mijn oude leraar ..........',
     englishTranslation:
       '(to see – perfect) I .......... my old teacher ..........',
-    correctAnswer: 'Ik heb mijn oude leraar gezien.',
+    correctAnswer: [
+      'Ik heb mijn oude leraar gezien.',
+      'Ik heb mijn oude leraar gezien',
+    ],
     explanation:
       'Correct answer: "Ik heb mijn oude leraar gezien." Perfect tense: heb + gezien',
     hints: ['Perfect: heb + gezien', 'Regular transitive verb uses "hebben"'],
@@ -1664,7 +1830,10 @@ export const separableVerbsExercises: ExamExercise[] = [
       '(bestellen – presens) De familie .......... het eten .......... in het restaurant.',
     englishTranslation:
       '(to order – present) The family .......... the food .......... in the restaurant.',
-    correctAnswer: 'De familie bestelt het eten in het restaurant.',
+    correctAnswer: [
+      'De familie bestelt het eten in het restaurant.',
+      'De familie bestelt het eten in het restaurant',
+    ],
     explanation:
       'Correct answer: "De familie bestelt het eten in het restaurant." Regular verb - not separable',
     hints: ['Regular verb', 'Not separable'],
@@ -1684,8 +1853,10 @@ export const conjunctionExercises: ExamExercise[] = [
       'Ik maakte het eten. Mijn vriendin keek een spannende film. (terwijl)',
     englishTranslation:
       'I made the food. My girlfriend watched an exciting film. (while)',
-    correctAnswer:
+    correctAnswer: [
       'Ik maakte het eten, terwijl mijn vriendin een spannende film keek.',
+      'Ik maakte het eten, terwijl mijn vriendin een spannende film keek',
+    ],
     explanation:
       '"Terwijl" sends the verb to the end of the subordinate clause',
     hints: [
@@ -1703,7 +1874,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Ik moet vanmiddag naar de dokter. Ik ben ziek. (omdat)',
     englishTranslation:
       'I have to go to the doctor this afternoon. I am sick. (because)',
-    correctAnswer: 'Ik moet vanmiddag naar de dokter, omdat ik ziek ben.',
+    correctAnswer: [
+      'Ik moet vanmiddag naar de dokter, omdat ik ziek ben.',
+      'Ik moet vanmiddag naar de dokter, omdat ik ziek ben',
+    ],
     explanation:
       'Correct answer: "Ik moet vanmiddag naar de dokter, omdat ik ziek ben." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -1719,8 +1893,10 @@ export const conjunctionExercises: ExamExercise[] = [
       'Ik moet zometeen naar de dokter. Ik ben gevallen met de fiets. (want)',
     englishTranslation:
       'I have to go to the doctor in a moment. I fell off my bike. (because)',
-    correctAnswer:
+    correctAnswer: [
       'Ik moet zometeen naar de dokter, want ik ben gevallen met de fiets.',
+      'Ik moet zometeen naar de dokter, want ik ben gevallen met de fiets',
+    ],
     explanation:
       'Correct answer: "Ik moet zometeen naar de dokter, want ik ben gevallen met de fiets." "Want" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "want"'],
@@ -1734,7 +1910,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ga autorijden. Ik ben achttien. (zodra)',
     englishTranslation: "I'm going to drive a car. I am eighteen. (as soon as)",
-    correctAnswer: 'Ik ga autorijden zodra ik achttien ben.',
+    correctAnswer: [
+      'Ik ga autorijden zodra ik achttien ben.',
+      'Ik ga autorijden zodra ik achttien ben',
+    ],
     explanation:
       'Correct answer: "Ik ga autorijden zodra ik achttien ben." "Zodra" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "zodra"'],
@@ -1750,8 +1929,10 @@ export const conjunctionExercises: ExamExercise[] = [
       'Ik heb een goed cijfer gehaald. Ik hoef geen extra toets te doen. (dus)',
     englishTranslation:
       "I got a good grade. I don't need to do an extra test. (so)",
-    correctAnswer:
+    correctAnswer: [
       'Ik heb een goed cijfer gehaald, dus ik hoef geen extra toets te doen.',
+      'Ik heb een goed cijfer gehaald, dus ik hoef geen extra toets te doen',
+    ],
     explanation:
       'Correct answer: "Ik heb een goed cijfer gehaald, dus ik hoef geen extra toets te doen." "Dus" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "dus"'],
@@ -1765,7 +1946,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het regent hard. We blijven thuis. (omdat)',
     englishTranslation: "It's raining hard. We stay home. (because)",
-    correctAnswer: 'We blijven thuis omdat het hard regent.',
+    correctAnswer: [
+      'We blijven thuis omdat het hard regent.',
+      'We blijven thuis omdat het hard regent',
+    ],
     explanation:
       'Correct answer: "We blijven thuis omdat het hard regent." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -1780,7 +1964,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Ik studeer Nederlands. Ik wil in Nederland wonen. (omdat)',
     englishTranslation:
       'I study Dutch. I want to live in the Netherlands. (because)',
-    correctAnswer: 'Ik studeer Nederlands omdat ik in Nederland wil wonen.',
+    correctAnswer: [
+      'Ik studeer Nederlands omdat ik in Nederland wil wonen.',
+      'Ik studeer Nederlands omdat ik in Nederland wil wonen',
+    ],
     explanation:
       'Correct answer: "Ik studeer Nederlands omdat ik in Nederland wil wonen." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -1794,7 +1981,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ze heeft geen geld. Ze koopt geen nieuwe jas. (dus)',
     englishTranslation: "She has no money. She doesn't buy a new coat. (so)",
-    correctAnswer: 'Ze heeft geen geld, dus ze koopt geen nieuwe jas.',
+    correctAnswer: [
+      'Ze heeft geen geld, dus ze koopt geen nieuwe jas.',
+      'Ze heeft geen geld, dus ze koopt geen nieuwe jas',
+    ],
     explanation:
       'Correct answer: "Ze heeft geen geld, dus ze koopt geen nieuwe jas." "Dus" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "dus"'],
@@ -1810,8 +2000,10 @@ export const conjunctionExercises: ExamExercise[] = [
       'Ik heb een goed cijfer gehaald. Ik hoef geen extra toets te doen. (zodat)',
     englishTranslation:
       "I got a good grade. I don't need to do an extra test. (so that)",
-    correctAnswer:
+    correctAnswer: [
       'Ik heb een goed cijfer gehaald zodat ik geen extra toets hoef te doen.',
+      'Ik heb een goed cijfer gehaald zodat ik geen extra toets hoef te doen',
+    ],
     explanation:
       'Correct answer: "Ik heb een goed cijfer gehaald zodat ik geen extra toets hoef te doen." "Zodat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "zodat"'],
@@ -1826,7 +2018,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Vandaag is het koud. We gaan toch fietsen. (hoewel)',
     englishTranslation:
       "Today it's cold. We're still going cycling. (although)",
-    correctAnswer: 'Hoewel het vandaag koud is, gaan we toch fietsen.',
+    correctAnswer: [
+      'Hoewel het vandaag koud is, gaan we toch fietsen.',
+      'Hoewel het vandaag koud is, gaan we toch fietsen',
+    ],
     explanation:
       '"Hoewel" can start the sentence with verb at the end of that clause',
     hints: ['Subordinating conjunction', 'Can start sentence with "hoewel"'],
@@ -1840,7 +2035,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ga naar het feestje. Ik heb gezegd dat ik kom. (nadat)',
     englishTranslation: "I'm going to the party. I said I would come. (after)",
-    correctAnswer: 'Ik ga naar het feestje nadat ik heb gezegd dat ik kom.',
+    correctAnswer: [
+      'Ik ga naar het feestje nadat ik heb gezegd dat ik kom.',
+      'Ik ga naar het feestje nadat ik heb gezegd dat ik kom',
+    ],
     explanation:
       'Correct answer: "Ik ga naar het feestje nadat ik heb gezegd dat ik kom." "Nadat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "nadat"'],
@@ -1854,7 +2052,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het regent hard. We blijven thuis. (omdat)',
     englishTranslation: "It's raining hard. We stay home. (because)",
-    correctAnswer: 'We blijven thuis omdat het hard regent.',
+    correctAnswer: [
+      'We blijven thuis omdat het hard regent.',
+      'We blijven thuis omdat het hard regent',
+    ],
     explanation:
       'Correct answer: "We blijven thuis omdat het hard regent." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -1869,7 +2070,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Ik studeer Nederlands. Ik wil in Nederland wonen. (omdat)',
     englishTranslation:
       'I study Dutch. I want to live in the Netherlands. (because)',
-    correctAnswer: 'Ik studeer Nederlands omdat ik in Nederland wil wonen.',
+    correctAnswer: [
+      'Ik studeer Nederlands omdat ik in Nederland wil wonen.',
+      'Ik studeer Nederlands omdat ik in Nederland wil wonen',
+    ],
     explanation:
       'Correct answer: "Ik studeer Nederlands omdat ik in Nederland wil wonen." "Omdat" sends the verb to the end of the subordinate clause',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -1883,7 +2087,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ze heeft geen geld. Ze koopt geen nieuwe jas. (dus)',
     englishTranslation: "She has no money. She doesn't buy a new coat. (so)",
-    correctAnswer: 'Ze heeft geen geld, dus ze koopt geen nieuwe jas.',
+    correctAnswer: [
+      'Ze heeft geen geld, dus ze koopt geen nieuwe jas.',
+      'Ze heeft geen geld, dus ze koopt geen nieuwe jas',
+    ],
     explanation:
       'Correct answer: "Ze heeft geen geld, dus ze koopt geen nieuwe jas." "Dus" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "dus"'],
@@ -1897,7 +2104,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik was moe. Ik ging vroeg naar bed. (want)',
     englishTranslation: 'I was tired. I went to bed early. (because)',
-    correctAnswer: 'Ik ging vroeg naar bed, want ik was moe.',
+    correctAnswer: [
+      'Ik ging vroeg naar bed, want ik was moe.',
+      'Ik ging vroeg naar bed, want ik was moe',
+    ],
     explanation:
       'Correct answer: "Ik ging vroeg naar bed, want ik was moe." "Want" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "want"'],
@@ -1911,7 +2121,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het regent hard. Ik ga naar buiten. (hoewel)',
     englishTranslation: 'It rains hard. I go outside. (although)',
-    correctAnswer: 'Hoewel het hard regent, ga ik naar buiten.',
+    correctAnswer: [
+      'Hoewel het hard regent, ga ik naar buiten.',
+      'Hoewel het hard regent, ga ik naar buiten',
+    ],
     explanation:
       'Correct answer: "Hoewel het hard regent, ga ik naar buiten." Use "hoewel" for contrast at the beginning of a sentence',
     hints: [
@@ -1928,7 +2141,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ben moe. Ik ga vroeg slapen. (daarom)',
     englishTranslation: 'I am tired. I go to sleep early. (therefore)',
-    correctAnswer: 'Ik ben moe, daarom ga ik vroeg slapen.',
+    correctAnswer: [
+      'Ik ben moe, daarom ga ik vroeg slapen.',
+      'Ik ben moe, daarom ga ik vroeg slapen',
+    ],
     explanation:
       'Correct answer: "Ik ben moe, daarom ga ik vroeg slapen." Use "daarom" to show cause and effect',
     hints: [
@@ -1945,7 +2161,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Hij werkt hard. Hij verdient weinig geld. (ondanks dat)',
     englishTranslation: 'He works hard. He earns little money. (despite)',
-    correctAnswer: 'Ondanks dat hij hard werkt, verdient hij weinig geld.',
+    correctAnswer: [
+      'Ondanks dat hij hard werkt, verdient hij weinig geld.',
+      'Ondanks dat hij hard werkt, verdient hij weinig geld',
+    ],
     explanation:
       'Correct answer: "Ondanks dat hij hard werkt, verdient hij weinig geld." Use "ondanks dat" for contrast in dependent clause',
     hints: ['Start with "ondanks dat"', 'Verb to end in first clause'],
@@ -1959,7 +2178,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het is koud buiten. Ik draag een warme jas. (dus)',
     englishTranslation: 'It is cold outside. I wear a warm coat. (so)',
-    correctAnswer: 'Het is koud buiten, dus draag ik een warme jas.',
+    correctAnswer: [
+      'Het is koud buiten, dus draag ik een warme jas.',
+      'Het is koud buiten, dus draag ik een warme jas',
+    ],
     explanation:
       'Correct answer: "Het is koud buiten, dus draag ik een warme jas." Use "dus" to show result or conclusion',
     hints: [
@@ -1976,7 +2198,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'We gaan naar het strand. Het weer is mooi. (als)',
     englishTranslation: 'We go to the beach. The weather is nice. (if)',
-    correctAnswer: 'Als het weer mooi is, gaan we naar het strand.',
+    correctAnswer: [
+      'Als het weer mooi is, gaan we naar het strand.',
+      'Als het weer mooi is, gaan we naar het strand',
+    ],
     explanation:
       'Correct answer: "Als het weer mooi is, gaan we naar het strand." Use "als" for conditional statements',
     hints: ['Start with "als"', 'Verb goes to end in dependent clause'],
@@ -1990,7 +2215,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik lees een boek. Mijn zus kijkt televisie. (terwijl)',
     englishTranslation: 'I read a book. My sister watches TV. (while)',
-    correctAnswer: 'Ik lees een boek terwijl mijn zus televisie kijkt.',
+    correctAnswer: [
+      'Ik lees een boek terwijl mijn zus televisie kijkt.',
+      'Ik lees een boek terwijl mijn zus televisie kijkt',
+    ],
     explanation:
       'Correct answer: "Ik lees een boek terwijl mijn zus televisie kijkt." Use "terwijl" to show simultaneous actions',
     hints: [
@@ -2007,7 +2235,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Hij komt thuis. Hij eet meteen. (zodra)',
     englishTranslation: 'He comes home. He eats immediately. (as soon as)',
-    correctAnswer: 'Zodra hij thuiskomt, eet hij meteen.',
+    correctAnswer: [
+      'Zodra hij thuiskomt, eet hij meteen.',
+      'Zodra hij thuiskomt, eet hij meteen',
+    ],
     explanation:
       'Correct answer: "Zodra hij thuiskomt, eet hij meteen." Use "zodra" for immediate sequence of events',
     hints: ['Start with "zodra"', 'Verb to end in dependent clause'],
@@ -2021,7 +2252,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ga naar de winkel. Ik heb geen tijd. (hoewel)',
     englishTranslation: 'I go to the store. I have no time. (although)',
-    correctAnswer: 'Hoewel ik geen tijd heb, ga ik naar de winkel.',
+    correctAnswer: [
+      'Hoewel ik geen tijd heb, ga ik naar de winkel.',
+      'Hoewel ik geen tijd heb, ga ik naar de winkel',
+    ],
     explanation:
       'Correct answer: "Hoewel ik geen tijd heb, ga ik naar de winkel." Use "hoewel" to express contrast',
     hints: ['Start with "hoewel"', 'Show unexpected contrast'],
@@ -2035,7 +2269,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'De film is saai. We blijven kijken. (toch)',
     englishTranslation: 'The movie is boring. We keep watching. (still)',
-    correctAnswer: 'De film is saai, toch blijven we kijken.',
+    correctAnswer: [
+      'De film is saai, toch blijven we kijken.',
+      'De film is saai, toch blijven we kijken',
+    ],
     explanation:
       'Use "toch" to show persistence despite negative circumstances',
     hints: [
@@ -2053,7 +2290,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Ik studeer hard. Ik wil goed doen voor het examen. (zodat)',
     englishTranslation:
       'I study hard. I want to do well on the exam. (so that)',
-    correctAnswer: 'Ik studeer hard zodat ik goed doe voor het examen.',
+    correctAnswer: [
+      'Ik studeer hard zodat ik goed doe voor het examen.',
+      'Ik studeer hard zodat ik goed doe voor het examen',
+    ],
     explanation:
       'Correct answer: "Ik studeer hard zodat ik goed doe voor het examen." Use "zodat" to express purpose or goal',
     hints: ['Shows purpose or intention', 'Verb to end after "zodat"'],
@@ -2067,7 +2307,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het regent. We gaan niet wandelen. (omdat)',
     englishTranslation: "It rains. We don't go walking. (because)",
-    correctAnswer: 'Omdat het regent, gaan we niet wandelen.',
+    correctAnswer: [
+      'Omdat het regent, gaan we niet wandelen.',
+      'Omdat het regent, gaan we niet wandelen',
+    ],
     explanation:
       'Correct answer: "Omdat het regent, gaan we niet wandelen." Use "omdat" to give a reason',
     hints: ['Start with "omdat"', 'Explains the cause'],
@@ -2081,7 +2324,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik bel je. Ik ben thuis. (wanneer)',
     englishTranslation: 'I call you. I am home. (when)',
-    correctAnswer: 'Ik bel je wanneer ik thuis ben.',
+    correctAnswer: [
+      'Ik bel je wanneer ik thuis ben.',
+      'Ik bel je wanneer ik thuis ben',
+    ],
     explanation:
       'Correct answer: "Ik bel je wanneer ik thuis ben." Use "wanneer" for time reference',
     hints: ['Indicates specific time', 'Verb to end after "wanneer"'],
@@ -2095,7 +2341,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Zij zingt. Zij is gelukkig. (want)',
     englishTranslation: 'She sings. She is happy. (because)',
-    correctAnswer: 'Zij zingt want zij is gelukkig.',
+    correctAnswer: [
+      'Zij zingt want zij is gelukkig.',
+      'Zij zingt want zij is gelukkig',
+    ],
     explanation:
       'Correct answer: "Zij zingt want zij is gelukkig." Use "want" to give explanation in independent clause',
     hints: ['No comma before "want"', 'Explains reason with normal word order'],
@@ -2109,7 +2358,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'We eten pizza. We eten pasta. (of)',
     englishTranslation: 'We eat pizza. We eat pasta. (or)',
-    correctAnswer: 'We eten pizza of we eten pasta.',
+    correctAnswer: [
+      'We eten pizza of we eten pasta.',
+      'We eten pizza of we eten pasta',
+    ],
     explanation:
       'Correct answer: "We eten pizza of we eten pasta." Use "of" to show alternatives',
     hints: [
@@ -2126,7 +2378,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Hij slaapt. Hij is ziek. (sinds)',
     englishTranslation: 'He sleeps. He is sick. (since)',
-    correctAnswer: 'Hij slaapt sinds hij ziek is.',
+    correctAnswer: [
+      'Hij slaapt sinds hij ziek is.',
+      'Hij slaapt sinds hij ziek is',
+    ],
     explanation:
       'Correct answer: "Hij slaapt sinds hij ziek is." Use "sinds" to indicate starting point in time',
     hints: [
@@ -2143,7 +2398,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Het is laat. Ik ga naar bed. (dus)',
     englishTranslation: "It's late. I'm going to bed. (so)",
-    correctAnswer: 'Het is laat, dus ik ga naar bed.',
+    correctAnswer: [
+      'Het is laat, dus ik ga naar bed.',
+      'Het is laat, dus ik ga naar bed',
+    ],
     explanation:
       'Correct answer: "Het is laat, dus ik ga naar bed." "Dus" is a coordinating conjunction - normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "dus"'],
@@ -2158,7 +2416,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Zij studeert hard. Ze wil goede cijfers halen. (omdat)',
     englishTranslation:
       'She studies hard. She wants to get good grades. (because)',
-    correctAnswer: 'Zij studeert hard omdat ze goede cijfers wil halen.',
+    correctAnswer: [
+      'Zij studeert hard omdat ze goede cijfers wil halen.',
+      'Zij studeert hard omdat ze goede cijfers wil halen',
+    ],
     explanation:
       'Correct answer: "Zij studeert hard omdat ze goede cijfers wil halen." "Omdat" sends the verb to the end',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "omdat"'],
@@ -2172,7 +2433,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik drink koffie. Ik lees de krant. (terwijl)',
     englishTranslation: 'I drink coffee. I read the newspaper. (while)',
-    correctAnswer: 'Ik drink koffie terwijl ik de krant lees.',
+    correctAnswer: [
+      'Ik drink koffie terwijl ik de krant lees.',
+      'Ik drink koffie terwijl ik de krant lees',
+    ],
     explanation:
       'Correct answer: "Ik drink koffie terwijl ik de krant lees." "Terwijl" sends the verb to the end',
     hints: [
@@ -2189,7 +2453,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'We gaan wandelen. Het regent niet. (als)',
     englishTranslation: "We go for a walk. It doesn't rain. (if)",
-    correctAnswer: 'We gaan wandelen als het niet regent.',
+    correctAnswer: [
+      'We gaan wandelen als het niet regent.',
+      'We gaan wandelen als het niet regent',
+    ],
     explanation:
       'Correct answer: "We gaan wandelen als het niet regent." "Als" sends the verb to the end',
     hints: ['Subordinating conjunction', 'Verb goes to the end after "als"'],
@@ -2203,7 +2470,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Hij is ziek. Hij gaat niet naar school. (want)',
     englishTranslation: "He is sick. He doesn't go to school. (because)",
-    correctAnswer: 'Hij gaat niet naar school, want hij is ziek.',
+    correctAnswer: [
+      'Hij gaat niet naar school, want hij is ziek.',
+      'Hij gaat niet naar school, want hij is ziek',
+    ],
     explanation:
       'Correct answer: "Hij gaat niet naar school, want hij is ziek." "Want" is a coordinating conjunction',
     hints: ['Coordinating conjunction', 'Normal word order after "want"'],
@@ -2217,7 +2487,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik heb honger. Ik heb geen tijd om te koken. (maar)',
     englishTranslation: "I'm hungry. I have no time to cook. (but)",
-    correctAnswer: 'Ik heb honger, maar ik heb geen tijd om te koken.',
+    correctAnswer: [
+      'Ik heb honger, maar ik heb geen tijd om te koken.',
+      'Ik heb honger, maar ik heb geen tijd om te koken',
+    ],
     explanation:
       'Correct answer: "Ik heb honger, maar ik heb geen tijd om te koken." "Maar" shows contrast',
     hints: ['Coordinating conjunction', 'Shows contrast between ideas'],
@@ -2231,7 +2504,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ze ging naar de dokter. Ze voelde zich beter. (voordat)',
     englishTranslation: 'She went to the doctor. She felt better. (before)',
-    correctAnswer: 'Ze voelde zich beter voordat ze naar de dokter ging.',
+    correctAnswer: [
+      'Ze voelde zich beter voordat ze naar de dokter ging.',
+      'Ze voelde zich beter voordat ze naar de dokter ging',
+    ],
     explanation:
       'Correct answer: "Ze voelde zich beter voordat ze naar de dokter ging." "Voordat" sends verb to end',
     hints: [
@@ -2248,7 +2524,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik koop een nieuwe auto. Ik heb genoeg geld. (als)',
     englishTranslation: 'I buy a new car. I have enough money. (if)',
-    correctAnswer: 'Ik koop een nieuwe auto als ik genoeg geld heb.',
+    correctAnswer: [
+      'Ik koop een nieuwe auto als ik genoeg geld heb.',
+      'Ik koop een nieuwe auto als ik genoeg geld heb',
+    ],
     explanation:
       'Correct answer: "Ik koop een nieuwe auto als ik genoeg geld heb." "Als" is used for conditions',
     hints: ['Subordinating conjunction', 'Conditional statement'],
@@ -2263,7 +2542,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Het weer is slecht. We gaan niet naar het strand. (omdat)',
     englishTranslation:
       "The weather is bad. We don't go to the beach. (because)",
-    correctAnswer: 'We gaan niet naar het strand omdat het weer slecht is.',
+    correctAnswer: [
+      'We gaan niet naar het strand omdat het weer slecht is.',
+      'We gaan niet naar het strand omdat het weer slecht is',
+    ],
     explanation:
       'Correct answer: "We gaan niet naar het strand omdat het weer slecht is." "Omdat" gives reason',
     hints: ['Subordinating conjunction', 'Explains the reason'],
@@ -2277,7 +2559,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Zij werkt veel. Ze verdient goed geld. (en)',
     englishTranslation: 'She works a lot. She earns good money. (and)',
-    correctAnswer: 'Zij werkt veel en ze verdient goed geld.',
+    correctAnswer: [
+      'Zij werkt veel en ze verdient goed geld.',
+      'Zij werkt veel en ze verdient goed geld',
+    ],
     explanation:
       'Correct answer: "Zij werkt veel en ze verdient goed geld." "En" simply connects two clauses',
     hints: ['Coordinating conjunction', 'Simple connection'],
@@ -2291,7 +2576,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ga slapen. Ik ben moe. (omdat)',
     englishTranslation: "I'm going to sleep. I'm tired. (because)",
-    correctAnswer: 'Ik ga slapen omdat ik moe ben.',
+    correctAnswer: [
+      'Ik ga slapen omdat ik moe ben.',
+      'Ik ga slapen omdat ik moe ben',
+    ],
     explanation:
       'Correct answer: "Ik ga slapen omdat ik moe ben." "Omdat" introduces a reason',
     hints: ['Subordinating conjunction', 'Gives the reason'],
@@ -2306,7 +2594,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Hij studeert hard. Hij wil dokter worden. (omdat)',
     englishTranslation:
       'He studies hard. He wants to become a doctor. (because)',
-    correctAnswer: 'Hij studeert hard omdat hij dokter wil worden.',
+    correctAnswer: [
+      'Hij studeert hard omdat hij dokter wil worden.',
+      'Hij studeert hard omdat hij dokter wil worden',
+    ],
     explanation:
       'Correct answer: "Hij studeert hard omdat hij dokter wil worden." "Omdat" explains the purpose',
     hints: ['Subordinating conjunction', 'Explains motivation'],
@@ -2320,7 +2611,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'We blijven binnen. Het regent. (omdat)',
     englishTranslation: "We stay inside. It's raining. (because)",
-    correctAnswer: 'We blijven binnen omdat het regent.',
+    correctAnswer: [
+      'We blijven binnen omdat het regent.',
+      'We blijven binnen omdat het regent',
+    ],
     explanation:
       'Correct answer: "We blijven binnen omdat het regent." "Omdat" gives the reason for staying inside',
     hints: ['Subordinating conjunction', 'Explains the reason'],
@@ -2334,7 +2628,10 @@ export const conjunctionExercises: ExamExercise[] = [
     instruction: 'Combine the two sentences using the given conjunction.',
     question: 'Ik ga naar de winkel. Ik heb geen melk meer. (want)',
     englishTranslation: "I'm going to the shop. I have no more milk. (because)",
-    correctAnswer: 'Ik ga naar de winkel, want ik heb geen melk meer.',
+    correctAnswer: [
+      'Ik ga naar de winkel, want ik heb geen melk meer.',
+      'Ik ga naar de winkel, want ik heb geen melk meer',
+    ],
     explanation:
       'Correct answer: "Ik ga naar de winkel, want ik heb geen melk meer." "Want" explains with normal word order',
     hints: ['Coordinating conjunction', 'Normal word order after "want"'],
@@ -2349,7 +2646,10 @@ export const conjunctionExercises: ExamExercise[] = [
     question: 'Ze is intelligent. Ze maakt soms fouten. (hoewel)',
     englishTranslation:
       'She is intelligent. She sometimes makes mistakes. (although)',
-    correctAnswer: 'Ze is intelligent, hoewel ze soms fouten maakt.',
+    correctAnswer: [
+      'Ze is intelligent, hoewel ze soms fouten maakt.',
+      'Ze is intelligent, hoewel ze soms fouten maakt',
+    ],
     explanation:
       'Correct answer: "Ze is intelligent, hoewel ze soms fouten maakt." "Hoewel" shows contrast',
     hints: ['Subordinating conjunction', 'Shows unexpected contrast'],
@@ -2368,7 +2668,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Wat vind je van de biefstuk?',
     englishTranslation: 'What do you think of the steak?',
     options: ['Ja lekker', 'Nee, dank je', 'Tot ziens', 'Goedemorgen'],
-    correctAnswer: 'Ja lekker',
+    correctAnswer: ['Ja lekker', 'Ja lekker.'],
     explanation:
       'When asked for opinion about food, "Ja lekker" (Yes, delicious) is appropriate',
     points: 1,
@@ -2382,7 +2682,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik ben geslaagd!',
     englishTranslation: 'I passed!',
     options: ['Gefeliciteerd!', 'Dag!', 'Dank je wel', 'Sorry'],
-    correctAnswer: 'Gefeliciteerd!',
+    correctAnswer: ['Gefeliciteerd!', 'Gefeliciteerd!.'],
     explanation:
       'When someone shares good news, "Gefeliciteerd!" (Congratulations!) is the proper response',
     points: 1,
@@ -2396,7 +2696,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Anders nog iets?',
     englishTranslation: 'Anything else?',
     options: ['Ja, graag', 'Nee, dank u. Dat is alles.', 'Tot ziens', 'Hallo'],
-    correctAnswer: 'Nee, dank u. Dat is alles.',
+    correctAnswer: ['Nee, dank u. Dat is alles.', 'Nee, dank u. Dat is alles'],
     explanation:
       'When asked if you need anything else, this polite decline is appropriate',
     points: 1,
@@ -2410,7 +2710,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik .......... u niet. U praat een beetje zacht.',
     englishTranslation: 'I .......... you. You speak a bit quietly.',
     options: ['hoor', 'zie', 'voel', 'ruik'],
-    correctAnswer: 'hoor',
+    correctAnswer: ['hoor', 'hoor.'],
     explanation:
       '"Horen" means to hear - appropriate when someone speaks quietly',
     points: 1,
@@ -2424,7 +2724,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Wat .......... dat moeilijke woord?',
     englishTranslation: 'What does that difficult word ..........?',
     options: ['zegt', 'doet', 'betekent', 'spreekt'],
-    correctAnswer: 'betekent',
+    correctAnswer: ['betekent', 'betekent.'],
     explanation:
       '"Betekenen" means "to mean" - used when asking for word definitions',
     points: 1,
@@ -2438,7 +2738,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik .......... de som niet. Kunt u het nog een keer uitleggen?',
     englishTranslation: "I don't .......... the sum. Can you explain it again?",
     options: ['weet', 'begrijp', 'ken', 'hoor'],
-    correctAnswer: 'begrijp',
+    correctAnswer: ['begrijp', 'begrijp.'],
     explanation:
       '"Begrijpen" means "to understand" - used when you don\'t comprehend something',
     points: 1,
@@ -2457,7 +2757,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
       'Nee, dat is niet waar.',
       'Tot ziens.',
     ],
-    correctAnswer: 'Dat weet ik niet meer.',
+    correctAnswer: ['Dat weet ik niet meer.', 'Dat weet ik niet meer'],
     explanation:
       "When you can't remember when something happened, this is the appropriate response",
     points: 1,
@@ -2471,7 +2771,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'What is the plural of "kind" (child)?',
     englishTranslation: 'What is the plural of "kind" (child)?',
     options: ['kinders', 'kinderen', 'kinden', 'kinds'],
-    correctAnswer: 'kinderen',
+    correctAnswer: ['kinderen', 'kinderen.'],
     explanation:
       'Correct answer: "kinderen" The plural of "kind" is "kinderen" (irregular plural)',
     hints: [
@@ -2490,7 +2790,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     englishTranslation:
       'Which auxiliary verb do you use with "komen" in perfect tense?',
     options: ['hebben', 'zijn', 'worden', 'zullen'],
-    correctAnswer: 'zijn',
+    correctAnswer: ['zijn', 'zijn.'],
     explanation:
       'Correct answer: "zijn" Motion verbs like "komen" use "zijn" in perfect tense',
     hints: ['Motion verbs use "zijn"', 'Think about movement'],
@@ -2510,7 +2810,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
       'to go to sleep',
       'to dream',
     ],
-    correctAnswer: 'to sleep in/oversleep',
+    correctAnswer: ['to sleep in/oversleep', 'to sleep in/oversleep.'],
     explanation:
       'Correct answer: "to sleep in/oversleep" "Uitslapen" means to sleep in or sleep longer than usual',
     hints: ['"Uit" often indicates completion', 'Think about sleeping longer'],
@@ -2525,7 +2825,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Which conjunction shows contrast?',
     englishTranslation: 'Which conjunction shows contrast?',
     options: ['omdat', 'dus', 'maar', 'want'],
-    correctAnswer: 'maar',
+    correctAnswer: ['maar', 'maar.'],
     explanation:
       'Correct answer: "maar" "Maar" means "but" and shows contrast between ideas',
     hints: [
@@ -2543,7 +2843,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'What is the past participle of "schrijven"?',
     englishTranslation: 'What is the past participle of "schrijven"?',
     options: ['geschreven', 'geschrijven', 'geshreven', 'geshrijven'],
-    correctAnswer: 'geschreven',
+    correctAnswer: ['geschreven', 'geschreven.'],
     explanation:
       'Correct answer: "geschreven" Strong verb: schrijven → geschreven',
     hints: ['Strong verb with vowel change', 'ij becomes e'],
@@ -2558,7 +2858,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'How do you say "to take off clothes" in Dutch?',
     englishTranslation: 'How do you say "to take off clothes" in Dutch?',
     options: ['aantrekken', 'uittrekken', 'optrekken', 'intrekken'],
-    correctAnswer: 'uittrekken',
+    correctAnswer: ['uittrekken', 'uittrekken.'],
     explanation:
       'Correct answer: "uittrekken" "Uittrekken" means to take off or remove clothing',
     hints: ['"Uit" indicates removal or taking away', 'Opposite of putting on'],
@@ -2573,7 +2873,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Which word means "although" in Dutch?',
     englishTranslation: 'Which word means "although" in Dutch?',
     options: ['alhoewel', 'hoewel', 'welhoewel', 'althans'],
-    correctAnswer: 'hoewel',
+    correctAnswer: ['hoewel', 'hoewel.'],
     explanation:
       'Correct answer: "hoewel" "Hoewel" means "although" and introduces contrast',
     hints: [
@@ -2591,7 +2891,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'What is the imperfect form of "zijn" for "ik"?',
     englishTranslation: 'What is the imperfect form of "zijn" for "ik"?',
     options: ['was', 'waren', 'ben', 'geweest'],
-    correctAnswer: 'was',
+    correctAnswer: ['was', 'was.'],
     explanation:
       'Correct answer: "was" "Zijn" in imperfect: ik was, jij was, hij/zij was',
     hints: ['Irregular verb', 'Different from present tense'],
@@ -2606,7 +2906,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Which separable verb means "to clean up"?',
     englishTranslation: 'Which separable verb means "to clean up"?',
     options: ['opruimen', 'uitruimen', 'afruimen', 'inruimen'],
-    correctAnswer: 'opruimen',
+    correctAnswer: ['opruimen', 'opruimen.'],
     explanation:
       'Correct answer: "opruimen" "Opruimen" means to clean up or tidy up',
     hints: [
@@ -2624,7 +2924,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'How do you form the plural of most Dutch nouns?',
     englishTranslation: 'How do you form the plural of most Dutch nouns?',
     options: ['add -s', 'add -en', 'add -er', 'add -e'],
-    correctAnswer: 'add -en',
+    correctAnswer: ['add -en', 'add -en.'],
     explanation:
       'Correct answer: "add -en" Most Dutch nouns form plural by adding -en',
     hints: ['Most common plural ending', 'Different from English'],
@@ -2639,7 +2939,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'What does "opbellen" mean?',
     englishTranslation: 'What does "opbellen" mean?',
     options: ['to hang up', 'to call/phone', 'to ring a bell', 'to wake up'],
-    correctAnswer: 'to call/phone',
+    correctAnswer: ['to call/phone', 'to call/phone.'],
     explanation:
       'Correct answer: "to call/phone" "Opbellen" means to call someone on the phone',
     hints: ['Related to telephone communication', '"Op" + "bellen" (to ring)'],
@@ -2654,7 +2954,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Which conjunction introduces a reason?',
     englishTranslation: 'Which conjunction introduces a reason?',
     options: ['dus', 'omdat', 'maar', 'of'],
-    correctAnswer: 'omdat',
+    correctAnswer: ['omdat', 'omdat.'],
     explanation:
       'Correct answer: "omdat" "Omdat" means "because" and introduces a reason',
     hints: [
@@ -2672,7 +2972,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'What is the past participle of "doen"?',
     englishTranslation: 'What is the past participle of "doen"?',
     options: ['gedaan', 'gedoen', 'gedoend', 'gedo'],
-    correctAnswer: 'gedaan',
+    correctAnswer: ['gedaan', 'gedaan.'],
     explanation: 'Correct answer: "gedaan" Irregular verb: doen → gedaan',
     hints: ['Irregular past participle', 'Very common verb'],
     points: 1,
@@ -2686,7 +2986,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'How do you say "to turn on" in Dutch?',
     englishTranslation: 'How do you say "to turn on" in Dutch?',
     options: ['uitzetten', 'aanzetten', 'opzetten', 'afzetten'],
-    correctAnswer: 'aanzetten',
+    correctAnswer: ['aanzetten', 'aanzetten.'],
     explanation:
       'Correct answer: "aanzetten" "Aanzetten" means to turn on or switch on',
     hints: ['"Aan" indicates activation', 'Opposite of "uitzetten"'],
@@ -2701,7 +3001,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Which word means "therefore" in Dutch?',
     englishTranslation: 'Which word means "therefore" in Dutch?',
     options: ['daarom', 'daarna', 'daarbij', 'daarop'],
-    correctAnswer: 'daarom',
+    correctAnswer: ['daarom', 'daarom.'],
     explanation:
       'Correct answer: "daarom" "Daarom" means "therefore" and shows cause and effect',
     hints: ['Shows result or conclusion', '"Daar" + "om" (for that reason)'],
@@ -2716,7 +3016,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Hoe laat vertrekt de trein?',
     englishTranslation: 'What time does the train leave?',
     options: ['Om half negen', 'Ja, graag', 'Naar Amsterdam'],
-    correctAnswer: 'Om half negen',
+    correctAnswer: ['Om half negen', 'Om half negen.'],
     explanation:
       'Correct answer: "Om half negen" When asking about time, give a time answer',
     hints: ['Question asks for time', 'Half negen = 8:30'],
@@ -2735,7 +3035,10 @@ export const multipleChoiceExercises: ExamExercise[] = [
       'Natuurlijk, wat kan ik voor u doen?',
       'Tot ziens',
     ],
-    correctAnswer: 'Natuurlijk, wat kan ik voor u doen?',
+    correctAnswer: [
+      'Natuurlijk, wat kan ik voor u doen?',
+      'Natuurlijk, wat kan ik voor u doen?.',
+    ],
     explanation:
       'Correct answer: "Natuurlijk, wat kan ik voor u doen?" Polite way to offer help',
     hints: ['Offer to help', 'Formal response'],
@@ -2750,7 +3053,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik .......... geen Nederlands.',
     englishTranslation: 'I .......... no Dutch.',
     options: ['spreek', 'praat', 'zeg'],
-    correctAnswer: 'spreek',
+    correctAnswer: ['spreek', 'spreek.'],
     explanation:
       'Correct answer: "spreek" Use "spreken" for speaking a language',
     hints: ['Speaking a language', 'Different from "praten"'],
@@ -2765,7 +3068,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: '.......... je morgen tijd?',
     englishTranslation: '.......... you time tomorrow?',
     options: ['Ben', 'Heb', 'Kan'],
-    correctAnswer: 'Heb',
+    correctAnswer: ['Heb', 'Heb.'],
     explanation:
       'Correct answer: "Heb" Use "hebben" with "tijd" (to have time)',
     hints: ['Having time', 'Tijd hebben'],
@@ -2780,7 +3083,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Waar .......... je vandaan?',
     englishTranslation: 'Where .......... you from?',
     options: ['ben', 'kom', 'ga'],
-    correctAnswer: 'kom',
+    correctAnswer: ['kom', 'kom.'],
     explanation:
       'Correct answer: "kom" Use "komen" for origin (waar kom je vandaan?)',
     hints: ['Asking about origin', 'Vandaan komen'],
@@ -2795,7 +3098,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Hoe .......... dit woord?',
     englishTranslation: 'How do you .......... this word?',
     options: ['zeg je', 'spreek je', 'praat je'],
-    correctAnswer: 'zeg je',
+    correctAnswer: ['zeg je', 'zeg je.'],
     explanation:
       'Correct answer: "zeg je" Use "zeggen" for saying specific words',
     hints: ['Saying a word', 'Hoe zeg je...?'],
@@ -2810,7 +3113,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Excuseer, waar is het station?',
     englishTranslation: 'Excuse me, where is the station?',
     options: ['Rechts, dan linksaf', 'Dank je wel', 'Tot morgen'],
-    correctAnswer: 'Rechts, dan linksaf',
+    correctAnswer: ['Rechts, dan linksaf', 'Rechts, dan linksaf.'],
     explanation:
       'Correct answer: "Rechts, dan linksaf" Give directions when asked for location',
     hints: ['Give directions', 'Right, then left'],
@@ -2825,7 +3128,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik heb .......... in mijn rug.',
     englishTranslation: 'I have .......... in my back.',
     options: ['pijn', 'ziek', 'slecht'],
-    correctAnswer: 'pijn',
+    correctAnswer: ['pijn', 'pijn.'],
     explanation: 'Correct answer: "pijn" Use "pijn hebben" for having pain',
     hints: ['Having pain', 'Pijn in...'],
     points: 1,
@@ -2839,7 +3142,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: '.......... je koffie of thee?',
     englishTranslation: '.......... you coffee or tea?',
     options: ['Wil', 'Moet', 'Kan'],
-    correctAnswer: 'Wil',
+    correctAnswer: ['Wil', 'Wil.'],
     explanation: 'Correct answer: "Wil" Use "willen" for wanting something',
     hints: ['Wanting something', 'Offering choice'],
     points: 1,
@@ -2853,7 +3156,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Het is vandaag erg .......... weer.',
     englishTranslation: "It's very .......... weather today.",
     options: ['goed', 'mooi', 'lekker'],
-    correctAnswer: 'mooi',
+    correctAnswer: ['mooi', 'mooi.'],
     explanation: 'Correct answer: "mooi" Use "mooi weer" for nice weather',
     hints: ['Nice weather', 'Mooi weer'],
     points: 1,
@@ -2867,7 +3170,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik ben mijn portemonnee .......... .',
     englishTranslation: 'I .......... my wallet.',
     options: ['vergeten', 'verloren', 'kwijt'],
-    correctAnswer: 'kwijt',
+    correctAnswer: ['kwijt', 'kwijt.'],
     explanation:
       'Correct answer: "kwijt" Use "kwijt zijn" for losing something',
     hints: ['Lost something', 'Kwijt zijn'],
@@ -2882,7 +3185,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: '.......... u me de weg naar het ziekenhuis wijzen?',
     englishTranslation: '.......... you show me the way to the hospital?',
     options: ['Wilt', 'Kunt', 'Moet'],
-    correctAnswer: 'Kunt',
+    correctAnswer: ['Kunt', 'Kunt.'],
     explanation:
       'Correct answer: "Kunt" Use "kunnen" for ability to do something',
     hints: ['Asking for ability/possibility', 'Polite request'],
@@ -2897,7 +3200,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'Ik ga naar de .......... om brood te kopen.',
     englishTranslation: "I'm going to the .......... to buy bread.",
     options: ['winkel', 'bakker', 'slager'],
-    correctAnswer: 'bakker',
+    correctAnswer: ['bakker', 'bakker.'],
     explanation:
       'Correct answer: "bakker" Go to bakery for bread, but "winkel" is also acceptable',
     hints: ['Where to buy bread', 'Bakery or shop'],
@@ -2912,7 +3215,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: 'De bus komt .......... vijf minuten.',
     englishTranslation: 'The bus comes .......... five minutes.',
     options: ['in', 'na', 'over'],
-    correctAnswer: 'over',
+    correctAnswer: ['over', 'over.'],
     explanation:
       'Correct answer: "over" Use "over" for time remaining until something happens',
     hints: ['Time remaining', 'Over vijf minuten'],
@@ -2927,7 +3230,7 @@ export const multipleChoiceExercises: ExamExercise[] = [
     question: '.......... je Nederlands moeilijk?',
     englishTranslation: '.......... you Dutch difficult?',
     options: ['Vind', 'Denk', 'Weet'],
-    correctAnswer: 'Vind',
+    correctAnswer: ['Vind', 'Vind.'],
     explanation:
       'Correct answer: "Vind" Use "vinden" for opinions about difficulty',
     hints: ['Expressing opinion', 'Vind je... moeilijk?'],
@@ -2946,7 +3249,7 @@ export const wordChoiceExercises: ExamExercise[] = [
       'Choose the correct word from the list: afspraak – gezellig – ziekenhuis – docent – passen – gezond – voorstel – tijd – wandeling – koffie – hoofd – griep',
     question: 'Ik heb een .......... met de dokter om 2 uur.',
     englishTranslation: "I have an .......... with the doctor at 2 o'clock.",
-    correctAnswer: 'afspraak',
+    correctAnswer: ['afspraak', 'afspraak.'],
     explanation: 'Correct answer: "afspraak" - an appointment with the doctor',
     hints: ['Meeting with doctor', 'Scheduled time'],
     points: 1,
@@ -2959,7 +3262,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Deze schoenen .......... me niet. Ze zijn te klein.',
     englishTranslation: "These shoes don't .......... me. They are too small.",
-    correctAnswer: 'passen',
+    correctAnswer: ['passen', 'passen.'],
     explanation: 'Correct answer: "passen" - shoes that fit or don\'t fit',
     hints: ['Clothing fit', 'Size matters'],
     points: 1,
@@ -2972,7 +3275,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Ik voel me niet lekker. Ik denk dat ik de .......... heb.',
     englishTranslation: "I don't feel well. I think I have the ..........",
-    correctAnswer: 'griep',
+    correctAnswer: ['griep', 'griep.'],
     explanation: 'Correct answer: "griep" - the flu, a common illness',
     hints: ['Common illness', 'Feeling sick'],
     points: 1,
@@ -2985,7 +3288,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'De dokter zegt dat ik meer .......... moet nemen.',
     englishTranslation: 'The doctor says I need to take more ..........',
-    correctAnswer: 'tijd',
+    correctAnswer: ['tijd', 'tijd.'],
     explanation: 'Correct answer: "tijd" - taking time to rest and recover',
     hints: ["Doctor's advice", 'Rest and recovery'],
     points: 1,
@@ -2998,7 +3301,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Veel groenten eten is .......... voor je.',
     englishTranslation: 'Eating lots of vegetables is .......... for you.',
-    correctAnswer: 'gezond',
+    correctAnswer: ['gezond', 'gezond.'],
     explanation: 'Correct answer: "gezond" - healthy eating habits',
     hints: ['Good for health', 'Nutritious food'],
     points: 1,
@@ -3011,7 +3314,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'We gaan een .......... maken in het park.',
     englishTranslation: "We're going to take a .......... in the park.",
-    correctAnswer: 'wandeling',
+    correctAnswer: ['wandeling', 'wandeling.'],
     explanation: 'Correct answer: "wandeling" - taking a walk in the park',
     hints: ['Activity in park', 'Walking exercise'],
     points: 1,
@@ -3024,7 +3327,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Het was een heel .......... avond met vrienden.',
     englishTranslation: 'It was a very .......... evening with friends.',
-    correctAnswer: 'gezellig',
+    correctAnswer: ['gezellig', 'gezellig.'],
     explanation:
       'Correct answer: "gezellig" - cozy, pleasant social atmosphere',
     hints: ['Pleasant social time', 'Dutch cultural concept'],
@@ -3038,7 +3341,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Ik heb pijn in mijn .......... door de stress.',
     englishTranslation: 'I have pain in my .......... because of stress.',
-    correctAnswer: 'hoofd',
+    correctAnswer: ['hoofd', 'hoofd.'],
     explanation: 'Correct answer: "hoofd" - headache from stress',
     hints: ['Body part', 'Common stress symptom'],
     points: 1,
@@ -3052,7 +3355,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     question: 'De .......... aan de school kan je helpen met je vragen.',
     englishTranslation:
       'The .......... at the school can help you with your questions.',
-    correctAnswer: 'docent',
+    correctAnswer: ['docent', 'docent.'],
     explanation:
       'Correct answer: "docent" - teacher who can help with questions',
     hints: ['School professional', 'Helps students'],
@@ -3067,7 +3370,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     question: 'Mijn oma ligt in het .......... na haar operatie.',
     englishTranslation:
       'My grandmother is in the .......... after her operation.',
-    correctAnswer: 'ziekenhuis',
+    correctAnswer: ['ziekenhuis', 'ziekenhuis.'],
     explanation: 'Correct answer: "ziekenhuis" - hospital for medical care',
     hints: ['Medical facility', 'After surgery'],
     points: 1,
@@ -3080,7 +3383,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Heb je een goed .......... voor een restaurant?',
     englishTranslation: 'Do you have a good .......... for a restaurant?',
-    correctAnswer: 'voorstel',
+    correctAnswer: ['voorstel', 'voorstel.'],
     explanation: 'Correct answer: "voorstel" - suggestion or recommendation',
     hints: ['Recommendation', 'Suggestion'],
     points: 1,
@@ -3093,7 +3396,7 @@ export const wordChoiceExercises: ExamExercise[] = [
     instruction: 'Choose the correct word from the list.',
     question: 'Wil je .......... of thee?',
     englishTranslation: 'Do you want .......... or tea?',
-    correctAnswer: 'koffie',
+    correctAnswer: ['koffie', 'koffie.'],
     explanation: 'Correct answer: "koffie" - coffee as a drink choice',
     hints: ['Hot beverage', 'Alternative to tea'],
     points: 1,
@@ -3111,7 +3414,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Zie je die man daar? Ja, ik zie .......... .',
     englishTranslation: 'Do you see that man there? Yes, I see .......... .',
     options: ['hem', 'hij', 'zijn'],
-    correctAnswer: 'hem',
+    correctAnswer: ['hem', 'hem.'],
     explanation: 'Correct answer: "hem" - object form of "hij" (he/him)',
     hints: ['Object pronoun', 'Direct object'],
     points: 1,
@@ -3125,7 +3428,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Waar is mijn tas? .......... ligt op de stoel.',
     englishTranslation: 'Where is my bag? .......... is on the chair.',
     options: ['Het', 'Hij', 'Zij'],
-    correctAnswer: 'Hij',
+    correctAnswer: ['Hij', 'Hij.'],
     explanation: 'Correct answer: "Hij" - "tas" is de-word, so use "hij"',
     hints: ['De-word', 'Masculine pronoun'],
     points: 1,
@@ -3139,7 +3442,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Dit is echt een .......... huis met een grote tuin.',
     englishTranslation: 'This is really a .......... house with a big garden.',
     options: ['mooie', 'mooi', 'mooier'],
-    correctAnswer: 'mooi',
+    correctAnswer: ['mooi', 'mooi.'],
     explanation:
       'Correct answer: "mooi" - het-word with indefinite article uses uninflected adjective',
     hints: ['Het-word', 'Indefinite article'],
@@ -3156,7 +3459,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     englishTranslation:
       'I give the flowers to my mother. I give .......... to her.',
     options: ['het', 'ze', 'zij'],
-    correctAnswer: 'ze',
+    correctAnswer: ['ze', 'ze.'],
     explanation: 'Correct answer: "ze" - plural object pronoun for "bloemen"',
     hints: ['Plural object', 'Direct object pronoun'],
     points: 1,
@@ -3171,7 +3474,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     englishTranslation:
       'Where is the station? .......... is around the corner.',
     options: ['Het', 'Hij', 'Dat'],
-    correctAnswer: 'Dat',
+    correctAnswer: ['Dat', 'Dat.'],
     explanation:
       'Correct answer: "Dat" - demonstrative pronoun referring back to location',
     hints: ['Demonstrative pronoun', 'Referring to location'],
@@ -3186,7 +3489,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Amsterdam is .......... dan Utrecht.',
     englishTranslation: 'Amsterdam is .......... than Utrecht.',
     options: ['groot', 'groter', 'grootse'],
-    correctAnswer: 'groter',
+    correctAnswer: ['groter', 'groter.'],
     explanation: 'Correct answer: "groter" - comparative form of "groot"',
     hints: ['Comparison', 'Add -er for comparative'],
     points: 1,
@@ -3200,7 +3503,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Ik ken die mensen niet. Ik ken .......... niet.',
     englishTranslation: "I don't know those people. I don't know .......... .",
     options: ['hen', 'zij', 'hun'],
-    correctAnswer: 'hen',
+    correctAnswer: ['hen', 'hen.'],
     explanation: 'Correct answer: "hen" - object form for people (plural)',
     hints: ['Plural object pronoun', 'For people'],
     points: 1,
@@ -3214,7 +3517,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Dit is .......... auto van mijn vader.',
     englishTranslation: 'This is .......... car of my father.',
     options: ['het', 'de', 'een'],
-    correctAnswer: 'de',
+    correctAnswer: ['de', 'de.'],
     explanation: 'Correct answer: "de" - "auto" is a de-word',
     hints: ['De-word', 'Definite article'],
     points: 1,
@@ -3228,7 +3531,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Van wie is deze pen? Hij is van .......... .',
     englishTranslation: "Whose pen is this? It's .......... .",
     options: ['ik', 'mijn', 'mij'],
-    correctAnswer: 'mij',
+    correctAnswer: ['mij', 'mij.'],
     explanation: 'Correct answer: "mij" - object pronoun after preposition',
     hints: ['After preposition "van"', 'Object pronoun'],
     points: 1,
@@ -3242,7 +3545,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Dit bed is .......... dan dat bed.',
     englishTranslation: 'This bed is .......... than that bed.',
     options: ['zacht', 'zachte', 'zachter'],
-    correctAnswer: 'zachter',
+    correctAnswer: ['zachter', 'zachter.'],
     explanation: 'Correct answer: "zachter" - comparative form of "zacht"',
     hints: ['Comparison', 'Add -er'],
     points: 1,
@@ -3258,7 +3561,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     englishTranslation:
       'Anna has many friends, but Jan has .......... friends than Anna.',
     options: ['minder', 'weinig', 'minste'],
-    correctAnswer: 'minder',
+    correctAnswer: ['minder', 'minder.'],
     explanation: 'Correct answer: "minder" - comparative form meaning "fewer"',
     hints: ['Fewer/less', 'Comparative'],
     points: 1,
@@ -3272,7 +3575,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Van alle studenten is Marie het .......... .',
     englishTranslation: 'Of all students, Marie is the .......... .',
     options: ['slim', 'slimmer', 'slimst'],
-    correctAnswer: 'slimst',
+    correctAnswer: ['slimst', 'slimst.'],
     explanation: 'Correct answer: "slimst" - superlative form with "het"',
     hints: ['Superlative', 'Add -st'],
     points: 1,
@@ -3286,7 +3589,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Kun je .......... helpen met deze oefening?',
     englishTranslation: 'Can you .......... with this exercise?',
     options: ['ik', 'mij', 'mijn'],
-    correctAnswer: 'mij',
+    correctAnswer: ['mij', 'mij.'],
     explanation: 'Correct answer: "mij" - object pronoun (help me)',
     hints: ['Direct object', 'Help me'],
     points: 1,
@@ -3300,7 +3603,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Dit is .......... interessant boek over de natuur.',
     englishTranslation: 'This is .......... interesting book about nature.',
     options: ['een', 'het', 'de'],
-    correctAnswer: 'een',
+    correctAnswer: ['een', 'een.'],
     explanation: 'Correct answer: "een" - indefinite article for singular noun',
     hints: ['Indefinite article', 'A/an'],
     points: 1,
@@ -3314,7 +3617,7 @@ export const grammarPronounsExercises: ExamExercise[] = [
     question: 'Waar woon je? .......... woon in Den Haag.',
     englishTranslation: 'Where do you live? .......... live in The Hague.',
     options: ['Mij', 'Ik', 'Mijn'],
-    correctAnswer: 'Ik',
+    correctAnswer: ['Ik', 'Ik.'],
     explanation: 'Correct answer: "Ik" - subject pronoun (I)',
     hints: ['Subject pronoun', 'First person singular'],
     points: 1,
@@ -3333,7 +3636,10 @@ export const writingExercises: ExamExercise[] = [
     question: 'Bezoek aan de huisarts - Schrijf over een bezoek aan de dokter.',
     englishTranslation:
       'Visit to the doctor - Write about a visit to the doctor.',
-    correctAnswer: 'Open-ended writing exercise',
+    correctAnswer: [
+      'Open-ended writing exercise',
+      'Open-ended writing exercise.',
+    ],
     wordCount: 100,
     sampleAnswer:
       'Gisteren ben ik naar de huisarts geweest omdat ik me niet lekker voelde. Ik had hoofdpijn en koorts. In de wachtkamer moest ik twintig minuten wachten. De dokter was erg vriendelijk en stelde veel vragen over mijn klachten. Hij heeft me onderzocht en zei dat ik griep heb. Hij gaf me medicijnen en zei dat ik veel moet rusten. Ik moet veel water drinken en paracetamol nemen tegen de pijn. Over een week moet ik terugkomen als ik me nog steeds ziek voel. Ik hoop dat ik snel beter word.',
@@ -3357,7 +3663,10 @@ export const writingExercises: ExamExercise[] = [
       'Bezoek aan de fietsenmaker - Schrijf over een probleem met je fiets.',
     englishTranslation:
       'Visit to the bike repair shop - Write about a problem with your bike.',
-    correctAnswer: 'Open-ended writing exercise',
+    correctAnswer: [
+      'Open-ended writing exercise',
+      'Open-ended writing exercise.',
+    ],
     wordCount: 100,
     sampleAnswer:
       'Vorige week had ik een probleem met mijn fiets. De ketting was gebroken en ik kon niet meer fietsen. Ik ben naar de fietsenmaker in mijn buurt gegaan. Hij was erg behulpzaam en keek meteen naar mijn fiets. Hij zei dat hij een nieuwe ketting nodig had en dat het een dag zou duren. De reparatie kostte dertig euro, wat ik redelijk vond. De volgende dag kon ik mijn fiets ophalen. Nu rijdt hij weer perfect! Ik ben blij dat ik weer kan fietsen naar mijn werk. De fietsenmaker deed zijn werk heel goed.',
@@ -3380,7 +3689,10 @@ export const writingExercises: ExamExercise[] = [
       'Brief aan een vriend - Schrijf waarom je niet naar zijn/haar feestje kunt komen.',
     englishTranslation:
       'Letter to a friend - Write why you cannot come to his/her party.',
-    correctAnswer: 'Open-ended writing exercise',
+    correctAnswer: [
+      'Open-ended writing exercise',
+      'Open-ended writing exercise.',
+    ],
     wordCount: 100,
     sampleAnswer:
       'Lieve Sarah, Dank je wel voor je uitnodiging voor je verjaardagfeest volgende zaterdag. Het klinkt heel leuk en ik zou graag komen, maar helaas kan ik niet. Mijn oma wordt negentig jaar en mijn hele familie komt bij elkaar voor een groot feest. Dit is heel belangrijk voor mij omdat ze ver weg woont en ik haar niet vaak zie. Ik hoop dat je een fantastische verjaardag hebt met al je vrienden. Kunnen we misschien de week erna samen koffie drinken om je verjaardag te vieren? Ik wil je alsnog feliciteren! Liefs, [Je naam]',
@@ -3403,7 +3715,10 @@ export const writingExercises: ExamExercise[] = [
     question: 'Vakantie in Nederland - Schrijf over een bezoek aan Nederland.',
     englishTranslation:
       'Holiday in the Netherlands - Write about a visit to the Netherlands.',
-    correctAnswer: 'Open-ended writing exercise',
+    correctAnswer: [
+      'Open-ended writing exercise',
+      'Open-ended writing exercise.',
+    ],
     wordCount: 100,
     sampleAnswer:
       'Afgelopen zomer heb ik een prachtige vakantie gehad in Nederland. Ik heb Amsterdam bezocht en veel musea gezien, zoals het Rijksmuseum en het Van Gogh Museum. De stad was heel mooi en ik heb veel gewandeld. Daarna ben ik naar de kust gegaan en heb ik Scheveningen bezocht. Het strand was geweldig en het weer was perfect voor zwemmen. Ik heb ook traditioneel Nederlands eten geproefd, zoals kaas en brood. De mensen waren erg vriendelijk en veel mensen spraken goed Engels. Nederland is een prachtig land om te bezoeken. Ik wil zeker terugkomen!',
@@ -3426,7 +3741,10 @@ export const writingExercises: ExamExercise[] = [
     question: 'Kleren kopen - Schrijf over welke kleren je zou willen kopen.',
     englishTranslation:
       'Buying clothes - Write about what clothes you would like to buy.',
-    correctAnswer: 'Open-ended writing exercise',
+    correctAnswer: [
+      'Open-ended writing exercise',
+      'Open-ended writing exercise.',
+    ],
     wordCount: 100,
     sampleAnswer:
       'Als ik nieuwe kleren zou kopen, zou ik beginnen met praktische dingen. Ik heb nieuwe winterlaarzen nodig omdat mijn oude laarzen kapot zijn. Ook wil ik een warme winterjas kopen, want de winter komt eraan. Voor de lente zou ik graag nieuwe jeans kopen en een paar mooie shirts. Ik hou van kleurrijke kleding, dus ik zou een rode trui en een blauwe jurk kiezen. Schoenen zijn ook belangrijk - ik wil comfortabele sneakers voor sporten en elegante schoenen voor speciale gelegenheden. Ik zou ook nieuwe ondergoed en sokken kopen. Kwaliteit is belangrijk, dus ik zou niet de goedkoopste kleren kiezen.',
