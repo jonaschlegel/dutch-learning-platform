@@ -22,6 +22,12 @@ export function useProgress() {
         scores: {},
       },
     },
+    finalExamProgress: {
+      completedExercises: new Set(),
+      incorrectExercises: {},
+      scores: {},
+      mistakeMode: false,
+    },
   });
 
   // State for current exercise session
@@ -88,6 +94,23 @@ export function useProgress() {
                 incorrectExercises: {},
                 scores: {},
               },
+            },
+        finalExamProgress: parsed.finalExamProgress
+          ? {
+              ...parsed.finalExamProgress,
+              completedExercises: new Set(
+                parsed.finalExamProgress.completedExercises || [],
+              ),
+              incorrectExercises:
+                parsed.finalExamProgress.incorrectExercises || {},
+              scores: parsed.finalExamProgress.scores || {},
+              mistakeMode: parsed.finalExamProgress.mistakeMode || false,
+            }
+          : {
+              completedExercises: new Set(),
+              incorrectExercises: {},
+              scores: {},
+              mistakeMode: false,
             },
       });
     }
@@ -424,6 +447,117 @@ export function useProgress() {
     [],
   );
 
+  const markFinalExamExerciseCompleted = useCallback(
+    (exerciseId: string, score: number) => {
+      setProgress((currentProgress) => {
+        const newProgress = { ...currentProgress };
+
+        // Initialize final exam progress if it doesn't exist
+        if (!newProgress.finalExamProgress) {
+          newProgress.finalExamProgress = {
+            completedExercises: new Set(),
+            incorrectExercises: {},
+            scores: {},
+            mistakeMode: false,
+          };
+        }
+
+        const finalExamProgress = newProgress.finalExamProgress;
+
+        // Mark as completed and record score
+        finalExamProgress.completedExercises.add(exerciseId);
+        finalExamProgress.scores[exerciseId] = score;
+
+        // Handle incorrect answers
+        if (score === 0) {
+          const now = Date.now();
+          const currentIncorrect = finalExamProgress.incorrectExercises[
+            exerciseId
+          ] || {
+            count: 0,
+            lastAttempt: 0,
+          };
+
+          finalExamProgress.incorrectExercises[exerciseId] = {
+            count: currentIncorrect.count + 1,
+            lastAttempt: now,
+          };
+        } else if (
+          score === 1 &&
+          finalExamProgress.incorrectExercises[exerciseId]
+        ) {
+          // Remove from incorrect list if answered correctly
+          const { [exerciseId]: removed, ...remaining } =
+            finalExamProgress.incorrectExercises;
+          finalExamProgress.incorrectExercises = remaining;
+        }
+
+        // Save to localStorage
+        const toSave = {
+          ...newProgress,
+          completedWords: Array.from(newProgress.completedWords),
+          testExerciseProgress: newProgress.testExerciseProgress
+            ? {
+                test1: {
+                  ...newProgress.testExerciseProgress.test1,
+                  completedExercises: Array.from(
+                    newProgress.testExerciseProgress.test1.completedExercises,
+                  ),
+                },
+                test2: {
+                  ...newProgress.testExerciseProgress.test2,
+                  completedExercises: Array.from(
+                    newProgress.testExerciseProgress.test2.completedExercises,
+                  ),
+                },
+              }
+            : undefined,
+          finalExamProgress: newProgress.finalExamProgress
+            ? {
+                ...newProgress.finalExamProgress,
+                completedExercises: Array.from(
+                  newProgress.finalExamProgress.completedExercises,
+                ),
+              }
+            : undefined,
+        };
+        localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+        return newProgress;
+      });
+    },
+    [],
+  );
+
+  const setFinalExamMistakeMode = useCallback((mistakeMode: boolean) => {
+    setProgress((currentProgress) => {
+      const newProgress = {
+        ...currentProgress,
+        finalExamProgress: {
+          ...currentProgress.finalExamProgress!,
+          mistakeMode,
+        },
+      };
+
+      // Save to localStorage
+      const toSave = {
+        ...newProgress,
+        completedWords: Array.from(newProgress.completedWords),
+        finalExamProgress: newProgress.finalExamProgress
+          ? {
+              ...newProgress.finalExamProgress,
+              completedExercises: Array.from(
+                newProgress.finalExamProgress.completedExercises,
+              ),
+            }
+          : undefined,
+      };
+      localStorage.setItem('dutch-learning-progress', JSON.stringify(toSave));
+
+      return newProgress;
+    });
+  }, []);
+
   const getTestExerciseProgress = useCallback(
     (testType: 'test1' | 'test2') => {
       return (
@@ -447,6 +581,8 @@ export function useProgress() {
     resetProgress,
     markTestExerciseCompleted,
     getTestExerciseProgress,
+    markFinalExamExerciseCompleted,
+    setFinalExamMistakeMode,
     saveExerciseSession,
     clearExerciseSession,
   };

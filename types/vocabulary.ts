@@ -88,6 +88,12 @@ export interface UserProgress {
       scores: Record<string, number>;
     };
   };
+  finalExamProgress?: {
+    completedExercises: Set<string>;
+    incorrectExercises: Record<string, { count: number; lastAttempt: number }>;
+    scores: Record<string, number>;
+    mistakeMode: boolean; // Whether currently in final exam mistake review mode
+  };
 }
 
 export interface Exercise {

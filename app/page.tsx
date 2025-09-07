@@ -23,7 +23,11 @@ import {
 } from '@/components/TestExerciseCard';
 import { VocabularyCard } from '@/components/VocabularyCard';
 import { conjunctions } from '@/data/conjunctions';
-import { allExamExercises, examCategories } from '@/data/final-exam-exercises';
+import {
+  allExamExercises,
+  examCategories,
+  ExamExercise,
+} from '@/data/final-exam-exercises';
 import {
   finalTestCategories,
   finalTestVocabulary,
@@ -65,6 +69,8 @@ export default function DutchLearningPlatform() {
     resetProgress,
     markTestExerciseCompleted,
     getTestExerciseProgress,
+    markFinalExamExerciseCompleted,
+    setFinalExamMistakeMode,
     saveExerciseSession,
     clearExerciseSession,
   } = useProgress();
@@ -194,6 +200,7 @@ export default function DutchLearningPlatform() {
   const [finalTestCategory, setFinalTestCategory] =
     useState<string>('All Categories');
   const [finalTestReviewMode, setFinalTestReviewMode] = useState(false);
+  const [finalExamReviewMode, setFinalExamReviewMode] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [sessionScores, setSessionScores] = useState<{
     [key: string]: { correct: number; total: number };
@@ -311,6 +318,78 @@ export default function DutchLearningPlatform() {
       return () => clearTimeout(timeoutId);
     }
   }, [sessionScores, exerciseMode, hasStartedLearning, saveCurrentSession]);
+
+  // Initialize shuffled exam exercises when finalTestMode changes
+  useEffect(() => {
+    if (finalTestMode) {
+      let filteredExercises: ExamExercise[] = [];
+
+      if (
+        finalExamReviewMode &&
+        progress.finalExamProgress?.incorrectExercises
+      ) {
+        // In review mode, only show incorrect exercises
+        const incorrectExerciseIds = Object.keys(
+          progress.finalExamProgress.incorrectExercises,
+        );
+        filteredExercises = allExamExercises.filter((ex) =>
+          incorrectExerciseIds.includes(ex.id),
+        );
+      } else {
+        // Normal mode: filter by exam type
+        filteredExercises = (() => {
+          switch (finalTestMode) {
+            case 'exam-perfect':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'perfect-construction',
+              );
+            case 'exam-imperfect':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'imperfect-fill',
+              );
+            case 'exam-separable':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'separable-verbs',
+              );
+            case 'exam-conjunctions':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'conjunctions-combine',
+              );
+            case 'exam-multiple-choice':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'multiple-choice',
+              );
+            case 'exam-writing':
+              return allExamExercises.filter(
+                (ex) => ex.type === 'writing-prompt',
+              );
+            case 'exam-mixed':
+              return allExamExercises;
+            default:
+              return [];
+          }
+        })();
+      }
+
+      // Shuffle the filtered exercises
+      const shuffled = [...filteredExercises].sort(() => Math.random() - 0.5);
+      console.log(`[DEBUG] ${finalTestMode} exercises:`, {
+        total: filteredExercises.length,
+        shuffled: shuffled.map((ex) => ex.id),
+        firstExercise: shuffled[0]?.question,
+      });
+      setShuffledExamExercises(shuffled);
+
+      // Reset the current index
+      setCurrentExamExerciseIndex(0);
+    } else {
+      setShuffledExamExercises([]);
+    }
+  }, [
+    finalTestMode,
+    finalExamReviewMode,
+    progress.finalExamProgress?.incorrectExercises,
+  ]);
 
   const currentChapterWords = useMemo(() => {
     if (progress.currentChapter === 0) {
@@ -648,6 +727,9 @@ export default function DutchLearningPlatform() {
   // Exam exercises state with proper queue management
   const [currentExamExerciseIndex, setCurrentExamExerciseIndex] = useState(0);
   const [examExercises, setExamExercises] = useState(allExamExercises);
+  const [shuffledExamExercises, setShuffledExamExercises] = useState<
+    typeof allExamExercises
+  >([]);
   const [completedExamExercises, setCompletedExamExercises] = useState<
     Set<string>
   >(new Set());
@@ -655,76 +737,30 @@ export default function DutchLearningPlatform() {
     useState(false);
 
   const currentExamExercise = useMemo(() => {
-    const filteredExercises = (() => {
-      switch (finalTestMode) {
-        case 'exam-perfect':
-          return allExamExercises.filter(
-            (ex) => ex.type === 'perfect-construction',
-          );
-        case 'exam-imperfect':
-          return allExamExercises.filter((ex) => ex.type === 'imperfect-fill');
-        case 'exam-separable':
-          return allExamExercises.filter((ex) => ex.type === 'separable-verbs');
-        case 'exam-conjunctions':
-          return allExamExercises.filter(
-            (ex) => ex.type === 'conjunctions-combine',
-          );
-        case 'exam-multiple-choice':
-          return allExamExercises.filter((ex) => ex.type === 'multiple-choice');
-        case 'exam-writing':
-          return allExamExercises.filter((ex) => ex.type === 'writing-prompt');
-        case 'exam-mixed':
-          return allExamExercises;
-        default:
-          return [];
-      }
-    })();
-
     // If we've completed the session, return null
     if (
       examExerciseSessionCompleted ||
-      currentExamExerciseIndex >= filteredExercises.length
+      currentExamExerciseIndex >= shuffledExamExercises.length
     ) {
       return null;
     }
 
-    return filteredExercises[currentExamExerciseIndex] || null;
-  }, [finalTestMode, currentExamExerciseIndex, examExerciseSessionCompleted]);
+    return shuffledExamExercises[currentExamExerciseIndex] || null;
+  }, [
+    currentExamExerciseIndex,
+    examExerciseSessionCompleted,
+    shuffledExamExercises,
+  ]);
 
   // Function to get exam exercise progress
   const getExamExerciseProgress = () => {
-    const filteredExercises = (() => {
-      switch (finalTestMode) {
-        case 'exam-perfect':
-          return allExamExercises.filter(
-            (ex) => ex.type === 'perfect-construction',
-          );
-        case 'exam-imperfect':
-          return allExamExercises.filter((ex) => ex.type === 'imperfect-fill');
-        case 'exam-separable':
-          return allExamExercises.filter((ex) => ex.type === 'separable-verbs');
-        case 'exam-conjunctions':
-          return allExamExercises.filter(
-            (ex) => ex.type === 'conjunctions-combine',
-          );
-        case 'exam-multiple-choice':
-          return allExamExercises.filter((ex) => ex.type === 'multiple-choice');
-        case 'exam-writing':
-          return allExamExercises.filter((ex) => ex.type === 'writing-prompt');
-        case 'exam-mixed':
-          return allExamExercises;
-        default:
-          return [];
-      }
-    })();
-
     return {
       current: currentExamExerciseIndex,
-      total: filteredExercises.length,
+      total: shuffledExamExercises.length,
       completed: completedExamExercises.size,
       percentage:
-        filteredExercises.length > 0
-          ? (currentExamExerciseIndex / filteredExercises.length) * 100
+        shuffledExamExercises.length > 0
+          ? (currentExamExerciseIndex / shuffledExamExercises.length) * 100
           : 0,
     };
   };
@@ -734,6 +770,13 @@ export default function DutchLearningPlatform() {
     setCurrentExamExerciseIndex(0);
     setCompletedExamExercises(new Set());
     setExamExerciseSessionCompleted(false);
+    // Reset session scores when switching exam modes
+    if (finalTestMode.startsWith('exam-')) {
+      setSessionScores((prev) => ({
+        ...prev,
+        finaltest: { correct: 0, total: 0 },
+      }));
+    }
   }, [finalTestMode]);
 
   // Auto-switch to "All Categories" when current category becomes irrelevant for the mode
@@ -772,6 +815,78 @@ export default function DutchLearningPlatform() {
     } else if (exerciseMode === 'conjunctions' && currentConjunction) {
       markWordCompleted(currentConjunction.id, correct ? 1 : 0);
       conjunctionsQueue.moveToNext(currentConjunction.id, correct);
+    } else if (
+      exerciseMode === 'finaltest' &&
+      [
+        'exam-perfect',
+        'exam-imperfect',
+        'exam-separable',
+        'exam-conjunctions',
+        'exam-multiple-choice',
+        'exam-writing',
+        'exam-mixed',
+      ].includes(finalTestMode) &&
+      currentExamExercise
+    ) {
+      // Handle exam exercises with proper completion tracking
+      console.log(`[DEBUG] Exam exercise completed:`, {
+        exerciseId: currentExamExercise.id,
+        correct,
+        currentIndex: currentExamExerciseIndex,
+        total: getExamExerciseProgress().total,
+      });
+      markFinalExamExerciseCompleted(currentExamExercise.id, correct ? 1 : 0);
+
+      setCompletedExamExercises(
+        (prev) => new Set([...prev, currentExamExercise.id]),
+      );
+
+      const nextIndex = currentExamExerciseIndex + 1;
+      const examProgress = getExamExerciseProgress();
+
+      // Check if we've completed all exercises in this mode
+      if (nextIndex >= examProgress.total) {
+        setExamExerciseSessionCompleted(true);
+
+        // Check if there are any incorrect exercises for review
+        const incorrectExercises =
+          progress.finalExamProgress?.incorrectExercises || {};
+        const incorrectCount = Object.keys(incorrectExercises).length;
+
+        // Show completion message
+        setTimeout(() => {
+          if (finalExamReviewMode) {
+            // Review mode completion
+            const remainingIncorrect =
+              progress.finalExamProgress?.incorrectExercises || {};
+            const remainingCount = Object.keys(remainingIncorrect).length;
+
+            if (remainingCount > 0) {
+              toast({
+                title: 'Review Session Complete!',
+                description: `You've practiced your mistakes! You still have ${remainingCount} exercises that need more practice.`,
+              });
+            } else {
+              toast({
+                title: 'All Mistakes Mastered!',
+                description: `Excellent! You've successfully corrected all your previous mistakes. Great job!`,
+              });
+            }
+          } else if (incorrectCount > 0) {
+            toast({
+              title: 'Exam Section Complete!',
+              description: `You've completed all ${examProgress.total} exercises. You have ${incorrectCount} exercises to review. Click "Review Mistakes" to practice them again.`,
+            });
+          } else {
+            toast({
+              title: 'Perfect Score!',
+              description: `You've completed all ${examProgress.total} exercises with no mistakes. Excellent work!`,
+            });
+          }
+        }, 100);
+      } else {
+        setCurrentExamExerciseIndex(nextIndex);
+      }
     } else if (exerciseMode === 'finaltest' && currentFinalTestItem) {
       // For final test, handle completion with review mode logic
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
@@ -791,29 +906,6 @@ export default function DutchLearningPlatform() {
             });
           }
         }, 100);
-      }
-    } else if (exerciseMode === 'finaltest' && currentExamExercise) {
-      // Handle exam exercises with proper completion tracking
-      setCompletedExamExercises(
-        (prev) => new Set([...prev, currentExamExercise.id]),
-      );
-
-      const nextIndex = currentExamExerciseIndex + 1;
-      const examProgress = getExamExerciseProgress();
-
-      // Check if we've completed all exercises in this mode
-      if (nextIndex >= examProgress.total) {
-        setExamExerciseSessionCompleted(true);
-
-        // Show completion message and ask if user wants to restart
-        setTimeout(() => {
-          toast({
-            title: 'Exam Section Complete!',
-            description: `You've completed all ${examProgress.total} exercises in this section. Great job!`,
-          });
-        }, 100);
-      } else {
-        setCurrentExamExerciseIndex(nextIndex);
       }
     } else if (currentWord) {
       markWordCompleted(currentWord.id, correct ? 1 : 0);
@@ -848,44 +940,8 @@ export default function DutchLearningPlatform() {
             'exam-writing',
             'exam-mixed',
           ].includes(finalTestMode)
-        ? (() => {
-            const filteredExercises = (() => {
-              switch (finalTestMode) {
-                case 'exam-perfect':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'perfect-construction',
-                  );
-                case 'exam-imperfect':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'imperfect-fill',
-                  );
-                case 'exam-separable':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'separable-verbs',
-                  );
-                case 'exam-conjunctions':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'conjunctions-combine',
-                  );
-                case 'exam-multiple-choice':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'multiple-choice',
-                  );
-                case 'exam-writing':
-                  return allExamExercises.filter(
-                    (ex) => ex.type === 'writing-prompt',
-                  );
-                case 'exam-mixed':
-                  return allExamExercises;
-                default:
-                  return [];
-              }
-            })();
-            return (
-              !examExerciseSessionCompleted &&
-              currentExamExerciseIndex < filteredExercises.length
-            );
-          })()
+        ? !examExerciseSessionCompleted &&
+          currentExamExerciseIndex < shuffledExamExercises.length
         : exerciseMode === 'finaltest'
         ? finalTestQueue.hasMoreItems() &&
           !finalTestQueue.shouldShowReviewMode()
@@ -936,7 +992,13 @@ export default function DutchLearningPlatform() {
       [exerciseMode]: { correct: 0, total: 0 },
     }));
     clearExerciseSession(); // Clear session when resetting
-    if (exerciseMode === 'test1') {
+
+    // Reset exam exercise state for finaltest modes with exam- prefix
+    if (exerciseMode === 'finaltest' && finalTestMode.startsWith('exam-')) {
+      setCurrentExamExerciseIndex(0);
+      setCompletedExamExercises(new Set());
+      setExamExerciseSessionCompleted(false);
+    } else if (exerciseMode === 'test1') {
       const exercises = createTestExercises();
       test1ExerciseQueue.initializeTestQueue(exercises, 0);
     } else if (exerciseMode === 'test2') {
@@ -1082,39 +1144,48 @@ export default function DutchLearningPlatform() {
 
     // For final test, ensure immediate initialization
     if (mode === 'finaltest') {
-      // Initialize final test immediately with mode filtering
-      const categoryItems =
-        finalTestCategory === 'All Categories'
-          ? finalTestVocabulary
-          : finalTestVocabulary.filter(
-              (item) => item.category === finalTestCategory,
-            );
+      // Reset exam exercise state for finaltest modes with exam- prefix
+      if (finalTestMode.startsWith('exam-')) {
+        setCurrentExamExerciseIndex(0);
+        setCompletedExamExercises(new Set());
+        setExamExerciseSessionCompleted(false);
+      } else {
+        // Initialize final test immediately with mode filtering
+        const categoryItems =
+          finalTestCategory === 'All Categories'
+            ? finalTestVocabulary
+            : finalTestVocabulary.filter(
+                (item) => item.category === finalTestCategory,
+              );
 
-      // Filter by exercise mode
-      const filteredItems = (() => {
-        switch (finalTestMode) {
-          case 'article':
-            return categoryItems.filter(
-              (item) => item.type === 'noun' && item.article,
-            );
-          case 'conjugation':
-            return categoryItems.filter(
-              (item) => item.type === 'verb' && item.conjugation,
-            );
-          case 'translate':
-          case 'reverse':
-          case 'mixed':
-          default:
-            return categoryItems;
-        }
-      })();
+        // Filter by exercise mode
+        const filteredItems = (() => {
+          switch (finalTestMode) {
+            case 'article':
+              return categoryItems.filter(
+                (item) => item.type === 'noun' && item.article,
+              );
+            case 'conjugation':
+              return categoryItems.filter(
+                (item) => item.type === 'verb' && item.conjugation,
+              );
+            case 'translate':
+            case 'reverse':
+            case 'mixed':
+            default:
+              return categoryItems;
+          }
+        })();
 
-      finalTestQueue.initializeFinalTestQueue(
-        filteredItems,
-        finalTestCategory === 'All Categories' ? undefined : finalTestCategory,
-        {},
-        0,
-      );
+        finalTestQueue.initializeFinalTestQueue(
+          filteredItems,
+          finalTestCategory === 'All Categories'
+            ? undefined
+            : finalTestCategory,
+          {},
+          0,
+        );
+      }
     }
 
     // Save the session state
@@ -1178,6 +1249,14 @@ export default function DutchLearningPlatform() {
       ...prev,
       finaltest: { correct: 0, total: 0 },
     }));
+  };
+
+  const handleExamModeChange = (mode: string) => {
+    setFinalTestMode(mode as any);
+    setFinalExamReviewMode(false); // Always exit review mode when changing exam modes
+    setCurrentExamExerciseIndex(0);
+    setCompletedExamExercises(new Set());
+    setExamExerciseSessionCompleted(false);
   };
 
   const getTestCompletionStatus = (testType: 'test1' | 'test2') => {
@@ -2020,7 +2099,7 @@ export default function DutchLearningPlatform() {
                                 : 'outline'
                             }
                             size="sm"
-                            onClick={() => setFinalTestMode('exam-perfect')}
+                            onClick={() => handleExamModeChange('exam-perfect')}
                             className="mb-1"
                             title="Perfect tense construction exercises"
                           >
@@ -2033,7 +2112,9 @@ export default function DutchLearningPlatform() {
                                 : 'outline'
                             }
                             size="sm"
-                            onClick={() => setFinalTestMode('exam-imperfect')}
+                            onClick={() =>
+                              handleExamModeChange('exam-imperfect')
+                            }
                             className="mb-1"
                             title="Imperfect tense fill-in exercises"
                           >
@@ -2046,7 +2127,9 @@ export default function DutchLearningPlatform() {
                                 : 'outline'
                             }
                             size="sm"
-                            onClick={() => setFinalTestMode('exam-separable')}
+                            onClick={() =>
+                              handleExamModeChange('exam-separable')
+                            }
                             className="mb-1"
                             title="Separable verbs exercises"
                           >
@@ -2060,7 +2143,7 @@ export default function DutchLearningPlatform() {
                             }
                             size="sm"
                             onClick={() =>
-                              setFinalTestMode('exam-conjunctions')
+                              handleExamModeChange('exam-conjunctions')
                             }
                             className="mb-1"
                             title="Conjunction combination exercises"
@@ -2075,7 +2158,7 @@ export default function DutchLearningPlatform() {
                             }
                             size="sm"
                             onClick={() =>
-                              setFinalTestMode('exam-multiple-choice')
+                              handleExamModeChange('exam-multiple-choice')
                             }
                             className="mb-1"
                             title="Multiple choice grammar exercises"
@@ -2089,7 +2172,7 @@ export default function DutchLearningPlatform() {
                                 : 'outline'
                             }
                             size="sm"
-                            onClick={() => setFinalTestMode('exam-mixed')}
+                            onClick={() => handleExamModeChange('exam-mixed')}
                             className="mb-1"
                             title="Mixed exam exercises from all categories"
                           >
@@ -2102,7 +2185,7 @@ export default function DutchLearningPlatform() {
                                 : 'outline'
                             }
                             size="sm"
-                            onClick={() => setFinalTestMode('exam-writing')}
+                            onClick={() => handleExamModeChange('exam-writing')}
                             className="mb-1"
                             title="Writing exercises - compose texts on various topics"
                           >
@@ -2553,66 +2636,136 @@ export default function DutchLearningPlatform() {
                             'exam-writing',
                             'exam-mixed',
                           ].includes(finalTestMode) ? (
-                            currentExamExercise ? (
-                              <ExamExerciseCard
-                                exercise={currentExamExercise}
-                                onComplete={handleExerciseComplete}
-                              />
-                            ) : examExerciseSessionCompleted ? (
-                              <Card className="text-center py-8">
-                                <CardContent>
-                                  <div className="space-y-4">
-                                    <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
-                                      <h3 className="text-xl font-bold text-green-800 mb-2">
-                                        🎉 Section Complete!
-                                      </h3>
-                                      <p className="text-green-700 mb-4">
-                                        You've completed all{' '}
-                                        {getExamExerciseProgress().total}{' '}
-                                        exercises in this{' '}
-                                        {finalTestMode
-                                          .replace('exam-', '')
-                                          .replace('-', ' ')}{' '}
-                                        section!
-                                      </p>
-                                      <div className="space-y-2">
-                                        <Button
-                                          onClick={() => {
-                                            setCurrentExamExerciseIndex(0);
-                                            setCompletedExamExercises(
-                                              new Set(),
-                                            );
-                                            setExamExerciseSessionCompleted(
-                                              false,
-                                            );
-                                          }}
-                                          className="bg-green-600 text-white hover:bg-green-700 mr-2"
-                                        >
-                                          Practice Again
-                                        </Button>
-                                        <Button
-                                          variant="outline"
-                                          onClick={() =>
-                                            setFinalTestMode('mixed')
-                                          }
-                                          className="text-green-700 border-green-300 hover:bg-green-50"
-                                        >
-                                          Try Different Section
-                                        </Button>
+                            <>
+                              {finalExamReviewMode && (
+                                <Card className="mb-4">
+                                  <CardContent className="py-4">
+                                    <div className="flex items-center justify-between">
+                                      <div className="flex items-center space-x-2">
+                                        <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                                        <span className="font-medium text-orange-700">
+                                          Review Mode: Practicing Mistakes
+                                        </span>
+                                      </div>
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => {
+                                          setFinalExamReviewMode(false);
+                                          setCurrentExamExerciseIndex(0);
+                                          setCompletedExamExercises(new Set());
+                                          setExamExerciseSessionCompleted(
+                                            false,
+                                          );
+                                        }}
+                                        className="text-orange-700 border-orange-300 hover:bg-orange-50"
+                                      >
+                                        Exit Review Mode
+                                      </Button>
+                                    </div>
+                                  </CardContent>
+                                </Card>
+                              )}
+                              {currentExamExercise ? (
+                                <ExamExerciseCard
+                                  exercise={currentExamExercise}
+                                  onComplete={handleExerciseComplete}
+                                />
+                              ) : examExerciseSessionCompleted ? (
+                                <Card className="text-center py-8">
+                                  <CardContent>
+                                    <div className="space-y-4">
+                                      <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
+                                        <h3 className="text-xl font-bold text-green-800 mb-2">
+                                          🎉 Section Complete!
+                                        </h3>
+                                        <p className="text-green-700 mb-4">
+                                          You've completed all{' '}
+                                          {getExamExerciseProgress().total}{' '}
+                                          exercises in this{' '}
+                                          {finalTestMode
+                                            .replace('exam-', '')
+                                            .replace('-', ' ')}{' '}
+                                          section!
+                                        </p>
+                                        <div className="space-y-2">
+                                          <Button
+                                            onClick={() => {
+                                              setCurrentExamExerciseIndex(0);
+                                              setCompletedExamExercises(
+                                                new Set(),
+                                              );
+                                              setExamExerciseSessionCompleted(
+                                                false,
+                                              );
+                                              // Reset session scores for exam exercises
+                                              setSessionScores((prev) => ({
+                                                ...prev,
+                                                finaltest: {
+                                                  correct: 0,
+                                                  total: 0,
+                                                },
+                                              }));
+                                            }}
+                                            className="bg-green-600 text-white hover:bg-green-700 mr-2"
+                                          >
+                                            Practice Again
+                                          </Button>
+                                          {progress.finalExamProgress
+                                            ?.incorrectExercises &&
+                                            Object.keys(
+                                              progress.finalExamProgress
+                                                .incorrectExercises,
+                                            ).length > 0 && (
+                                              <Button
+                                                onClick={() => {
+                                                  setFinalExamReviewMode(true);
+                                                  setExamExerciseSessionCompleted(
+                                                    false,
+                                                  );
+                                                  setCurrentExamExerciseIndex(
+                                                    0,
+                                                  );
+                                                  setCompletedExamExercises(
+                                                    new Set(),
+                                                  );
+                                                }}
+                                                className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
+                                              >
+                                                Review Mistakes (
+                                                {
+                                                  Object.keys(
+                                                    progress.finalExamProgress
+                                                      .incorrectExercises,
+                                                  ).length
+                                                }
+                                                )
+                                              </Button>
+                                            )}
+                                          <Button
+                                            variant="outline"
+                                            onClick={() =>
+                                              setFinalTestMode('mixed')
+                                            }
+                                            className="text-green-700 border-green-300 hover:bg-green-50"
+                                          >
+                                            Try Different Section
+                                          </Button>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </CardContent>
-                              </Card>
-                            ) : (
-                              <Card className="text-center py-8">
-                                <CardContent>
-                                  <p className="text-lg text-muted-foreground">
-                                    Loading exam exercises...
-                                  </p>
-                                </CardContent>
-                              </Card>
-                            )
+                                  </CardContent>
+                                </Card>
+                              ) : (
+                                <Card className="text-center py-8">
+                                  <CardContent>
+                                    <p className="text-lg text-muted-foreground">
+                                      Loading exam exercises...
+                                    </p>
+                                  </CardContent>
+                                </Card>
+                              )}
+                            </>
                           ) : currentFinalTestItem ? (
                             <FinalTestExercise
                               item={currentFinalTestItem}
