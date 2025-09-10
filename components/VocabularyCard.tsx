@@ -17,7 +17,7 @@ import {
   Volume2,
   XCircle,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface VocabularyCardProps {
   word: VocabularyItem;
@@ -34,6 +34,7 @@ export function VocabularyCard({
   const [showFeedback, setShowFeedback] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasAnswered, setHasAnswered] = useState(false);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   const checkAnswer = () => {
     const userAnswerLower = userAnswer.toLowerCase().trim();
@@ -51,6 +52,16 @@ export function VocabularyCard({
     setShowFeedback(true);
     setHasAnswered(true);
   };
+
+  // Focus the continue button when feedback is shown
+  useEffect(() => {
+    if (hasAnswered && continueButtonRef.current) {
+      // Small delay to ensure the button is rendered
+      setTimeout(() => {
+        continueButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [hasAnswered]);
 
   const handleNext = () => {
     onComplete(isCorrect);
@@ -161,6 +172,7 @@ export function VocabularyCard({
             </Button>
           ) : (
             <Button
+              ref={continueButtonRef}
               onClick={handleNext}
               className="w-full bg-dutch-blue text-white hover:bg-dutch-blue/90 flex items-center justify-center space-x-2"
             >

@@ -7,7 +7,13 @@ import {
   TooltipTrigger,
 } from '@/components/Tooltip';
 import { CheckCircle, ChevronRight, Lightbulb, XCircle } from 'lucide-react';
-import React, { ReactNode, useCallback, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 export interface ExerciseResult {
   isCorrect: boolean;
@@ -70,6 +76,7 @@ export function GenericExercise<TData = any>({
   );
   const [hasAnswered, setHasAnswered] = useState(false);
   const [hintUsed, setHintUsed] = useState(false);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleAnswerChange = useCallback(
     (answer: any) => {
@@ -93,6 +100,16 @@ export function GenericExercise<TData = any>({
     setShowFeedback(true);
     setHasAnswered(true);
   }, [userAnswer, data, validateAnswer]);
+
+  // Focus the continue button when feedback is shown
+  useEffect(() => {
+    if (showFeedback && continueButtonRef.current) {
+      // Small delay to ensure the button is rendered
+      setTimeout(() => {
+        continueButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [showFeedback]);
 
   const handleNext = useCallback(() => {
     if (exerciseResult) {
@@ -195,6 +212,7 @@ export function GenericExercise<TData = any>({
             </Button>
           ) : (
             <Button
+              ref={continueButtonRef}
               onClick={handleNext}
               className={`px-8 ${
                 isCorrect

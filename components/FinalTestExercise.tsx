@@ -24,7 +24,7 @@ import {
   Volume2,
   XCircle,
 } from 'lucide-react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface FinalTestExerciseProps {
   item: FinalTestVocabulary;
@@ -56,6 +56,7 @@ export function FinalTestExercise({
   const [isCorrect, setIsCorrect] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   const checkAnswer = () => {
     const userAnswerLower = userAnswer.toLowerCase().trim();
@@ -184,6 +185,16 @@ export function FinalTestExercise({
     setIsCorrect(correct);
     setShowFeedback(true);
   };
+
+  // Focus the continue button when feedback is shown
+  useEffect(() => {
+    if (showFeedback && continueButtonRef.current) {
+      // Small delay to ensure the button is rendered
+      setTimeout(() => {
+        continueButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [showFeedback]);
 
   const handleNext = () => {
     onComplete(isCorrect);
@@ -470,6 +481,7 @@ export function FinalTestExercise({
             )}
 
             <Button
+              ref={continueButtonRef}
               onClick={handleNext}
               className="w-full bg-blue-600 text-white hover:bg-blue-700"
             >

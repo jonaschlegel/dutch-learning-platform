@@ -46,6 +46,7 @@ export function ExamExerciseCard({
   const [showAnswer, setShowAnswer] = useState(false);
   const [currentHintIndex, setCurrentHintIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   // Initialize userAnswers array for separable verbs
   useEffect(() => {
@@ -180,6 +181,16 @@ export function ExamExerciseCard({
     setIsCorrect(correct);
     setShowFeedback(true);
   };
+
+  // Focus the continue button when feedback is shown
+  useEffect(() => {
+    if (showFeedback && continueButtonRef.current) {
+      // Small delay to ensure the button is rendered
+      setTimeout(() => {
+        continueButtonRef.current?.focus();
+      }, 100);
+    }
+  }, [showFeedback]);
 
   const handleNext = () => {
     onComplete(isCorrect);
@@ -572,7 +583,11 @@ export function ExamExerciseCard({
               Check Answer
             </Button>
           ) : (
-            <Button onClick={handleNext} className="px-8">
+            <Button
+              ref={continueButtonRef}
+              onClick={handleNext}
+              className="px-8"
+            >
               Continue
             </Button>
           )}
