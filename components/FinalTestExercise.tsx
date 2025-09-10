@@ -57,6 +57,7 @@ export function FinalTestExercise({
   const [showHint, setShowHint] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
   const continueButtonRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const checkAnswer = () => {
     const userAnswerLower = userAnswer.toLowerCase().trim();
@@ -195,6 +196,16 @@ export function FinalTestExercise({
       }, 100);
     }
   }, [showFeedback]);
+
+  // Focus the input field when a new exercise starts
+  useEffect(() => {
+    if (!showFeedback && inputRef.current) {
+      // Small delay to ensure the input is rendered
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [item.id, showFeedback]); // Focus when item changes or feedback is hidden
 
   const handleNext = () => {
     onComplete(isCorrect);
@@ -366,6 +377,7 @@ export function FinalTestExercise({
 
         <div className="space-y-4">
           <Input
+            ref={inputRef}
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
             placeholder="Type your answer..."

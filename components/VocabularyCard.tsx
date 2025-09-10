@@ -35,6 +35,7 @@ export function VocabularyCard({
   const [isCorrect, setIsCorrect] = useState(false);
   const [hasAnswered, setHasAnswered] = useState(false);
   const continueButtonRef = useRef<HTMLButtonElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const checkAnswer = () => {
     const userAnswerLower = userAnswer.toLowerCase().trim();
@@ -62,6 +63,16 @@ export function VocabularyCard({
       }, 100);
     }
   }, [hasAnswered]);
+
+  // Focus the input field when a new exercise starts
+  useEffect(() => {
+    if (!hasAnswered && inputRef.current) {
+      // Small delay to ensure the input is rendered
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [word.id, hasAnswered]); // Focus when word changes or after reset
 
   const handleNext = () => {
     onComplete(isCorrect);
@@ -146,6 +157,7 @@ export function VocabularyCard({
 
         <div className="space-y-4 flex-1 flex flex-col justify-center">
           <Input
+            ref={inputRef}
             value={userAnswer}
             onChange={(e) => setUserAnswer(e.target.value)}
             placeholder="Type your answer in Dutch..."

@@ -192,6 +192,20 @@ export function ExamExerciseCard({
     }
   }, [showFeedback]);
 
+  // Focus the input field when a new exercise starts
+  useEffect(() => {
+    if (
+      !showFeedback &&
+      inputRef.current &&
+      exercise.type !== 'multiple-choice'
+    ) {
+      // Small delay to ensure the input is rendered
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [exercise.id, showFeedback, exercise.type]); // Focus when exercise changes or feedback is hidden
+
   const handleNext = () => {
     onComplete(isCorrect);
     resetExercise();
