@@ -925,34 +925,49 @@ export default function DutchLearningPlatform() {
       markWordCompleted(currentFinalTestItem.id, correct ? 1 : 0);
       finalTestQueue.moveToNext(currentFinalTestItem.id, correct);
 
-      // Check if we've finished all items (either for review or completion)
+      // Check if we've finished all items in current queue
       if (!finalTestQueue.hasMoreItems()) {
-        setFinalTestSessionCompleted(true);
+        const progress = finalTestQueue.getProgress();
 
-        // Check if we should show review mode after going through all items
-        if (finalTestQueue.shouldShowReviewMode()) {
-          // Show completion message and review option
+        if (progress.isReviewMode) {
+          // Completed review mode
+          setFinalTestSessionCompleted(true);
+          setTimeout(() => {
+            const remainingIncorrect = Object.keys(
+              finalTestQueue.getIncorrectItems(),
+            ).length;
+            if (remainingIncorrect > 0) {
+              toast({
+                title: 'Review Complete!',
+                description: `You still have ${remainingIncorrect} words that need more practice. You can review them again or continue with new exercises.`,
+              });
+            } else {
+              toast({
+                title: 'All Mistakes Corrected!',
+                description: `Great job! You've successfully corrected all your previous mistakes.`,
+              });
+            }
+            setShowResults(true);
+          }, 100);
+        } else if (progress.completedFirstPass) {
+          // Completed first pass through all exercises
+          setFinalTestSessionCompleted(true);
           setTimeout(() => {
             const incorrectCount = Object.keys(
               finalTestQueue.getIncorrectItems(),
             ).length;
             if (incorrectCount > 0) {
-              setShowResults(true);
               toast({
-                title: 'Session Complete!',
-                description: `You have ${incorrectCount} words to review. Click "Review Mistakes" to practice them again.`,
+                title: 'First Round Complete!',
+                description: `You've gone through all ${progress.total} exercises. You have ${incorrectCount} words to review. Click "Review Mistakes" to practice them again.`,
+              });
+            } else {
+              toast({
+                title: 'Perfect Score!',
+                description: `You've completed all ${progress.total} exercises with no mistakes. Excellent work!`,
               });
             }
-          }, 100);
-        } else {
-          // Perfect completion - no incorrect items
-          setTimeout(() => {
-            toast({
-              title: 'Perfect Score!',
-              description: `You've completed all ${
-                finalTestQueue.getProgress().total
-              } exercises with no mistakes. Excellent work!`,
-            });
+            setShowResults(true);
           }, 100);
         }
       }
@@ -982,8 +997,7 @@ export default function DutchLearningPlatform() {
         ? !examExerciseSessionCompleted &&
           currentExamExerciseIndex < shuffledExamExercises.length
         : exerciseMode === 'finaltest'
-        ? finalTestQueue.hasMoreItems() &&
-          !finalTestQueue.shouldShowReviewMode()
+        ? finalTestQueue.hasMoreItems()
         : exerciseMode === 'perfect'
         ? perfectTenseQueue.hasMoreItems()
         : exerciseMode === 'imperfectum'
@@ -1280,16 +1294,17 @@ export default function DutchLearningPlatform() {
     const newReviewMode = !finalTestReviewMode;
     setFinalTestReviewMode(newReviewMode);
 
-    if (newReviewMode && finalTestQueue.shouldShowReviewMode()) {
+    if (newReviewMode) {
       // Start review mode with incorrect items
-      finalTestQueue.startReviewMode();
+      finalTestQueue.startReviewMode(finalTestVocabulary);
     } else {
-      // Restart normal mode
-      startNewSession('finaltest');
+      // Exit review mode and return to normal practice
+      finalTestQueue.exitReviewMode(finalTestVocabulary, finalTestCategory);
     }
 
     // Reset session state
     setShowResults(false);
+    setFinalTestSessionCompleted(false);
     exerciseActions.resetSessionScore('finaltest');
   };
 
@@ -2175,16 +2190,34 @@ export default function DutchLearningPlatform() {
                                 <div className="space-y-4">
                                   <div className="bg-green-50 p-6 rounded-lg border-2 border-green-200">
                                     <h3 className="text-xl font-bold text-green-800 mb-2">
-                                      🎉 Final Test Complete!
+                                      {finalTestQueue.isInReviewMode()
+                                        ? '🔄 Review Session Complete!'
+                                        : finalTestCompletionData.incorrectCount >
+                                          0
+                                        ? '📚 First Pass Complete!'
+                                        : '🎉 Perfect Score!'}
                                     </h3>
                                     <p className="text-green-700 mb-4">
-                                      You've completed all{' '}
-                                      {finalTestCompletionData.totalExercises}{' '}
-                                      exercises in {finalTestMode} mode
-                                      {finalTestCategory !== 'All Categories'
-                                        ? ` for ${finalTestCategory}`
-                                        : ''}
-                                      !
+                                      {finalTestQueue.isInReviewMode()
+                                        ? `You've finished reviewing ${finalTestCompletionData.totalExercises} exercises.`
+                                        : finalTestCompletionData.incorrectCount >
+                                          0
+                                        ? `You've gone through all ${
+                                            finalTestCompletionData.totalExercises
+                                          } exercises in ${finalTestMode} mode${
+                                            finalTestCategory !==
+                                            'All Categories'
+                                              ? ` for ${finalTestCategory}`
+                                              : ''
+                                          }. Time to review your mistakes!`
+                                        : `You've completed all ${
+                                            finalTestCompletionData.totalExercises
+                                          } exercises in ${finalTestMode} mode${
+                                            finalTestCategory !==
+                                            'All Categories'
+                                              ? ` for ${finalTestCategory}`
+                                              : ''
+                                          } with no mistakes. Excellent work!`}
                                     </p>
                                     <div className="space-y-2">
                                       <Button
@@ -2199,21 +2232,31 @@ export default function DutchLearningPlatform() {
                                       >
                                         Practice Again
                                       </Button>
-                                      {finalTestCompletionData.incorrectCount >
-                                        0 && (
+                                      {finalTestQueue.isInReviewMode() ? (
                                         <Button
                                           onClick={() => {
-                                            setFinalTestReviewMode(true);
-                                            setFinalTestSessionCompleted(false);
+                                            toggleFinalTestReviewMode();
                                           }}
-                                          className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
+                                          className="bg-blue-600 text-white hover:bg-blue-700 mr-2"
                                         >
-                                          Review Mistakes (
-                                          {
-                                            finalTestCompletionData.incorrectCount
-                                          }
-                                          )
+                                          Exit Review Mode
                                         </Button>
+                                      ) : (
+                                        finalTestCompletionData.incorrectCount >
+                                          0 && (
+                                          <Button
+                                            onClick={() => {
+                                              toggleFinalTestReviewMode();
+                                            }}
+                                            className="bg-orange-600 text-white hover:bg-orange-700 mr-2"
+                                          >
+                                            Review Mistakes (
+                                            {
+                                              finalTestCompletionData.incorrectCount
+                                            }
+                                            )
+                                          </Button>
+                                        )
                                       )}
                                       <Button
                                         variant="outline"
@@ -2498,7 +2541,7 @@ export default function DutchLearningPlatform() {
                         finalTestQueue.reset();
                       }}
                       onStartReview={() => {
-                        setFinalTestReviewMode(true);
+                        toggleFinalTestReviewMode();
                         if (exerciseMode !== 'finaltest') {
                           startNewSession('finaltest');
                         }

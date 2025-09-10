@@ -24,9 +24,12 @@ interface FinalTestProgressDashboardProps {
     current: number;
     total: number;
     completed: number;
+    seen: number;
     percentage: number;
     categoryProgress: Record<string, { completed: number; total: number }>;
     allCategoriesCompleted: boolean;
+    isReviewMode: boolean;
+    completedFirstPass: boolean;
   };
   incorrectItems: Record<string, { count: number; lastAttempt: number }>;
   currentCategory: string | null;
@@ -86,7 +89,7 @@ export function FinalTestProgressDashboard({
         <Card className="bg-card shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Overall Progress
+              {progress.isReviewMode ? 'Review Progress' : 'Overall Progress'}
             </CardTitle>
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -95,9 +98,18 @@ export function FinalTestProgressDashboard({
               {progress.current}/{progress.total}
             </div>
             <p className="text-xs text-muted-foreground">
-              {progress.percentage.toFixed(1)}% complete
+              {progress.isReviewMode
+                ? `Reviewing mistakes (${progress.percentage.toFixed(
+                    1,
+                  )}% complete)`
+                : progress.completedFirstPass
+                ? `First pass complete • ${progress.seen} seen`
+                : `${progress.percentage.toFixed(1)}% complete`}
             </p>
             <Progress value={progress.percentage} className="mt-2 bg-muted" />
+            {progress.isReviewMode && (
+              <p className="text-xs text-orange-600 mt-1">Review Mode Active</p>
+            )}
           </CardContent>
         </Card>
 
