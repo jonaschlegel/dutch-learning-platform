@@ -3130,7 +3130,7 @@ export const imperfectExercises: ExamExercise[] = [
     category: 'Imperfect Tense',
     level: 'A2',
     instruction: 'Fill in the correct imperfect tense form.',
-    question: 'Het erg moe uit. (lijken)',
+    question: 'Hij .......... er erg moe uit. (lijken)',
     englishTranslation: 'He .......... very tired. (seem)',
     correctAnswer: ['leek', 'leek.'],
     explanation:
@@ -3517,7 +3517,8 @@ export const imperfectExercises: ExamExercise[] = [
     category: 'Imperfect Tense',
     level: 'A2',
     instruction: 'Fill in the correct imperfect tense form.',
-    question: 'Het gelukkig niet om de opdracht af te maken. (lukken)',
+    question:
+      'Het .......... gelukkig niet om de opdracht af te maken. (lukken)',
     englishTranslation:
       'It fortunately did not .......... to finish the assignment. (succeed)',
     correctAnswer: ['lukte', 'lukte.'],
@@ -3592,7 +3593,7 @@ export const imperfectExercises: ExamExercise[] = [
     category: 'Imperfect Tense',
     level: 'A2',
     instruction: 'Fill in the correct imperfect tense form.',
-    question: 'Hij zei dat hij de volgende dag zou komen. (zullen)',
+    question: 'Hij zei dat hij de volgende dag .......... komen. (zullen)',
     englishTranslation:
       'He said that he .......... come the next day. (will/shall)',
     correctAnswer: ['zou', 'zou.'],
